@@ -1,0 +1,60 @@
+name: sweep_prompts
+method: grid
+# metric:
+#   goal: minimize
+#   name: loss
+# early_terminate:
+#   type: hyperband
+#   min_iter: 200
+#   eta: 2
+parameters:
+  width: 
+    value: 400
+  height: 
+    value: 400
+
+  seed:
+    values:
+    - 0 
+    - 1
+    # - 2
+
+  start_image:
+    values:
+    - "quickdraw/bird/4.png"
+    - "quickdraw/palm tree/172.png"
+    - "quickdraw/wine glass/15.png"
+    - "quickdraw/ambulance/25.png"
+    - "quickdraw/apple/714.png"
+    - "quickdraw/computer/8.png"
+    # - "quickdraw/alarm clock/11.png"
+    # - "quickdraw/beach/123.png"
+    # - "quickdraw/book/241.png"
+    # - "quickdraw/brain/890.png"
+    # - "quickdraw/butterfly/29.png"
+    - "quickdraw/campfire/101.png"
+    - "quickdraw/fish/2.png"
+    - "quickdraw/pizza/181.png"
+    - "test_doodles/eyeball_doodle.jpeg"
+    - "test_doodles/pikachu.jpeg"
+    - "test_doodles/robot_doodle.jpeg"
+    - "test_doodles/sketch-old-temple-doodle-style-vector-illustration-sketch-old-temple-doodle-style-188387010.jpeg"
+    - "test_doodles/weed_doodle.jpeg"
+
+  prompts:
+    values:
+    - ["A photorealistic render in unreal engine on a white background", "8K HD detailed Wallpaper, trending on ArtStation"]
+    - ["A photorealistic render in unreal engine", "on a white background", "8K HD detailed Wallpaper, trending on ArtStation"]
+    - ["A photorealistic render in unreal engine", "8K HD detailed Wallpaper, trending on ArtStation"]
+    - ["A charcoal drawing", "8K HD detailed Wallpaper, trending on ArtStation, digital illustration"]
+    - ["A photorealistic charcoal drawing", "8K HD detailed Wallpaper, trending on ArtStation, digital illustration"]
+    - ["A photorealistic drawing", "8K HD detailed Wallpaper, trending on ArtStation"]
+    - ["A photorealistic drawing", "on a white background", "8K HD detailed Wallpaper, trending on ArtStation"]
+    - ["a beautiful epic wondrous fantasy painting", "8K HD detailed Wallpaper, trending on ArtStation"]
+    - ["A painting of zdzislaw beksinski", "8K HD detailed Wallpaper, trending on ArtStation"]
+    - ["A painting of Ivan Aivazovsky", "8K HD detailed Wallpaper, trending on ArtStation"]
+    - ["A painting of Henri Martin", "8K HD detailed Wallpaper, trending on ArtStation"]
+    - ["A painting of Thomas Kinkade", "8K HD detailed Wallpaper, trending on ArtStation"]
+    - ["A drawing of Escher", "8K HD detailed Wallpaper, trending on ArtStation"]
+
+program: train.py

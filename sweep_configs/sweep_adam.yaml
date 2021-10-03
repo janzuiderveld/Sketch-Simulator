@@ -1,0 +1,100 @@
+name: sweep_adam
+method: grid
+# metric:
+#   goal: minimize
+#   name: loss
+# early_terminate:
+#   type: hyperband
+#   min_iter: 200
+#   eta: 2
+parameters:
+  width: 
+    value: 400
+  height: 
+    value: 400
+
+  seed:
+    values:
+    - 0 
+    - 1
+    - 2
+
+  start_image:
+    values:
+    - "quickdraw/bird/4.png"
+    - "quickdraw/palm tree/172.png"
+    - "quickdraw/wine glass/15.png"
+    - "quickdraw/alarm clock/11.png"
+    - "quickdraw/ambulance/25.png"
+    - "quickdraw/apple/714.png"
+    - "quickdraw/beach/123.png"
+    - "quickdraw/book/241.png"
+    - "quickdraw/brain/890.png"
+    - "quickdraw/butterfly/29.png"
+    - "quickdraw/computer/8.png"
+    
+  prompts:
+    values:
+    - ["A photorealistic render in unreal engine", "a white background", "trending on ArtStation"]
+    - ["A charcoal drawing | 8K HD detailed Wallpaper, digital illustration."]
+    # - ["A photorealistic drawing | a white background | trending on ArtStation"]
+    # - ["a beautiful epic wondrous fantasy painting. 8K HD detailed Wallpaper, trending on ArtStation"]
+    # - ["A photorealistic render in unreal engine on a white background, trending on ArtStation"]
+
+# Sweeped PARAMS =======================================
+
+  optim:
+    values:
+    - "adam"
+    # - "adabelief"
+
+  step_size:
+    values:
+    - 0.12
+    - 0.87
+    # - 0.03
+    - 1.5
+
+  weight_reg:
+    values:
+    - 0
+    - 0.1
+    - 0.0001
+
+  beta1:
+    values:
+    - 0.9
+    - 0.5
+
+  epsilon:
+    values:
+    - 1e-16
+    - 1e-12
+    - 1e-8
+
+  # cutn:
+  #   values:
+  #   - 32
+  #   - 64
+  #   - 128
+  
+  # cut_pow:
+  #   values:
+  #   - 0.5
+  #   - 0.75 
+  #   - 1.5
+  #   - 2
+
+  # flavor:
+  #   values:
+  #   - "cumin"
+  #   - "holywater"
+  #   - "ginger"
+
+  edge_weight:
+    values:
+    - 1
+    - 5
+    # - 15
+
+program: train.py

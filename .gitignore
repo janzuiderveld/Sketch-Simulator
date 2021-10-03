@@ -1,0 +1,13 @@
+*.ckpt
+*.out
+*.pyc
+taming*/
+vqgan_imagenet_f16_16384.yaml
+test_doodles/
+sketch_env/
+quickdraw/
+outputs/
+CLIP/
+wandb/
+.quickdrawcache/
+.history/
