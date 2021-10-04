@@ -31,3 +31,8 @@ All outputs are saved in `outputs/{args.experiment_name}/step_{i}.png`
 ## Notes
 * 1 step of synthesizing + embedding 400x400 images takes about 0.3 seconds on a single 1080, usually 20-30 steps is enough for nice results.
 * Prompts can be used as a metric in large hyperparameter sweeps (their scores are automatically logged) by using a weight of 0.
+
+## TODO
+* Add server / client scripts to circumvent startup times
+* Add CLIP-based classifier for testing conceptual embedding accuracy on Quickdraw classification
+* 
