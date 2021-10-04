@@ -1,6 +1,11 @@
 # Sketch Simulator
 An architecture that makes any doodle realistic, in any specified style, using VQGAN, CLIP and some basic embedding arithmetics.
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1JP6ExVr91ACXYA-0cBO_YTpeKoQgXTrW?usp=sharing)
+
+*WARNING: This colab is messy, but it works.*
+
+
 ## Architecture Overview
 ![](https://i.ibb.co/SJxKby4/image.png)
 
