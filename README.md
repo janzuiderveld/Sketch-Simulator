@@ -29,5 +29,5 @@ All outputs are saved in `outputs/{args.experiment_name}/step_{i}.png`
   * `extract_sketch_emb.py --items_per_class 1000 --save_root "path/to/repo/root" --pad_images 6`
 
 ## Notes
-* 1 step for synthesizing 400x400 images takes about 0.3 seconds on a single 1080, usually 20-30 steps is enough for nice results.
+* 1 step of synthesizing + embedding 400x400 images takes about 0.3 seconds on a single 1080, usually 20-30 steps is enough for nice results.
 * Prompts can be used as a metric in large hyperparameter sweeps (their scores are automatically logged) by using a weight of 0.
