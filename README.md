@@ -10,6 +10,7 @@ An architecture that makes any doodle realistic, in any specified style, using V
 ## Usage
 * To work a single doodle, in your desired style (see `train.py` for all avaible modifiers), run: 
   * `train.py --start_image "path/to/your/doodle" --prompts "a painting in the style of ... | Trending on artstation`   
+  
   Prompts are split using "|", and specific weights can be assigned using `{prompt1}:{weight1}|{prompt2}:{weight2}`
 
 * To explore the hyperparameter space or large amounts of doodles and / or promps using weights and biases:
