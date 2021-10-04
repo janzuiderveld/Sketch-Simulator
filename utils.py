@@ -131,74 +131,7 @@ def resize_image(image, out_size):
     size = round((area * ratio)**0.5), round((area / ratio)**0.5)
     return image.resize(size, Image.LANCZOS)
 
-
-############################################################################################
-############################################################################################
-
-class MakeCutoutsCustom(nn.Module):
-    def __init__(self, cut_size, cutn, cut_pow, augs):
-        super().__init__()
-        self.cut_size = cut_size
-        self.cutn = cutn
-        self.cut_pow = cut_pow
-        self.noise_fac = 0.1
-        self.av_pool = nn.AdaptiveAvgPool2d((self.cut_size, self.cut_size))
-        self.max_pool = nn.AdaptiveMaxPool2d((self.cut_size, self.cut_size))
-        self.augs = augs
-        
-        nn.Sequential(
-          K.RandomHorizontalFlip(p=Random_Horizontal_Flip),
-          K.RandomSharpness(Random_Sharpness,p=Random_Sharpness_P),
-          K.RandomGaussianBlur((Random_Gaussian_Blur),(Random_Gaussian_Blur_W,Random_Gaussian_Blur_W),p=Random_Gaussian_Blur_P),
-          K.RandomGaussianNoise(p=Random_Gaussian_Noise_P),
-          K.RandomElasticTransform(kernel_size=(Random_Elastic_Transform_Kernel_Size_W, Random_Elastic_Transform_Kernel_Size_H), sigma=(Random_Elastic_Transform_Sigma), p=Random_Elastic_Transform_P),
-          K.RandomAffine(degrees=Random_Affine_Degrees, translate=Random_Affine_Translate, p=Random_Affine_P, padding_mode='border'),
-          K.RandomPerspective(Random_Perspective,p=Random_Perspective_P),
-          K.ColorJitter(hue=Color_Jitter_Hue, saturation=Color_Jitter_Saturation, p=Color_Jitter_P),)
-          #K.RandomErasing((0.1, 0.7), (0.3, 1/0.4), same_on_batch=True, p=0.2),)
-
-    def set_cut_pow(self, cut_pow):
-      self.cut_pow = cut_pow
-    
-    def forward(self, input):
-        sideY, sideX = input.shape[2:4]
-        max_size = min(sideX, sideY)
-        min_size = min(sideX, sideY, self.cut_size)
-        cutouts = []
-        cutouts_full = []
-        noise_fac = 0.1
-        
-        
-        min_size_width = min(sideX, sideY)
-        lower_bound = float(self.cut_size/min_size_width)
-        
-        for ii in range(self.cutn):
-            
-            
-          # size = int(torch.rand([])**self.cut_pow * (max_size - min_size) + min_size)
-          randsize = torch.zeros(1,).normal_(mean=.8, std=.3).clip(lower_bound,1.)
-          size_mult = randsize ** self.cut_pow
-          size = int(min_size_width * (size_mult.clip(lower_bound, 1.))) # replace .5 with a result for 224 the default large size is .95
-          # size = int(min_size_width*torch.zeros(1,).normal_(mean=.9, std=.3).clip(lower_bound, .95)) # replace .5 with a result for 224 the default large size is .95
-
-          offsetx = torch.randint(0, sideX - size + 1, ())
-          offsety = torch.randint(0, sideY - size + 1, ())
-          cutout = input[:, :, offsety:offsety + size, offsetx:offsetx + size]
-          cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
-        
-        
-        cutouts = torch.cat(cutouts, dim=0)
-        cutouts = clamp_with_grad(cutouts, 0, 1)
-
-        #if args.use_augs:
-        cutouts = self.augs(cutouts)
-        if self.noise_fac:
-          facs = cutouts.new_empty([cutouts.shape[0], 1, 1, 1]).uniform_(0, self.noise_fac)
-          cutouts = cutouts + facs * torch.randn_like(cutouts)
-        return cutouts
-
-class MakeCutoutsCumin(nn.Module):
-    #from https://colab.research.google.com/drive/1ZAus_gn2RhTZWzOWUpPERNC0Q8OhZRTZ
+class Cutouts_preset(nn.Module):
     def __init__(self, cut_size, cutn, cut_pow, augs):
         super().__init__()
         self.cut_size = cut_size
@@ -231,12 +164,10 @@ class MakeCutoutsCumin(nn.Module):
         cutouts_full = []
         noise_fac = 0.1
         
-        
         min_size_width = min(sideX, sideY)
         lower_bound = float(self.cut_size/min_size_width)
         
         for ii in range(self.cutn):
-            
             
           # size = int(torch.rand([])**self.cut_pow * (max_size - min_size) + min_size)
           randsize = torch.zeros(1,).normal_(mean=.8, std=.3).clip(lower_bound,1.)
@@ -249,7 +180,6 @@ class MakeCutoutsCumin(nn.Module):
           cutout = input[:, :, offsety:offsety + size, offsetx:offsetx + size]
           cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
         
-        
         cutouts = torch.cat(cutouts, dim=0)
         cutouts = clamp_with_grad(cutouts, 0, 1)
 
@@ -259,136 +189,3 @@ class MakeCutoutsCumin(nn.Module):
           facs = cutouts.new_empty([cutouts.shape[0], 1, 1, 1]).uniform_(0, self.noise_fac)
           cutouts = cutouts + facs * torch.randn_like(cutouts)
         return cutouts
-
-
-class MakeCutoutsHolywater(nn.Module):
-    def __init__(self, cut_size, cutn, cut_pow, augs):
-        super().__init__()
-        self.cut_size = cut_size
-        self.cutn = cutn
-        self.cut_pow = cut_pow
-        self.noise_fac = 0.1
-        self.av_pool = nn.AdaptiveAvgPool2d((self.cut_size, self.cut_size))
-        self.max_pool = nn.AdaptiveMaxPool2d((self.cut_size, self.cut_size))
-        self.augs = augs
-        
-        nn.Sequential(
-          #K.RandomHorizontalFlip(p=0.5),
-          #K.RandomSharpness(0.3,p=0.4),
-          #K.RandomGaussianBlur((3,3),(10.5,10.5),p=0.2),
-          #K.RandomGaussianNoise(p=0.5),
-          #K.RandomElasticTransform(kernel_size=(33, 33), sigma=(7,7), p=0.2),
-          K.RandomAffine(degrees=180, translate=0.5, p=0.2, padding_mode='border'),
-          K.RandomPerspective(0.6,p=0.9),
-          K.ColorJitter(hue=0.03, saturation=0.01, p=0.1),
-          K.RandomErasing((.1, .7), (.3, 1/.4), same_on_batch=True, p=0.2),)
-
-    def set_cut_pow(self, cut_pow):
-      self.cut_pow = cut_pow
-    
-    def forward(self, input):
-        sideY, sideX = input.shape[2:4]
-        max_size = min(sideX, sideY)
-        min_size = min(sideX, sideY, self.cut_size)
-        cutouts = []
-        cutouts_full = []
-        noise_fac = 0.1
-        
-        
-        min_size_width = min(sideX, sideY)
-        lower_bound = float(self.cut_size/min_size_width)
-        
-        for ii in range(self.cutn):
-            
-            
-          # size = int(torch.rand([])**self.cut_pow * (max_size - min_size) + min_size)
-          randsize = torch.zeros(1,).normal_(mean=.8, std=.3).clip(lower_bound,1.)
-          size_mult = randsize ** self.cut_pow
-          size = int(min_size_width * (size_mult.clip(lower_bound, 1.))) # replace .5 with a result for 224 the default large size is .95
-          # size = int(min_size_width*torch.zeros(1,).normal_(mean=.9, std=.3).clip(lower_bound, .95)) # replace .5 with a result for 224 the default large size is .95
-
-          offsetx = torch.randint(0, sideX - size + 1, ())
-          offsety = torch.randint(0, sideY - size + 1, ())
-          cutout = input[:, :, offsety:offsety + size, offsetx:offsetx + size]
-          cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
-        
-        
-        cutouts = torch.cat(cutouts, dim=0)
-        cutouts = clamp_with_grad(cutouts, 0, 1)
-
-        #if args.use_augs:
-        cutouts = self.augs(cutouts)
-        if self.noise_fac:
-          facs = cutouts.new_empty([cutouts.shape[0], 1, 1, 1]).uniform_(0, self.noise_fac)
-          cutouts = cutouts + facs * torch.randn_like(cutouts)
-        return cutouts
-
-
-class MakeCutoutsGinger(nn.Module):
-    def __init__(self, cut_size, cutn, cut_pow, augs):
-        super().__init__()
-        self.cut_size = cut_size
-        self.cutn = cutn
-        self.cut_pow = cut_pow
-        self.noise_fac = 0.1
-        self.av_pool = nn.AdaptiveAvgPool2d((self.cut_size, self.cut_size))
-        self.max_pool = nn.AdaptiveMaxPool2d((self.cut_size, self.cut_size))
-        self.augs = augs
-        '''
-        nn.Sequential(
-          K.RandomHorizontalFlip(p=0.5),
-          K.RandomSharpness(0.3,p=0.4),
-          K.RandomGaussianBlur((3,3),(10.5,10.5),p=0.2),
-          K.RandomGaussianNoise(p=0.5),
-          K.RandomElasticTransform(kernel_size=(33, 33), sigma=(7,7), p=0.2),
-          K.RandomAffine(degrees=30, translate=0.1, p=0.8, padding_mode='border'), # padding_mode=2
-          K.RandomPerspective(0.2,p=0.4, ),
-          K.ColorJitter(hue=0.01, saturation=0.01, p=0.7),)
-'''
-
-    def set_cut_pow(self, cut_pow):
-      self.cut_pow = cut_pow
-
-    def forward(self, input):
-        sideY, sideX = input.shape[2:4]
-        max_size = min(sideX, sideY)
-        min_size = min(sideX, sideY, self.cut_size)
-        cutouts = []
-        cutouts_full = []
-        noise_fac = 0.1
-        
-        
-        min_size_width = min(sideX, sideY)
-        lower_bound = float(self.cut_size/min_size_width)
-        
-        for ii in range(self.cutn):
-            
-            
-          # size = int(torch.rand([])**self.cut_pow * (max_size - min_size) + min_size)
-          randsize = torch.zeros(1,).normal_(mean=.8, std=.3).clip(lower_bound,1.)
-          size_mult = randsize ** self.cut_pow
-          size = int(min_size_width * (size_mult.clip(lower_bound, 1.))) # replace .5 with a result for 224 the default large size is .95
-          # size = int(min_size_width*torch.zeros(1,).normal_(mean=.9, std=.3).clip(lower_bound, .95)) # replace .5 with a result for 224 the default large size is .95
-
-          offsetx = torch.randint(0, sideX - size + 1, ())
-          offsety = torch.randint(0, sideY - size + 1, ())
-          cutout = input[:, :, offsety:offsety + size, offsetx:offsetx + size]
-          cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
-        
-        
-        cutouts = torch.cat(cutouts, dim=0)
-        cutouts = clamp_with_grad(cutouts, 0, 1)
-
-        #if args.use_augs:
-        cutouts = self.augs(cutouts)
-        if self.noise_fac:
-          facs = cutouts.new_empty([cutouts.shape[0], 1, 1, 1]).uniform_(0, self.noise_fac)
-          cutouts = cutouts + facs * torch.randn_like(cutouts)
-        return cutouts
-
-flavordict = {
-    "cumin": MakeCutoutsCumin,
-    "holywater": MakeCutoutsHolywater,
-    "ginger": MakeCutoutsGinger,
-    "custom": MakeCutoutsCustom
-}

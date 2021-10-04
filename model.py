@@ -55,7 +55,7 @@ class ModelHost:
         cut_size = perceptor.visual.input_resolution
         e_dim = model.quantize.e_dim
         f = 2**(model.decoder.num_resolutions - 1)
-        make_cutouts = flavordict[self.args.flavor](cut_size, self.args.cutn, cut_pow=self.args.cut_pow,augs=self.augs)
+        make_cutouts = Cutouts_preset(cut_size, self.args.cutn, cut_pow=self.args.cut_pow,augs=self.augs)
 
         n_toks = model.quantize.n_e
         toksX, toksY = self.args.size[0] // f, self.args.size[1] // f
@@ -97,6 +97,7 @@ class ModelHost:
         for prompt in self.args.prompts:
             print(prompt)
             txt, weight, stop = parse_prompt(prompt)
+            print(txt, weight, stop)
             embed = perceptor.encode_text(clip.tokenize(txt).to(device)).float()
             pMs.append(Prompt(embed, weight, stop).to(device))
         
@@ -122,7 +123,6 @@ class ModelHost:
         self.prompts = pMs
         self.opt = opt
         self.z, self.z_init = z, z_init
-    # =============================================================================
     
     @torch.no_grad()
     def reset_img_prompt(self):
@@ -164,7 +164,6 @@ class ModelHost:
     def checkin(self, i, losses):
         losses_str = ', '.join(f'{loss.item():g}' for loss in losses)
         print(f'i: {i}, loss: {sum(losses).item():g}, losses: {losses_str}')
-        # print(f'cutn: {self.make_cutouts.cutn}, cut_pow: {self.make_cutouts.cut_pow}')
 
     def unique_index(self, batchpath):
         i = 0
@@ -177,13 +176,13 @@ class ModelHost:
     def ascend_txt(self, i):
         import time
 
-        now = time.time()
+        # now = time.time()
         out = self.synth(self.z)
-        print(f"synth took {time.time() - now}")
+        # print(f"synth took {time.time() - now}")
 
-        now = time.time()
+        # now = time.time()
         iii = self.perceptor.encode_image(self.normalize(self.make_cutouts(out))).float()
-        print(f"perceptor took {time.time() - now}")
+        # print(f"perceptor took {time.time() - now}")
         
         result = []        
         if self.args.edge_weight:
