@@ -24,7 +24,7 @@ An architecture that makes any doodle realistic, in any specified style, using V
 All outputs are saved in `outputs/{args.experiment_name}/step_{i}.png`
 
 
-# Avergae Sketch Embedding
+## Calculte Average Sketch Embedding
 * To (re)calculate average sketch embeddings (`results/ovl_mean_sketch.pth` is calculated based on 1000 (padded) items per class for all 350 quickdraw classes) run:
   * `extract_sketch_emb.py --items_per_class 1000 --save_root "path/to/repo/root" --pad_images 6`
 
