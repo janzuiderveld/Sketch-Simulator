@@ -12,7 +12,7 @@ See the final cell output of the colab below for some examples with and without 
 ![](https://i.ibb.co/SJxKby4/image.png)
 
 ## Setup
-* run `setup.sh` in your environment. This will install required libraries and download model weights.
+* run `./setup.sh` in your environment. This will install required libraries and download model weights.
 
 ## Usage
 * To work a single doodle, in your desired style (see `train.py` for all avaible modifiers), run: 
