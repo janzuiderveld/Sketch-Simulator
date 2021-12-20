@@ -40,6 +40,8 @@ parser.add_argument('--width', type=int, default= 400 )
 parser.add_argument('--height', type=int, default= 400 )
 parser.add_argument('--wandb', type=int, default=1)
 parser.add_argument('--experiment_name', type=str, default="")
+parser.add_argument('--path', type=str, default="")
+
 
 parser.add_argument('--cutn', type=int, default=32 )
 parser.add_argument('--cut_pow', type=float, default=0.75)
@@ -54,7 +56,7 @@ parser.add_argument('--edge_weight', type=int, default= 5)
 parser.add_argument('--sketch_embed_weight', type=int, default= 0)
 parser.add_argument('--reset_img_prompt_every', type=int, default= 0)
 
-parser.add_argument('--start_image', type=str, default="quickdraw/bird/4.png" )
+parser.add_argument('--start_image', type=str, default="" )
 parser.add_argument('--prompts', type=str, default="A charcoal drawing | 8K HD detailed Wallpaper, digital illustration.:0" )
 
 args = parser.parse_args()
@@ -67,7 +69,7 @@ args.vqgan_model = model_names[args.vqgan_model]
 args.size = [args.width, args.height]
 if args.seed == -1:
     args.seed = None
-if args.init_image == "None":
+if args.init_image == "":
     args.init_image = None
 if args.image_prompts == "None" or not args.image_prompts:
     args.image_prompts = []

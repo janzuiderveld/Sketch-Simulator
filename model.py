@@ -113,7 +113,8 @@ class ModelHost:
             embed = embed - self.ovl_mean_sketch
             pMs.append(Prompt(embed, weight, stop).to(device))
 
-        self.init_img = init_img
+        if self.args.init_image:
+            self.init_img = init_img
         self.device = device
         self.cut_size = cut_size
         self.model, self.perceptor = model, perceptor

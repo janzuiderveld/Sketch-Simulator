@@ -13,6 +13,7 @@ CLIP==0.2.0
 Pillow==8.3.2
 protobuf==3.18.0
 quickdraw==0.2.0
+torchtext==0.10
 pytorch-lightning
 einops
 transformers
