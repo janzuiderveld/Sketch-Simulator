@@ -88,9 +88,9 @@ if __name__ == "__main__":
     parser.add_argument('--items_per_class', type=int, default = 1000, help='Number of items to analyze per quickdraw class')
     parser.add_argument('--save_root', type=str, default = "", help='Root directory to save')
     parser.add_argument('--pad_images', type=int, default = 0, help='If to pad images, if so which ratio to add on each side')
-    parser.add_argument('--width', type=int, default = 400')
-    parser.add_argument('--height', type=int, default = 400')
-    parser.add_argument('--cutn', type=int, default = 64')
+    parser.add_argument('--width', type=int, default = 400)
+    parser.add_argument('--height', type=int, default = 400)
+    parser.add_argument('--cutn', type=int, default = 64)
     args = parser.parse_args()
 
     if not args.path:
