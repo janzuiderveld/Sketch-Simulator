@@ -40,8 +40,6 @@ parser.add_argument('--width', type=int, default= 400 )
 parser.add_argument('--height', type=int, default= 400 )
 parser.add_argument('--wandb', type=int, default=1)
 parser.add_argument('--experiment_name', type=str, default="")
-parser.add_argument('--path', type=str, default="")
-
 
 parser.add_argument('--cutn', type=int, default=32 )
 parser.add_argument('--cut_pow', type=float, default=0.75)
@@ -58,6 +56,8 @@ parser.add_argument('--reset_img_prompt_every', type=int, default= 0)
 
 parser.add_argument('--start_image', type=str, default="" )
 parser.add_argument('--prompts', type=str, default="A charcoal drawing | 8K HD detailed Wallpaper, digital illustration.:0" )
+
+parser.add_argument('--path', type=str, default="")
 
 args = parser.parse_args()
 

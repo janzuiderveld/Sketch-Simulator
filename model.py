@@ -146,7 +146,7 @@ class ModelHost:
         return(embeddings)
 
     def embed_images_cuts(self, image_prompts, width=400, height=400):
-        toksX, toksY = 400 // self.f, 400 // self.f
+        toksX, toksY = width // self.f, width // self.f
         sideX, sideY = toksX * self.f, toksY * self.f
         embeddings = []
         for path in image_prompts:
