@@ -11,3 +11,4 @@ CLIP/
 wandb/
 .quickdrawcache/
 .history/
+steps/
