@@ -48,6 +48,7 @@ parser.add_argument('--step_size', type=float, default=0.87)
 parser.add_argument('--ema_val', type=float, default=0.98)
 parser.add_argument('--init_weight', type=float, default=0.1)
 parser.add_argument('--decay_rate', type=float, default=100)
+
 parser.add_argument('--weight_reg', type=float, default=0)
 parser.add_argument('--weight_decouple', type=float, default=1)
 parser.add_argument('--rectify', type=float, default=0)
@@ -55,7 +56,9 @@ parser.add_argument('--beta1', type=float, default=0.9)
 parser.add_argument('--epsilon', type=float, default=1e-16)
 parser.add_argument('--edge_weight', type=int, default= 5)
 parser.add_argument('--sketch_embed_weight', type=int, default= 0)
-parser.add_argument('--reset_img_prompt_every', type=int, default= 0)
+parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketch.pth")
+
+# parser.add_argument('--reset_img_prompt_every', type=int, default= 0)
 
 parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/eedb70bc-7a45-41cd-98e1-1f91f6285803.jpeg" )
 parser.add_argument('--prompts', type=str, default="A charcoal drawing | 8K HD detailed Wallpaper, digital illustration.:0" )
