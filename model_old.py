@@ -11,6 +11,7 @@ from CLIP import clip
 import kornia
 import kornia.augmentation as K
 
+from PIL.PngImagePlugin import PngImageFile, PngInfo
 from PIL import Image
 import imageio
 
@@ -397,7 +398,7 @@ class ModelHost:
       mse_decay_rate = self.args.decay_rate
       lossAll = self.ascend_txt()
 
-      if i % args.display_freq == 0:
+      if self.counter % self.args.display_freq == 0:
         self.checkin(lossAll)
          
       loss = sum(lossAll)
