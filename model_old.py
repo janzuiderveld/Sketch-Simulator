@@ -254,7 +254,7 @@ class ModelHost:
     imfile.save(path, pnginfo=meta)
 
   @torch.no_grad()
-  def checkin(self, i, losses, x):
+  def checkin(self, i, losses):
       losses_str = ', '.join(f'{loss.item():g}' for loss in losses)
       if i < args.mse_end:
         print(f'i: {i}, loss: {sum(losses).item():g}, losses: {losses_str}')
@@ -367,21 +367,21 @@ class ModelHost:
       img = np.transpose(img, (1, 2, 0))
       im_path = f'./steps/{i}.png'
       imageio.imwrite(im_path, np.array(img))
-      self.add_metadata(im_path, i)
+      self.add_metadata(im_path, self.counter)
       return result
 
-  def train(self, i,x):
+  def train(self):
       self.opt.zero_grad()
       mse_decay = self.args.mse_decay
       mse_decay_rate = self.args.mse_decay_rate
-      lossAll = self.ascend_txt(i)
+      lossAll = self.ascend_txt()
 
       if i < args.mse_end and i % args.mse_display_freq == 0:
-        self.checkin(i, lossAll, x)
+        self.checkin(lossAll)
       if i == args.mse_end:
-        self.checkin(i,lossAll,x)
+        self.checkin(lossAll)
       if i > args.mse_end and (i-args.mse_end) % args.display_freq == 0:
-        self.checkin(i, lossAll, x)
+        self.checkin(lossAll)
          
       loss = sum(lossAll)
       loss.backward()
@@ -409,7 +409,7 @@ class ModelHost:
                   g['lr'] = self.cur_step_size
           #self.z.copy_(self.z.maximum(self.z_min).minimum(self.z_max))
 
-  def run(self,x):
+  def run(self):
     i = 0
     try:
         pbar = tqdm(range(int(args.max_iterations + args.mse_end)))
