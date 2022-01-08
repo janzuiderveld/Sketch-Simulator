@@ -38,9 +38,6 @@ class ModelHost:
   def setup_metadata(self, seed):
     metadata = {k:v for k,v in vars(self.args).items()}
     metadata = metadata['_items']
-    print(metadata['max_iterations'])
-    del metadata['max_iterations']
-    del metadata['display_freq']
     metadata['seed'] = seed
     if (metadata['init_image']):
       path = metadata['init_image']
