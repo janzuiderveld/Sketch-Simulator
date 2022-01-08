@@ -392,7 +392,6 @@ class ModelHost:
   def train(self):
       self.opt.zero_grad()
     #   mse_decay = self.args.decay
-      mse_decay_rate = self.args.decay_rate
       lossAll = self.ascend_txt()
 
       if self.counter % self.args.display_freq == 0:
@@ -402,7 +401,7 @@ class ModelHost:
       loss.backward()
       self.opt.step()
       with torch.no_grad():
-          if self.mse_weight > 0 and self.args.init_weight and self.counter > 0 and self.counter%mse_decay_rate == 0:
+          if self.mse_weight > 0 and self.args.init_weight and self.counter > 0 and self.counter%self.args.decay_rate == 0:
               self.z_orig = vector_quantize(self.z.average.movedim(1, 3), self.model.quantize.embedding.weight).movedim(3, 1)
               if self.mse_weight - mse_decay > 0:
                   self.mse_weight = self.mse_weight - mse_decay
