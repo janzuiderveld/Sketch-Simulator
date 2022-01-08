@@ -61,7 +61,8 @@ parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simula
 # parser.add_argument('--reset_img_prompt_every', type=int, default= 0)
 
 parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/eedb70bc-7a45-41cd-98e1-1f91f6285803.jpeg" )
-parser.add_argument('--prompts', type=str, default="A charcoal drawing | 8K HD detailed Wallpaper, digital illustration.:0" )
+parser.add_argument('--prompts', type=str, default="8K HD detailed Wallpaper, digital illustration, artstation" )
+# parser.add_argument('--prompts', type=str, default="A charcoal drawing | 8K HD detailed Wallpaper, digital illustration.:0" )
 parser.add_argument('--altprompts', type=str, default="" )
 parser.add_argument('--flavor', type=str, default="cumin", help='"ginger", "cumin", "holywater"')
 parser.add_argument('--noise_prompt_weights', type=list, default=[])
