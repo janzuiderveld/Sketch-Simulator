@@ -75,12 +75,12 @@ class ModelHost:
     e_dim = model.quantize.e_dim
     f = 2**(model.decoder.num_resolutions - 1)
 
-    make_cutouts = flavordict[flavor](cut_size, self.args.mse_cutn, cut_pow=self.args.mse_cut_pow,augs=self.args.augs)
+    make_cutouts = flavordict[self.args.flavor](cut_size, self.args.mse_cutn, cut_pow=self.args.mse_cut_pow,augs=self.args.augs)
 
     #make_cutouts = MakeCutouts(cut_size, self.args.mse_cutn, cut_pow=self.args.mse_cut_pow,augs=self.args.augs)
     if self.args.altprompts:
         self.usealtprompts = True
-        self.alt_make_cutouts = flavordict[flavor](cut_size, self.args.mse_cutn, cut_pow=self.args.alt_mse_cut_pow,augs=self.args.altaugs)
+        self.alt_make_cutouts = flavordict[self.args.flavor](cut_size, self.args.mse_cutn, cut_pow=self.args.alt_mse_cut_pow,augs=self.args.altaugs)
         #self.alt_make_cutouts = MakeCutouts(cut_size, self.args.mse_cutn, cut_pow=self.args.alt_mse_cut_pow,augs=self.args.altaugs)
     
     n_toks = model.quantize.n_e
