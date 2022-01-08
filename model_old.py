@@ -395,9 +395,9 @@ class ModelHost:
                   print(f"updated mse weight: {self.mse_weight}")
               else:
                   self.mse_weight = 0
-                  self.make_cutouts = flavordict[flavor](self.perceptor.visual.input_resolution, args.cutn, cut_pow=args.cut_pow, augs = args.augs)
+                  self.make_cutouts = flavordict[self.args.flavor](self.perceptor.visual.input_resolution, args.cutn, cut_pow=args.cut_pow, augs = args.augs)
                   if self.usealtprompts:
-                      self.alt_make_cutouts = flavordict[flavor](self.perceptor.visual.input_resolution, args.cutn, cut_pow=args.alt_cut_pow, augs = args.altaugs)
+                      self.alt_make_cutouts = flavordict[self.args.flavor](self.perceptor.visual.input_resolution, args.cutn, cut_pow=args.alt_cut_pow, augs = args.altaugs)
                   self.z = EMATensor(self.z.average, args.ema_val)
                   self.new_step_size =args.step_size
                   self.opt = optim.Adam(self.z.parameters(), lr=args.step_size, weight_decay=0.00000000)

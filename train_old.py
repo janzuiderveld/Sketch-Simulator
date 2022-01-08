@@ -57,7 +57,7 @@ parser.add_argument('--reset_img_prompt_every', type=int, default= 0)
 parser.add_argument('--start_image', type=str, default="" )
 parser.add_argument('--prompts', type=str, default="A charcoal drawing | 8K HD detailed Wallpaper, digital illustration.:0" )
 parser.add_argument('--altprompts', type=str, default="" )
-parser.add_argument('--flavor', type=str, default="cumin")
+parser.add_argument('--flavor', type=str, default="cumin", help='"ginger", "cumin", "holywater"')
 
 parser.add_argument('--path', type=str, default="")
 parser.add_argument('--save_root', type=str, default="")
