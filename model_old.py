@@ -371,8 +371,8 @@ class ModelHost:
       with torch.no_grad():
           if self.mse_weight > 0 and self.args.init_weight and self.counter > 0 and self.counter%self.args.decay_rate == 0:
               self.z_orig = vector_quantize(self.z.average.movedim(1, 3), self.model.quantize.embedding.weight).movedim(3, 1)
-              self.mse_weight = self.mse_weight - mse_decay
-              print(f"updated mse weight: {self.mse_weight}")
+            #   self.mse_weight = self.mse_weight - mse_decay
+            #   print(f"updated mse weight: {self.mse_weight}")
 
   def run(self):
     i = 0
