@@ -420,19 +420,19 @@ class ModelHost:
 
   def run(self):
     i = 0
-    try:
-        pbar = tqdm(range(int(self.args.max_iterations + self.args.mse_end)))
-        while True:
-          self.train()
-          if self.counter > 0 and self.counter%self.args.mse_decay_rate==0 and self.mse_weight > 0:
+    # try:
+    pbar = tqdm(range(int(self.args.max_iterations)))
+    while True:
+        self.train()
+        if self.counter > 0 and self.counter%self.args.mse_decay_rate==0 and self.mse_weight > 0:
             self.z = EMATensor(self.z.average, self.args.ema_val)
-            self.opt = optim.Adam(self.z.parameters(), lr=self.args.mse_step_size, weight_decay=0.00000000)
-          if self.counter >= self.args.max_iterations + self.args.mse_end:
+            self.opt = optim.Adam(self.z.parameters(), lr=self.args.mse_step_size, weight_decay=self.args.weight_decay)
+        if self.counter >= self.args.max_iterations:
             pbar.close()
             break
-          self.z.update()
-          i += 1
-          pbar.update()
-    except KeyboardInterrupt:
-        pass
+        self.z.update()
+        i += 1
+        pbar.update()
+    # except KeyboardInterrupt:
+    #     pass
     return i
