@@ -5,6 +5,7 @@ from torch import nn, optim
 from torch.nn import functional as F
 from torchvision.transforms import Normalize
 from torchvision.transforms import functional as TF
+from torchvision import transforms
 from adabelief_pytorch import AdaBelief
 from CLIP import clip
 import kornia
