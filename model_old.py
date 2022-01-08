@@ -202,8 +202,8 @@ class ModelHost:
 
     pMs.append(Prompt(embed, weight, stop).to(device))
 
-    for seed, weight in zip(self.args.noise_prompt_seeds, self.args.noise_prompt_weights):
-        gen = torch.Generator().manual_seed(seed)
+    for weight in self.args.noise_prompt_weights:
+        gen = torch.Generator().manual_seed(-1)
         embed = torch.empty([1, perceptor.visual.output_dim]).normal_(generator=gen)
         pMs.append(Prompt(embed, weight).to(device))
         if(self.usealtprompts):
@@ -334,7 +334,7 @@ class ModelHost:
           else:
               return batchpath+"/"+str(i)+".png"
 
-  def ascend_txt(self, i):
+  def ascend_txt(self):
       out = self.synth(self.z.tensor)
       iii = self.perceptor.encode_image(self.normalize(self.make_cutouts(out))).float()
       
@@ -359,6 +359,7 @@ class ModelHost:
         img_magnitude: np.ndarray = kornia.tensor_to_image(init_img_edges.byte())
         img_canny: np.ndarray = kornia.tensor_to_image(out_edges.byte())
 
+        # plot the results ##########################################
         # Create the plot
         fig, axs = plt.subplots(1, 2, figsize=(16,16))
         axs = axs.ravel()
@@ -385,7 +386,7 @@ class ModelHost:
       
       img = np.array(out.mul(255).clamp(0, 255)[0].cpu().detach().numpy().astype(np.uint8))[:,:,:]
       img = np.transpose(img, (1, 2, 0))
-      im_path = f'./steps/{i}.png'
+      im_path = f'./steps/{self.counter}.png'
       imageio.imwrite(im_path, np.array(img))
       self.add_metadata(im_path, self.counter)
       return result
