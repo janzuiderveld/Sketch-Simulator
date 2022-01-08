@@ -117,36 +117,12 @@ class ModelHost:
     if self.args.start_image:
         pil_image = Image.open(self.args.start_image).convert('RGB')
 
-        # enlarge image to fit in sideX, sideY, retaining its ratio
-        if pil_image.size[0] > pil_image.size[1]:
-            new_size = (sideX, int(sideX * pil_image.size[1] / pil_image.size[0]))
-        else:
-            new_size = (int(sideY * pil_image.size[0] / pil_image.size[1]), sideY)
-
-        pil_image = pil_image.resize(new_size, Image.LANCZOS)
-       
-        # resize image using reflection padding
-        # init_img = TF.to_tensor(pil_image).to(device).unsqueeze(0) * 2 - 1
-        # m = nn.ReflectionPad2d(((sideX-pil_image.size[0])//2, (sideX-pil_image.size[0])//2, 
-        #                        (sideY-pil_image.size[1])//2, (sideY-pil_image.size[1])//2))
-        # init_img = m(init_img)
-        # z, *_ = model.encode(init_img)
-      
-        # # resize image using white padding
-        # # pad enlarged image to fit in sideX, sideY. Original image centered
-        new_image = Image.new('RGB', (sideX, sideY), (255, 255, 255))
-        new_image.paste(pil_image, ((sideX - new_size[0]) // 2, (sideY - new_size[1]) // 2))
-        pil_image = new_image
-        print("Init image size:", pil_image.size)
+        pil_image = self.resize_image_custom(pil_image, sideX, sideY)
+        # pil_image = resize_image(pil_image, (sideX, sideY))
 
         init_img = TF.to_tensor(pil_image).to(device).unsqueeze(0) * 2 - 1
         z, *_ = model.encode(init_img)
 
-
-        # pil_image = pad_white(pil_image)
-        # pil_image = pil_image.resize((sideX, sideY), Image.LANCZOS)
-        # init_img = TF.to_tensor(pil_image).to(device).unsqueeze(0) * 2 - 1
-        # z, *_ = model.encode(init_img)
     else:
         one_hot = F.one_hot(torch.randint(n_toks, [toksY * toksX], device=device), n_toks).float()
         z = one_hot @ model.quantize.embedding.weight
@@ -186,26 +162,6 @@ class ModelHost:
     from PIL import Image
     # img_embeddings = self.embed_images(self.args.start_image)
 
-    path, weight, stop = parse_prompt(self.args.start_image)
-    print("image weight", weight)
-    # embed = self.embed_images([path])
-    img = resize_image(Image.open(path).convert('RGB'), (sideX, sideY))
-    batch = make_cutouts(TF.to_tensor(img).unsqueeze(0).to(device))
-    embed = perceptor.encode_image(normalize(batch)).float()
-
-    # print("embed shape before: ", embed.shape)
-    ovl_mean = torch.load(self.args.embedding_avg)
-    embed = embed - ovl_mean
-    # print("embed shape after: ", embed.shape)
-
-    pMs.append(Prompt(embed, weight, stop).to(device))
-
-    for weight in self.args.noise_prompt_weights:
-        gen = torch.Generator().manual_seed(-1)
-        embed = torch.empty([1, perceptor.visual.output_dim]).normal_(generator=gen)
-        pMs.append(Prompt(embed, weight).to(device))
-        if(self.usealtprompts):
-          altpMs.append(Prompt(embed, weight).to(device))
 
     self.z_init = z_init
     self.init_img = init_img
@@ -225,6 +181,57 @@ class ModelHost:
 
     self.counter = 0
 
+    # IMAGE CONTENT PROMPT BIZZ ##########################$########
+    path, weight, stop = parse_prompt(self.args.start_image)
+    print("image weight", weight)
+    # embed = self.embed_images([path])
+    # img = resize_image(Image.open(path).convert('RGB'), (sideX, sideY))
+    img = self.resize_image_custom(Image.open(path).convert('RGB'), sideX, sideY)
+
+    ovl_mean = torch.load(self.args.embedding_avg)
+
+
+    # set random cuts as target. Prompt class uses alll cuts, todo check how the distance to all of these is calculated, avg?
+    if self.args.target_avg_cuts:
+        batch = make_cutouts(TF.to_tensor(img).unsqueeze(0).to(device))
+        embed = perceptor.encode_image(normalize(batch)).float()
+        embed = embed - ovl_mean
+        pMs.append(Prompt(embed, weight, stop).to(device))
+        print("embed target", Prompt(embed, weight, stop).embed.shape)
+
+    if self.args.target_full_img:
+        embed = self.embed_images_full([self.args.start_image])
+        embed = embed - ovl_mean
+        pMs.append(Prompt(embed, weight, stop).to(device))
+        print("embed full target", Prompt(embed, weight, stop).embed.shape)
+
+    # print("embed shape before: ", embed.shape)
+    # print("embed shape after: ", embed.shape)
+
+
+    for weight in self.args.noise_prompt_weights:
+        gen = torch.Generator().manual_seed(-1)
+        embed = torch.empty([1, perceptor.visual.output_dim]).normal_(generator=gen)
+        pMs.append(Prompt(embed, weight).to(device))
+        if(self.usealtprompts):
+          altpMs.append(Prompt(embed, weight).to(device))
+
+  def resize_image_custom(self, pil_image, sideX, sideY):
+    # enlarge image to fit in sideX, sideY, retaining its ratio
+    if pil_image.size[0] > pil_image.size[1]:
+        new_size = (sideX, int(sideX * pil_image.size[1] / pil_image.size[0]))
+    else:
+        new_size = (int(sideY * pil_image.size[0] / pil_image.size[1]), sideY)
+
+    pil_image = pil_image.resize(new_size, Image.LANCZOS)
+    
+    # # resize image using white padding
+    # # pad enlarged image to fit in sideX, sideY. Original image centered
+    new_image = Image.new('RGB', (sideX, sideY), (255, 255, 255))
+    new_image.paste(pil_image, ((sideX - new_size[0]) // 2, (sideY - new_size[1]) // 2))
+    pil_image = new_image
+    print("Init image size:", pil_image.size)
+    return pil_image
 
   def embed_images_full(self, image_prompts, width=400, height=400):
       toksX, toksY = 400 // self.f, 400 // self.f
@@ -241,7 +248,7 @@ class ModelHost:
           # batch = self.make_cutouts(TF.to_tensor(img).unsqueeze(0).to(self.device))
           # embed = self.perceptor.encode_image(self.normalize(batch)).float()
       
-      embeddings = clamp_with_grad(embeddings, 0, 1)
+    #   embeddings = clamp_with_grad(embeddings, 0, 1)
       embeddings = torch.cat(embeddings, dim=0)  
 
       return(embeddings)

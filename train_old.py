@@ -58,6 +58,9 @@ parser.add_argument('--edge_weight', type=int, default= 5)
 parser.add_argument('--sketch_embed_weight', type=int, default= 0)
 parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketch.pth")
 
+parser.add_argument('--target_avg_cuts', type=int, default=1)
+parser.add_argument('--target_full_img', type=int, default=0)
+
 # parser.add_argument('--reset_img_prompt_every', type=int, default= 0)
 
 parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/eedb70bc-7a45-41cd-98e1-1f91f6285803.jpeg" )
@@ -109,4 +112,5 @@ def Main():
     mh.run()
 
 if __name__ == "__main__":
+    os.makedirs("steps", exist_ok=True)
     Main()
