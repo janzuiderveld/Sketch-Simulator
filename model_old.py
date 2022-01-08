@@ -207,7 +207,7 @@ class ModelHost:
 
     for prompt in self.args.start_image:
         path, weight, stop = parse_prompt(prompt)
-
+        print("image weight", weight)
         # embed = self.embed_images([path])
         img = resize_image(Image.open(path).convert('RGB'), (sideX, sideY))
         batch = make_cutouts(TF.to_tensor(img).unsqueeze(0).to(device))
@@ -350,7 +350,7 @@ class ModelHost:
 
       _, out_edges = kornia.filters.canny(out)
       _, init_img_edges = kornia.filters.canny(self.init_img)
-      result.append(F.mse_loss(out_edges[init_img_edges>0], init_img_edges[init_img_edges>0]) * 5)
+      result.append(F.mse_loss(out_edges[init_img_edges>0], init_img_edges[init_img_edges>0]) * self.args.edge_weight)
       
       if not self.counter % 10:
         import matplotlib.pyplot as plt
