@@ -77,11 +77,11 @@ class ModelHost:
 
     make_cutouts = flavordict[self.args.flavor](cut_size, self.args.cutn, cut_pow=self.args.cut_pow,augs=self.args.augs)
 
-    #make_cutouts = MakeCutouts(cut_size, self.args.mse_cutn, cut_pow=self.args.mse_cut_pow,augs=self.args.augs)
+    #make_cutouts = MakeCutouts(cut_size, self.args.cutn, cut_pow=self.args.cut_pow,augs=self.args.augs)
     if self.args.altprompts:
         self.usealtprompts = True
-        self.alt_make_cutouts = flavordict[self.args.flavor](cut_size, self.args.mse_cutn, cut_pow=self.args.alt_mse_cut_pow,augs=self.args.altaugs)
-        #self.alt_make_cutouts = MakeCutouts(cut_size, self.args.mse_cutn, cut_pow=self.args.alt_mse_cut_pow,augs=self.args.altaugs)
+        self.alt_make_cutouts = flavordict[self.args.flavor](cut_size, self.args.cutn, cut_pow=self.args.alt_mse_cut_pow,augs=self.args.altaugs)
+        #self.alt_make_cutouts = MakeCutouts(cut_size, self.args.cutn, cut_pow=self.args.alt_mse_cut_pow,augs=self.args.altaugs)
     
     n_toks = model.quantize.n_e
     toksX, toksY = self.args.size[0] // f, self.args.size[1] // f
@@ -136,17 +136,14 @@ class ModelHost:
         # z, *_ = model.encode(TF.to_tensor(pil_image).to(device).unsqueeze(0) * 2 - 1)
         # z = EMATensor(z, self.args.ema_val)
 
-    if self.args.mse_with_zeros and not self.args.init_image:
-        z_orig = torch.zeros_like(z.tensor)
-    else:
-        z_orig = z.tensor.clone()
-        z_init = z.tensor.clone()
+    z_orig = z.tensor.clone()
+    z_init = z.tensor.clone()
 
     z.requires_grad_(True)
-    opt = optim.Adam(z.parameters(), lr=self.args.mse_step_size, weight_decay=0.00000000)
-    # opt = AdaBelief(z.parameters(), lr=self.args.mse_step_size, eps=1e-16, betas=(0.9,0.999), weight_decouple = True, rectify = False)
+    opt = optim.Adam(z.parameters(), lr=self.args.step_size, weight_decay=0.00000000)
+    # opt = AdaBelief(z.parameters(), lr=self.args.step_size, eps=1e-16, betas=(0.9,0.999), weight_decouple = True, rectify = False)
 
-    self.cur_step_size =self.args.mse_step_size
+    self.cur_step_size =self.args.step_size
 
     normalize = transforms.Normalize(mean=[0.48145466, 0.4578275, 0.40821073],
                                     std=[0.26862954, 0.26130258, 0.27577711])
@@ -370,8 +367,8 @@ class ModelHost:
 
   def train(self):
       self.opt.zero_grad()
-      mse_decay = self.args.mse_decay
-      mse_decay_rate = self.args.mse_decay_rate
+      mse_decay = self.args.decay
+      mse_decay_rate = self.args.decay_rate
       lossAll = self.ascend_txt()
 
       if i < args.mse_end and i % args.mse_display_freq == 0:
