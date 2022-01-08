@@ -31,6 +31,7 @@ class ModelHost:
     self.metadata = None
     self.mse_weight = 0
     self.usealtprompts = False
+    self.setup_model()
 
   def setup_metadata(self, seed):
     metadata = {k:v for k,v in vars(self.args).items()}
