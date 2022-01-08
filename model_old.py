@@ -402,7 +402,7 @@ class ModelHost:
       loss.backward()
       self.opt.step()
       with torch.no_grad():
-          if self.mse_weight > 0 and self.args.init_weight and i > 0 and i%mse_decay_rate == 0:
+          if self.mse_weight > 0 and self.args.init_weight and self.counter > 0 and self.counter%mse_decay_rate == 0:
               self.z_orig = vector_quantize(self.z.average.movedim(1, 3), self.model.quantize.embedding.weight).movedim(3, 1)
               if self.mse_weight - mse_decay > 0:
                   self.mse_weight = self.mse_weight - mse_decay
@@ -416,7 +416,7 @@ class ModelHost:
                   self.new_step_size =args.step_size
                   self.opt = optim.Adam(self.z.parameters(), lr=args.step_size, weight_decay=0.00000000)
                   print(f"updated mse weight: {self.mse_weight}")
-          if i > args.mse_end:
+          if self.counter > args.mse_end:
               if args.step_size != args.final_step_size and args.max_iterations > 0:
                 progress = (i-args.mse_end)/(args.max_iterations)
                 self.cur_step_size = lerp(step_size, final_step_size,progress)
