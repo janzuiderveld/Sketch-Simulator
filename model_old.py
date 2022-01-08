@@ -409,31 +409,25 @@ class ModelHost:
                   print(f"updated mse weight: {self.mse_weight}")
               else:
                   self.mse_weight = 0
-                  self.make_cutouts = flavordict[self.args.flavor](self.perceptor.visual.input_resolution, args.cutn, cut_pow=args.cut_pow, augs = args.augs)
+                  self.make_cutouts = flavordict[self.args.flavor](self.perceptor.visual.input_resolution, self.args.cutn, cut_pow=self.args.cut_pow, augs = self.args.augs)
                   if self.usealtprompts:
-                      self.alt_make_cutouts = flavordict[self.args.flavor](self.perceptor.visual.input_resolution, args.cutn, cut_pow=args.alt_cut_pow, augs = args.altaugs)
-                  self.z = EMATensor(self.z.average, args.ema_val)
-                  self.new_step_size =args.step_size
-                  self.opt = optim.Adam(self.z.parameters(), lr=args.step_size, weight_decay=0.00000000)
+                      self.alt_make_cutouts = flavordict[self.args.flavor](self.perceptor.visual.input_resolution, self.args.cutn, cut_pow=self.args.alt_cut_pow, augs = self.args.altaugs)
+                  self.z = EMATensor(self.z.average, self.args.ema_val)
+                  self.new_step_size =self.args.step_size
+                  self.opt = optim.Adam(self.z.parameters(), lr=self.args.step_size, weight_decay=0.00000000)
                   print(f"updated mse weight: {self.mse_weight}")
-          if self.counter > args.mse_end:
-              if args.step_size != args.final_step_size and args.max_iterations > 0:
-                progress = (i-args.mse_end)/(args.max_iterations)
-                self.cur_step_size = lerp(step_size, final_step_size,progress)
-                for g in self.opt.param_groups:
-                  g['lr'] = self.cur_step_size
           #self.z.copy_(self.z.maximum(self.z_min).minimum(self.z_max))
 
   def run(self):
     i = 0
     try:
-        pbar = tqdm(range(int(args.max_iterations + args.mse_end)))
+        pbar = tqdm(range(int(self.args.max_iterations + self.args.mse_end)))
         while True:
-          self.train(i,x)
-          if i > 0 and i%args.mse_decay_rate==0 and self.mse_weight > 0:
-            self.z = EMATensor(self.z.average, args.ema_val)
-            self.opt = optim.Adam(self.z.parameters(), lr=args.mse_step_size, weight_decay=0.00000000)
-          if i >= args.max_iterations + args.mse_end:
+          self.train()
+          if self.counter > 0 and self.counter%self.args.mse_decay_rate==0 and self.mse_weight > 0:
+            self.z = EMATensor(self.z.average, self.args.ema_val)
+            self.opt = optim.Adam(self.z.parameters(), lr=self.args.mse_step_size, weight_decay=0.00000000)
+          if self.counter >= self.args.max_iterations + self.args.mse_end:
             pbar.close()
             break
           self.z.update()
