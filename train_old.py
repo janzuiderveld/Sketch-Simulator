@@ -104,7 +104,7 @@ def Main():
         config = args
 
     mh = ModelHost(config)
-    mh.train()
+    mh.run()
 
 if __name__ == "__main__":
     Main()
