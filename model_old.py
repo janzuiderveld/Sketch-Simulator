@@ -60,7 +60,7 @@ class ModelHost:
         print('Using alternate augment set prompts:', self.args.altprompts)
     if self.args.image_prompts:
         print('Using image prompts:', self.args.image_prompts)
-    if args.seed is None:
+    if self.args.seed is None:
         seed = torch.seed()
     else:
         seed = args.seed
