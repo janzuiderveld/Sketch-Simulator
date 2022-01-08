@@ -383,9 +383,8 @@ class ModelHost:
             self.z = EMATensor(self.z.average, self.args.ema_val)
             self.opt = optim.Adam(self.z.parameters(), lr=self.args.mse_step_size, weight_decay=self.args.weight_decay)
         if self.counter >= self.args.max_iterations:
-            pbar.close()
             break
         self.z.update()
     # except KeyboardInterrupt:
     #     pass
-    return i
+    return 
