@@ -255,12 +255,9 @@ class ModelHost:
     imfile.save(path, pnginfo=meta)
 
   @torch.no_grad()
-  def checkin(self, i, losses):
+  def checkin(self, losses):
       losses_str = ', '.join(f'{loss.item():g}' for loss in losses)
-      if i < args.mse_end:
-        print(f'i: {i}, loss: {sum(losses).item():g}, losses: {losses_str}')
-      else:
-        print(f'i: {i-args.mse_end} ({i}), loss: {sum(losses).item():g}, losses: {losses_str}')
+      print(f'i: {self.counter}, loss: {sum(losses).item():g}, losses: {losses_str}')
       print(f'cutn: {self.make_cutouts.cutn}, cut_pow: {self.make_cutouts.cut_pow}, step_size: {self.cur_step_size}')
       out = self.synth(self.z.average)
       if i == self.args.max_iterations:
