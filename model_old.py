@@ -186,6 +186,28 @@ class ModelHost:
         altpMs.append(Prompt(embed, weight, stop).to(device))
     
     from PIL import Image
+    # img_embeddings = self.embed_images(self.args.start_image)
+
+    path, weight, stop = parse_prompt(self.args.start_image)
+    print("image weight", weight)
+    # embed = self.embed_images([path])
+    img = resize_image(Image.open(path).convert('RGB'), (sideX, sideY))
+    batch = make_cutouts(TF.to_tensor(img).unsqueeze(0).to(device))
+    embed = perceptor.encode_image(normalize(batch)).float()
+
+    # print("embed shape before: ", embed.shape)
+    embed = embed - ovl_mean
+    # print("embed shape after: ", embed.shape)
+
+    pMs.append(Prompt(embed, weight, stop).to(device))
+
+    for seed, weight in zip(self.args.noise_prompt_seeds, self.args.noise_prompt_weights):
+        gen = torch.Generator().manual_seed(seed)
+        embed = torch.empty([1, perceptor.visual.output_dim]).normal_(generator=gen)
+        pMs.append(Prompt(embed, weight).to(device))
+        if(self.usealtprompts):
+          altpMs.append(Prompt(embed, weight).to(device))
+
     self.z_init = z_init
     self.init_img = init_img
     self.device = device
@@ -203,29 +225,7 @@ class ModelHost:
     self.mse_weight = self.args.init_weight
 
     self.counter = 0
-    # img_embeddings = self.embed_images(self.args.start_image)
-
-    for prompt in self.args.start_image:
-        path, weight, stop = parse_prompt(prompt)
-        print("image weight", weight)
-        # embed = self.embed_images([path])
-        img = resize_image(Image.open(path).convert('RGB'), (sideX, sideY))
-        batch = make_cutouts(TF.to_tensor(img).unsqueeze(0).to(device))
-        embed = perceptor.encode_image(normalize(batch)).float()
-
-        # print("embed shape before: ", embed.shape)
-        embed = embed - ovl_mean
-        # print("embed shape after: ", embed.shape)
-
-        pMs.append(Prompt(embed, weight, stop).to(device))
-
-    for seed, weight in zip(self.args.noise_prompt_seeds, self.args.noise_prompt_weights):
-        gen = torch.Generator().manual_seed(seed)
-        embed = torch.empty([1, perceptor.visual.output_dim]).normal_(generator=gen)
-        pMs.append(Prompt(embed, weight).to(device))
-        if(self.usealtprompts):
-          altpMs.append(Prompt(embed, weight).to(device))
-
+    
 
   def embed_images_full(self, image_prompts, width=400, height=400):
       toksX, toksY = 400 // self.f, 400 // self.f
