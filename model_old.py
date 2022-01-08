@@ -36,6 +36,8 @@ class ModelHost:
 
   def setup_metadata(self, seed):
     metadata = {k:v for k,v in vars(self.args).items()}
+    metadata = metadata['_items']
+    print(metadata['max_iterations'])
     del metadata['max_iterations']
     del metadata['display_freq']
     metadata['seed'] = seed
@@ -53,14 +55,15 @@ class ModelHost:
     self.metadata = metadata
 
   def setup_model(self):
+    # self.args.init_img = self.args.start_image
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     print('Using device:', device)
     if self.args.prompts:
         print('Using prompts:', self.args.prompts)
     if self.args.altprompts:
         print('Using alternate augment set prompts:', self.args.altprompts)
-    if self.args.image_prompts:
-        print('Using image prompts:', self.args.image_prompts)
+    if self.args.start_image:
+        print('Using image prompts:', self.args.start_image)
     if self.args.seed is None:
         seed = torch.seed()
     else:
@@ -113,8 +116,8 @@ class ModelHost:
     
     from PIL import Image
 
-    if self.args.init_image:
-        pil_image = Image.open(self.args.init_image).convert('RGB')
+    if self.args.start_image:
+        pil_image = Image.open(self.args.start_image).convert('RGB')
 
         # enlarge image to fit in sideX, sideY, retaining its ratio
         if pil_image.size[0] > pil_image.size[1]:
@@ -197,12 +200,12 @@ class ModelHost:
     self.normalize = normalize
     self.z, self.z_orig, self.z_min, self.z_max = z, z_orig, z_min, z_max
     self.setup_metadata(seed)
-    self.mse_weight = self.self.args.init_weight
+    self.mse_weight = self.args.init_weight
 
     self.counter = 0
-    # img_embeddings = self.embed_images(self.args.image_prompts)
+    # img_embeddings = self.embed_images(self.args.start_image)
 
-    for prompt in self.args.image_prompts:
+    for prompt in self.args.start_image:
         path, weight, stop = parse_prompt(prompt)
 
         # embed = self.embed_images([path])
@@ -392,11 +395,7 @@ class ModelHost:
       mse_decay_rate = self.args.decay_rate
       lossAll = self.ascend_txt()
 
-      if i < args.mse_end and i % args.mse_display_freq == 0:
-        self.checkin(lossAll)
-      if i == args.mse_end:
-        self.checkin(lossAll)
-      if i > args.mse_end and (i-args.mse_end) % args.display_freq == 0:
+      if i % args.display_freq == 0:
         self.checkin(lossAll)
          
       loss = sum(lossAll)
