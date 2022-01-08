@@ -381,7 +381,7 @@ class ModelHost:
         self.train()
         if self.counter > 0 and self.counter%self.args.decay_rate==0 and self.mse_weight > 0:
             self.z = EMATensor(self.z.average, self.args.ema_val)
-            self.opt = optim.Adam(self.z.parameters(), lr=self.args.mse_step_size, weight_decay=self.args.weight_decay)
+            self.opt = optim.Adam(self.z.parameters(), lr=self.args.step_size, weight_decay=self.args.weight_decay)
         if self.counter >= self.args.max_iterations:
             break
         self.z.update()

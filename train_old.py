@@ -49,7 +49,7 @@ parser.add_argument('--ema_val', type=float, default=0.98)
 parser.add_argument('--init_weight', type=float, default=0.1)
 parser.add_argument('--decay_rate', type=float, default=100)
 
-parser.add_argument('--weight_reg', type=float, default=0)
+parser.add_argument('--weight_decay', type=float, default=0)
 parser.add_argument('--weight_decouple', type=float, default=1)
 parser.add_argument('--rectify', type=float, default=0)
 parser.add_argument('--beta1', type=float, default=0.9)
