@@ -367,7 +367,7 @@ class ModelHost:
 
   def train(self):
       self.opt.zero_grad()
-      mse_decay = self.args.decay
+    #   mse_decay = self.args.decay
       mse_decay_rate = self.args.decay_rate
       lossAll = self.ascend_txt()
 
