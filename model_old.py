@@ -280,49 +280,17 @@ class ModelHost:
       print(f'i: {self.counter}, loss: {sum(losses).item():g}, losses: {losses_str}')
       print(f'cutn: {self.make_cutouts.cutn}, cut_pow: {self.make_cutouts.cut_pow}, step_size: {self.cur_step_size}')
       out = self.synth(self.z.average)
-      if i == self.args.max_iterations:
-          if save_to_drive== True:
-              batchpath = self.unique_index("./drive/MyDrive/VQGAN_Output/"+folder_name)
-          else:
-              batchpath = self.unique_index("./"+folder_name)
+      if self.counter == self.args.max_iterations:
+          os.makedirs(self.args.output_dir, exist_ok=True)
+          batchpath = self.unique_index("./"+self.args.output_dir)
           TF.to_pil_image(out[0].cpu()).save(batchpath)
       #TF.to_pil_image(out[0].cpu()).save('progress.png')
       #self.add_metadata('progress.png', i)
       #display.display(display.Image('progress.png'))
-      if self.args.png==True:
-        TF.to_pil_image(out[0].cpu()).save('png_progress.png')
-        self.add_metadata('png_progress.png', i)
-        #I know it's a mess, BUT, it works, right? RIGHT?!
-        from PIL import Image, ImageDraw, ImageFilter, ImageEnhance, ImageOps
-        import PIL.ImageOps    
+      
 
-        castle = Image.open(args.init_image).convert('RGB')
-        #castle = Image.open('castle.png')
-        castle = ImageEnhance.Brightness(castle)
-        castle.enhance(1000).save('/content/png_processing/brightness.png')
-
-        im = Image.open('/content/png_processing/brightness.png')
-        im_invert = ImageOps.invert(im)
-        im_invert.save('/content/png_processing/work.png')
-
-        image = Image.open('/content/png_processing/work.png').convert('RGB')
-        inverted_image = PIL.ImageOps.invert(image)
-        inverted_image.save('/content/png_processing/last.png')
-
-        im_rgb = Image.open('progress.png')
-        im_a = Image.open('/content/png_processing/last.png').convert('L').resize(im_rgb.size)
-        im_rgb.putalpha(im_a)
-
-        #im_rgb.save('/content/png_progress.png')
-        im_rgb.save('/content/png_processing/progress.png')
-        #display(Image.open('/content/png_progress.png').convert('RGB'))
-        display(Image.open('/content/png_processing/progress.png'))
-
-      else:
-        TF.to_pil_image(out[0].cpu()).save('progress.png')
-        self.add_metadata('progress.png', i)
-        from PIL import Image
-        display(Image.open('progress.png'))
+      TF.to_pil_image(out[0].cpu()).save('progress.png')
+      self.add_metadata('progress.png', self.counter)
 
   def unique_index(self, batchpath):
       i = 0
@@ -403,19 +371,8 @@ class ModelHost:
       with torch.no_grad():
           if self.mse_weight > 0 and self.args.init_weight and self.counter > 0 and self.counter%self.args.decay_rate == 0:
               self.z_orig = vector_quantize(self.z.average.movedim(1, 3), self.model.quantize.embedding.weight).movedim(3, 1)
-              if self.mse_weight - mse_decay > 0:
-                  self.mse_weight = self.mse_weight - mse_decay
-                  print(f"updated mse weight: {self.mse_weight}")
-              else:
-                  self.mse_weight = 0
-                  self.make_cutouts = flavordict[self.args.flavor](self.perceptor.visual.input_resolution, self.args.cutn, cut_pow=self.args.cut_pow, augs = self.args.augs)
-                  if self.usealtprompts:
-                      self.alt_make_cutouts = flavordict[self.args.flavor](self.perceptor.visual.input_resolution, self.args.cutn, cut_pow=self.args.alt_cut_pow, augs = self.args.altaugs)
-                  self.z = EMATensor(self.z.average, self.args.ema_val)
-                  self.new_step_size =self.args.step_size
-                  self.opt = optim.Adam(self.z.parameters(), lr=self.args.step_size, weight_decay=0.00000000)
-                  print(f"updated mse weight: {self.mse_weight}")
-          #self.z.copy_(self.z.maximum(self.z_min).minimum(self.z_max))
+              self.mse_weight = self.mse_weight - mse_decay
+              print(f"updated mse weight: {self.mse_weight}")
 
   def run(self):
     i = 0

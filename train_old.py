@@ -34,7 +34,7 @@ parser.add_argument('--vqgan_model', type=str, default='ImageNet' )
 parser.add_argument('--clip_model', type=str, default='ViT-B/32' )
 parser.add_argument('--display_freq', type=int, default= 10 )
 parser.add_argument('--log_edges', type=int, default=0)
-parser.add_argument('--max_iterations', type=int, default=30 )
+parser.add_argument('--max_iterations', type=int, default=300)
 parser.add_argument('--seed', type=int, default=-1 )
 parser.add_argument('--width', type=int, default= 400 )
 parser.add_argument('--height', type=int, default= 400 )
@@ -68,6 +68,7 @@ parser.add_argument('--noise_prompt_weights', type=list, default=[])
 
 parser.add_argument('--path', type=str, default="")
 parser.add_argument('--save_root', type=str, default="")
+parser.add_argument('--output_dir', type=str, default="test_outputs")
 
 args = parser.parse_args()
 
