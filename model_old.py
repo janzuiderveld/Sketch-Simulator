@@ -67,24 +67,24 @@ class ModelHost:
     torch.manual_seed(seed)
     print('Using seed:', seed)
 
-    model = load_vqgan_model(f'{args.vqgan_model}.yaml', f'{args.vqgan_model}.ckpt').to(device)
-    perceptor = clip.load(args.clip_model, jit=False)[0].eval().requires_grad_(False).to(device)
+    model = load_vqgan_model(f'{self.args.vqgan_model}.yaml', f'{self.args.vqgan_model}.ckpt').to(device)
+    perceptor = clip.load(self.args.clip_model, jit=False)[0].eval().requires_grad_(False).to(device)
 
     cut_size = perceptor.visual.input_resolution
     
     e_dim = model.quantize.e_dim
     f = 2**(model.decoder.num_resolutions - 1)
 
-    make_cutouts = flavordict[flavor](cut_size, args.mse_cutn, cut_pow=args.mse_cut_pow,augs=args.augs)
+    make_cutouts = flavordict[flavor](cut_size, self.args.mse_cutn, cut_pow=self.args.mse_cut_pow,augs=self.args.augs)
 
-    #make_cutouts = MakeCutouts(cut_size, args.mse_cutn, cut_pow=args.mse_cut_pow,augs=args.augs)
-    if args.altprompts:
+    #make_cutouts = MakeCutouts(cut_size, self.args.mse_cutn, cut_pow=self.args.mse_cut_pow,augs=self.args.augs)
+    if self.args.altprompts:
         self.usealtprompts = True
-        self.alt_make_cutouts = flavordict[flavor](cut_size, args.mse_cutn, cut_pow=args.alt_mse_cut_pow,augs=args.altaugs)
-        #self.alt_make_cutouts = MakeCutouts(cut_size, args.mse_cutn, cut_pow=args.alt_mse_cut_pow,augs=args.altaugs)
+        self.alt_make_cutouts = flavordict[flavor](cut_size, self.args.mse_cutn, cut_pow=self.args.alt_mse_cut_pow,augs=self.args.altaugs)
+        #self.alt_make_cutouts = MakeCutouts(cut_size, self.args.mse_cutn, cut_pow=self.args.alt_mse_cut_pow,augs=self.args.altaugs)
     
     n_toks = model.quantize.n_e
-    toksX, toksY = args.size[0] // f, args.size[1] // f
+    toksX, toksY = self.args.size[0] // f, self.args.size[1] // f
     sideX, sideY = toksX * f, toksY * f
     z_min = model.quantize.embedding.weight.min(dim=0).values[None, :, None, None]
     z_max = model.quantize.embedding.weight.max(dim=0).values[None, :, None, None]
@@ -92,8 +92,8 @@ class ModelHost:
     from PIL import Image
     pad_white = CC(sideX+ sideX//8)
 
-    if args.init_image:
-        pil_image = Image.open(args.init_image).convert('RGB')
+    if self.args.init_image:
+        pil_image = Image.open(self.args.init_image).convert('RGB')
 
         # enlarge image to fit in sideX, sideY, retaining its ratio
         if pil_image.size[0] > pil_image.size[1]:
@@ -129,24 +129,24 @@ class ModelHost:
         one_hot = F.one_hot(torch.randint(n_toks, [toksY * toksX], device=device), n_toks).float()
         z = one_hot @ model.quantize.embedding.weight
         z = z.view([-1, toksY, toksX, e_dim]).permute(0, 3, 1, 2)
-    z = EMATensor(z, args.ema_val)
+    z = EMATensor(z, self.args.ema_val)
     
-        # pil_image = Image.open(args.init_image).convert('RGB')
+        # pil_image = Image.open(self.args.init_image).convert('RGB')
         # pil_image = pil_image.resize((sideX, sideY), Image.LANCZOS)
         # z, *_ = model.encode(TF.to_tensor(pil_image).to(device).unsqueeze(0) * 2 - 1)
-        # z = EMATensor(z, args.ema_val)
+        # z = EMATensor(z, self.args.ema_val)
 
-    if args.mse_with_zeros and not args.init_image:
+    if self.args.mse_with_zeros and not self.args.init_image:
         z_orig = torch.zeros_like(z.tensor)
     else:
         z_orig = z.tensor.clone()
         z_init = z.tensor.clone()
 
     z.requires_grad_(True)
-    opt = optim.Adam(z.parameters(), lr=args.mse_step_size, weight_decay=0.00000000)
-    # opt = AdaBelief(z.parameters(), lr=args.mse_step_size, eps=1e-16, betas=(0.9,0.999), weight_decouple = True, rectify = False)
+    opt = optim.Adam(z.parameters(), lr=self.args.mse_step_size, weight_decay=0.00000000)
+    # opt = AdaBelief(z.parameters(), lr=self.args.mse_step_size, eps=1e-16, betas=(0.9,0.999), weight_decouple = True, rectify = False)
 
-    self.cur_step_size =args.mse_step_size
+    self.cur_step_size =self.args.mse_step_size
 
     normalize = transforms.Normalize(mean=[0.48145466, 0.4578275, 0.40821073],
                                     std=[0.26862954, 0.26130258, 0.27577711])
@@ -154,12 +154,12 @@ class ModelHost:
     pMs = []
     altpMs = []
 
-    for prompt in args.prompts:
+    for prompt in self.args.prompts:
         txt, weight, stop = parse_prompt(prompt)
         embed = perceptor.encode_text(clip.tokenize(txt).to(device)).float()
         pMs.append(Prompt(embed, weight, stop).to(device))
     
-    for prompt in args.altprompts:
+    for prompt in self.args.altprompts:
         txt, weight, stop = parse_prompt(prompt)
         embed = perceptor.encode_text(clip.tokenize(txt).to(device)).float()
         altpMs.append(Prompt(embed, weight, stop).to(device))
@@ -179,12 +179,12 @@ class ModelHost:
     self.normalize = normalize
     self.z, self.z_orig, self.z_min, self.z_max = z, z_orig, z_min, z_max
     self.setup_metadata(seed)
-    self.mse_weight = self.args.init_weight
+    self.mse_weight = self.self.args.init_weight
 
     self.counter = 0
-    # img_embeddings = self.embed_images(args.image_prompts)
+    # img_embeddings = self.embed_images(self.args.image_prompts)
 
-    for prompt in args.image_prompts:
+    for prompt in self.args.image_prompts:
         path, weight, stop = parse_prompt(prompt)
 
         # embed = self.embed_images([path])
@@ -198,7 +198,7 @@ class ModelHost:
 
         pMs.append(Prompt(embed, weight, stop).to(device))
 
-    for seed, weight in zip(args.noise_prompt_seeds, args.noise_prompt_weights):
+    for seed, weight in zip(self.args.noise_prompt_seeds, self.args.noise_prompt_weights):
         gen = torch.Generator().manual_seed(seed)
         embed = torch.empty([1, perceptor.visual.output_dim]).normal_(generator=gen)
         pMs.append(Prompt(embed, weight).to(device))
