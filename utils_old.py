@@ -145,7 +145,7 @@ class MakeCutoutsCustom(nn.Module):
     def __init__(self, cut_size, cutn, cut_pow, augs):
         super().__init__()
         self.cut_size = cut_size
-        tqdm.write(f'cut size: {self.cut_size}')
+        print(f'cut size: {self.cut_size}')
         self.cutn = cutn
         self.cut_pow = cut_pow
         self.noise_fac = 0.1
@@ -209,7 +209,7 @@ class MakeCutoutsCumin(nn.Module):
     def __init__(self, cut_size, cutn, cut_pow, augs):
         super().__init__()
         self.cut_size = cut_size
-        tqdm.write(f'cut size: {self.cut_size}')
+        print(f'cut size: {self.cut_size}')
         self.cutn = cutn
         self.cut_pow = cut_pow
         self.noise_fac = 0.1
@@ -273,7 +273,7 @@ class MakeCutoutsHolywater(nn.Module):
     def __init__(self, cut_size, cutn, cut_pow, augs):
         super().__init__()
         self.cut_size = cut_size
-        tqdm.write(f'cut size: {self.cut_size}')
+        print(f'cut size: {self.cut_size}')
         self.cutn = cutn
         self.cut_pow = cut_pow
         self.noise_fac = 0.1
@@ -337,7 +337,7 @@ class MakeCutoutsGinger(nn.Module):
     def __init__(self, cut_size, cutn, cut_pow, augs):
         super().__init__()
         self.cut_size = cut_size
-        tqdm.write(f'cut size: {self.cut_size}')
+        print(f'cut size: {self.cut_size}')
         self.cutn = cutn
         self.cut_pow = cut_pow
         self.noise_fac = 0.1

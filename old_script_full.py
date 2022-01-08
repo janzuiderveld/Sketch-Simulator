@@ -175,7 +175,7 @@ from utils_old import *
 #     def __init__(self, cut_size, cutn, cut_pow, augs):
 #         super().__init__()
 #         self.cut_size = cut_size
-#         tqdm.write(f'cut size: {self.cut_size}')
+#         print(f'cut size: {self.cut_size}')
 #         self.cutn = cutn
 #         self.cut_pow = cut_pow
 #         self.noise_fac = 0.1
@@ -239,7 +239,7 @@ from utils_old import *
 #     def __init__(self, cut_size, cutn, cut_pow, augs):
 #         super().__init__()
 #         self.cut_size = cut_size
-#         tqdm.write(f'cut size: {self.cut_size}')
+#         print(f'cut size: {self.cut_size}')
 #         self.cutn = cutn
 #         self.cut_pow = cut_pow
 #         self.noise_fac = 0.1
@@ -303,7 +303,7 @@ from utils_old import *
 #     def __init__(self, cut_size, cutn, cut_pow, augs):
 #         super().__init__()
 #         self.cut_size = cut_size
-#         tqdm.write(f'cut size: {self.cut_size}')
+#         print(f'cut size: {self.cut_size}')
 #         self.cutn = cutn
 #         self.cut_pow = cut_pow
 #         self.noise_fac = 0.1
@@ -367,7 +367,7 @@ from utils_old import *
 #     def __init__(self, cut_size, cutn, cut_pow, augs):
 #         super().__init__()
 #         self.cut_size = cut_size
-#         tqdm.write(f'cut size: {self.cut_size}')
+#         print(f'cut size: {self.cut_size}')
 #         self.cutn = cutn
 #         self.cut_pow = cut_pow
 #         self.noise_fac = 0.1
@@ -741,10 +741,10 @@ class ModelHost:
   def checkin(self, i, losses, x):
       losses_str = ', '.join(f'{loss.item():g}' for loss in losses)
       if i < args.mse_end:
-        tqdm.write(f'i: {i}, loss: {sum(losses).item():g}, losses: {losses_str}')
+        print(f'i: {i}, loss: {sum(losses).item():g}, losses: {losses_str}')
       else:
-        tqdm.write(f'i: {i-args.mse_end} ({i}), loss: {sum(losses).item():g}, losses: {losses_str}')
-      tqdm.write(f'cutn: {self.make_cutouts.cutn}, cut_pow: {self.make_cutouts.cut_pow}, step_size: {self.cur_step_size}')
+        print(f'i: {i-args.mse_end} ({i}), loss: {sum(losses).item():g}, losses: {losses_str}')
+      print(f'cutn: {self.make_cutouts.cutn}, cut_pow: {self.make_cutouts.cut_pow}, step_size: {self.cur_step_size}')
       out = self.synth(self.z.average)
       if i == self.args.max_iterations:
           if save_to_drive== True:
