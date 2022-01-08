@@ -196,6 +196,7 @@ class ModelHost:
     embed = perceptor.encode_image(normalize(batch)).float()
 
     # print("embed shape before: ", embed.shape)
+    ovl_mean = torch.load(self.args.embedding_avg)
     embed = embed - ovl_mean
     # print("embed shape after: ", embed.shape)
 
@@ -225,7 +226,7 @@ class ModelHost:
     self.mse_weight = self.args.init_weight
 
     self.counter = 0
-    
+
 
   def embed_images_full(self, image_prompts, width=400, height=400):
       toksX, toksY = 400 // self.f, 400 // self.f
