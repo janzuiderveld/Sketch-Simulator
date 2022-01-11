@@ -159,6 +159,10 @@ class MakeCutoutsDet(nn.Module):
         super().__init__()
         self.cut_size = cut_size
         print(f'cut size: {self.cut_size}')
+        
+        self.cutn = "det"
+        self.cut_pow = "det"
+
 
         self.testing = False
 
@@ -182,7 +186,6 @@ class MakeCutoutsDet(nn.Module):
         
         for prop in range(1,7):
             coord = np.linspace(0, max_size, prop+1, endpoint=True, dtype=np.int)
-            print(coord)
             for i in range(len(coord)-1): 
                 for j in range(len(coord)-1):
                     cutout = input[:, :, coord[i]:coord[i+1], coord[j]:coord[j+1]]
