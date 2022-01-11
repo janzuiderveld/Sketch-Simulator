@@ -141,6 +141,7 @@ class EMATensor(nn.Module):
         return self.average
 
 def save_tensor_as_img(tensor, save_path):
+    os.make_dirs(os.path.dirname(save_path), exist_ok=True)
     tensor = tensor.detach().cpu()
     tensor = tensor.clamp(0, 1)
     tensor = tensor.numpy()
@@ -163,7 +164,7 @@ class MakeCutoutsDet(nn.Module):
         
         # white pad input to be square
         input = F.pad(input, (0, sideX - sideY, 0, sideY - sideX))
-        save_tensor_as_image(input)
+        save_tensor_as_image(input, "")
 
         for prop in proportions:
             size = min(sideX, sideY) // prop
