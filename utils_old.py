@@ -162,6 +162,26 @@ class MakeCutoutsDet(nn.Module):
 
     def forward(self, input):
         sideY, sideX = input.shape[2:4]
+        cutouts = []
+        
+        # white pad input to be square
+        if sideY > sideX:
+            input = F.pad(input, (0, 0, 0, sideY - sideX), 'constant', 0)
+        elif sideX > sideY:
+            input = F.pad(input, (0, 0, sideX - sideY, 0), 'constant', 0)
+
+        
+        
+        for prop in range(3):
+            x_coord = np.linspace(0, sideX, prop)
+            y_coord = np.linspace(0, sideY, prop)
+            for  in x_coord: 
+                for y in y_coord:
+                    cutout = (input[:, :, int(y):int(y+self.cut_size), int(x):int(x+self.cut_size)])
+
+    """            
+    def forward(self, input):
+        sideY, sideX = input.shape[2:4]
         proportions = [1, 2, 3, 4]
         proportions = [1, 2]
         cutouts = []
@@ -184,9 +204,9 @@ class MakeCutoutsDet(nn.Module):
             x = 0
             y = 0
             print("\nstarting loop")
-            while endX < max(sideX, sideY):
+            while endX < sideX:
                 x+=1
-                while endY < max(sideX, sideY):
+                while endY < sideY:
                     y+=1
                     
                     startY, endY = sideY-restY, sideY-restY + size
@@ -209,7 +229,7 @@ class MakeCutoutsDet(nn.Module):
                 restY = sideY
                 if sideX == size: break
                 if restX < 0: break
-
+"""
             
 
 class MakeCutoutsCumin(nn.Module):
