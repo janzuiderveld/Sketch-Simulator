@@ -104,18 +104,19 @@ class Prompt(nn.Module):
         self.register_buffer('embed', embed)
         self.register_buffer('weight', torch.as_tensor(weight))
         self.register_buffer('stop', torch.as_tensor(stop))
-        if levels:
-            self.register_buffer('levels', levels)
-        else:
-            self.levels = None
-            
+        self.levels = levels
+        # if levels:
+        #     self.register_buffer('levels', levels)
+        # else:
+
     def forward(self, input):
         input_normed = F.normalize(input.unsqueeze(1), dim=2)
         embed_normed = F.normalize(self.embed.unsqueeze(0), dim=2)
+        print(input_normed.shape, embed_normed.shape)
         if self.levels:
             dists = []
             for i in range(input_normed.shape[0]):
-                dist = input_normed[i:i+1].sub(embed_normed[i:i+1]).norm(dim=2).div(2).arcsin().pow(2).mul(2)
+                dist = input_normed[i:i+1, :, :].sub(embed_normed[:, i:i+1, :]).norm(dim=2).div(2).arcsin().pow(2).mul(2)
                 dists.append(dist)
             dists = torch.cat(dists, dim=0)
             dists = input_normed.sub(embed_normed).norm(dim=2).div(2).arcsin().pow(2).mul(2)
@@ -202,7 +203,7 @@ class MakeCutoutsDet(nn.Module):
                 for j in range(len(coord)-1):
                     cutout = input[:, :, coord[i]:coord[i+1], coord[j]:coord[j+1]]
                     cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
-                    levels.append(prop)
+                    # levels.append(torch.tensor(prop))
                     
                     if self.testing:
                         cv2.rectangle(img_cv2, (coord[j], coord[i]), (coord[j]+coord[j+1], coord[i]+coord[i+1]), (0, 0, 255%prop*50), 2)
@@ -212,10 +213,10 @@ class MakeCutoutsDet(nn.Module):
             cv2.imwrite('/content/Sketch-Simulator/thrash/test_rectangles.jpg',img_cv2) 
 
         cutouts = torch.cat(cutouts, dim=0)
-        levels = torch.cat(levels, dim=0)
+        # levels = torch.cat(levels, dim=0)
         cutouts = clamp_with_grad(cutouts, 0, 1)
 
-        return cutouts, levels
+        return cutouts #, levels
 
     """            
     def forward(self, input):
