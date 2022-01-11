@@ -177,13 +177,13 @@ class MakeCutoutsDet(nn.Module):
 
         for prop in proportions:
             size = min(sideX, sideY) // prop
-            restX, restY = 0, 0
+            restX, restY = sideX, sideY
 
             x = 0
             y = 0
-            while restX + sideX <= sideX:
+            while restX + size <= sideX:
                 x+=1
-                while restY + sideY <= sideY:
+                while restY + size <= sideY:
                     y+=1
                     
                     cutout = input[:, :, restY:restY + size, restX:restX + size]
