@@ -179,7 +179,7 @@ class MakeCutoutsDet(nn.Module):
     def forward(self, input):
         sideY, sideX = input.shape[2:4]
         cutouts = []
-        
+        levels = []
 
         # white pad input to be square
         if sideY > sideX:
@@ -193,12 +193,13 @@ class MakeCutoutsDet(nn.Module):
         
         max_size = max(sideX, sideY)
         
-        for prop in range(1,2):
+        for prop in range(1,4):
             coord = np.linspace(0, max_size, prop+1, endpoint=True, dtype=np.int)
             for i in range(len(coord)-1): 
                 for j in range(len(coord)-1):
                     cutout = input[:, :, coord[i]:coord[i+1], coord[j]:coord[j+1]]
                     cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
+                    levels.append(prop)
                     
                     if self.testing:
                         cv2.rectangle(img_cv2, (coord[j], coord[i]), (coord[j]+coord[j+1], coord[i]+coord[i+1]), (0, 0, 255%prop*50), 2)
@@ -208,9 +209,10 @@ class MakeCutoutsDet(nn.Module):
             cv2.imwrite('/content/Sketch-Simulator/thrash/test_rectangles.jpg',img_cv2) 
 
         cutouts = torch.cat(cutouts, dim=0)
+        levels = torch.cat(levels, dim=0)
         cutouts = clamp_with_grad(cutouts, 0, 1)
 
-        return cutouts
+        return cutouts, levels
 
     """            
     def forward(self, input):
