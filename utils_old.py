@@ -185,7 +185,7 @@ class MakeCutoutsDet(nn.Module):
                     cutout = input[:, :, coord[i]:coord[i+1], coord[j]:coord[j+1]]
                     cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
                     
-                    cv2.rectangle(img_cv2, (coord[j], coord[i]), (coord[j]+coord[j+1], coord[i]+coord[i+1]), (0, 0, 255), 2)
+                    cv2.rectangle(img_cv2, (coord[j], coord[i]), (coord[j]+coord[j+1], coord[i]+coord[i+1]), (0, 0, 255%prop*20), 2)
 
         cv2.imwrite('/content/Sketch-Simulator/thrash/two_blobs_result.jpg',img_cv2) 
 
