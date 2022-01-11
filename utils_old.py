@@ -143,7 +143,7 @@ class EMATensor(nn.Module):
         return self.average
 
 def save_tensor_as_img(tensor, save_path):
-    tensor = tensor.detach().cpu().numpy()
+    tensor = tensor.detach().squeeze().cpu().numpy()
     tensor = np.transpose(tensor, (1, 2, 0))
     tensor = (tensor * 255).astype(np.uint8)
     Image.fromarray(tensor).save(save_path)
