@@ -149,8 +149,10 @@ def save_tensor_as_img(tensor, save_path):
     print(tensor.shape)
     tensor = tensor.permute(0, 3, 1, 2)
     print(tensor.shape)
-    TF.to_pil_image(tensor[0].cpu()).astype(np.uint8).save(save_path)
-
+    pil_img = TF.to_pil_image(tensor[0].cpu())
+    # set type to float
+    pil_img = pil_img.convert('RGB')
+    pil_img.save(save_path)
 
 class MakeCutoutsDet(nn.Module):
     def __init__(self, cut_size, cutn=None, cut_pow=None, augs=None):
