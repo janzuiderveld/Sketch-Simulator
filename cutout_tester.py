@@ -13,6 +13,4 @@ img = torch.from_numpy(np.array(img)).int().unsqueeze(0).permute(0,3,1,2).to(tor
 img = img / 255.
 img = img.clamp(0, 1)
 
-print(img.shape)
-
 cutter(img)
