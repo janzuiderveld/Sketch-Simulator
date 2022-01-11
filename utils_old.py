@@ -165,12 +165,18 @@ class MakeCutoutsDet(nn.Module):
         sideY, sideX = input.shape[2:4]
         cutouts = []
         
+
+
         # white pad input to be square
         if sideY > sideX:
             input = F.pad(input, (0, 0, 0, sideY - sideX), 'constant', 0)
         elif sideX > sideY:
             input = F.pad(input, (0, 0, sideX - sideY, 0), 'constant', 0)
 
+        # read image with cv2
+        cv2_img = cv2.cvtColor(input.permute(0, 2, 3, 1).cpu().numpy(), cv2.COLOR_RGB2BGR)
+        cv2.imwrite('thrash/two_blobs_result.jpg',cv2_img)
+        
         max_size = max(sideX, sideY)
         
         for prop in range(1,5):
