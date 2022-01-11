@@ -205,6 +205,8 @@ class ModelHost:
         pMs.append(Prompt(embed, weight, stop).to(device))
         print("embed full target", Prompt(embed, weight, stop).embed.shape)
 
+    if self.args.taget_det_cuts:
+
     # print("embed shape before: ", embed.shape)
     # print("embed shape after: ", embed.shape)
 

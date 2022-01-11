@@ -163,7 +163,6 @@ class MakeCutoutsDet(nn.Module):
         self.cutn = "det"
         self.cut_pow = "det"
 
-
         self.testing = False
 
 
