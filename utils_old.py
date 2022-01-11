@@ -12,6 +12,8 @@ from taming.models import vqgan
 from PIL import ImageFile, Image
 import os 
 import numpy as np
+from torchvision.utils import save_image
+
 
 def sinc(x):
     return torch.where(x != 0, torch.sin(math.pi * x) / (math.pi * x), x.new_ones([]))
@@ -162,11 +164,11 @@ class MakeCutoutsDet(nn.Module):
         
         # white pad input to be square
         if sideY > sideX:
-            input = F.pad(input, (0, 0, 0, sideY - sideX), 'constant', 255)
+            input = F.pad(input, (0, 0, sideY - sideX, 0), 'constant', 0)
         elif sideX > sideY:
-            input = F.pad(input, (0, 0, sideX - sideY, 0), 'constant', 255)
+            input = F.pad(input, (0, sideX - sideY, 0, 0), 'constant', 0)
     
-        save_tensor_as_img(input, "test_outputs/padded.png")
+        save_image(input[0], "test_outputs/padded.png")
 
         for prop in proportions:
             size = min(sideX, sideY) // prop
