@@ -149,9 +149,11 @@ def save_tensor_as_img(tensor, save_path):
     print(tensor.shape)
     tensor = tensor.permute(0, 3, 1, 2)
     print(tensor.shape)
+    # set tensor to [0, 1]
+    tensor = tensor.clamp(0, 1)
+    # set type
+    tensor = tensor.to(torch.float32)
     pil_img = TF.to_pil_image(tensor[0].cpu())
-    # set type to float
-    pil_img = pil_img.convert('RGB')
     pil_img.save(save_path)
 
 class MakeCutoutsDet(nn.Module):
