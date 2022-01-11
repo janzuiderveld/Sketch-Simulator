@@ -156,15 +156,18 @@ class MakeCutoutsDet(nn.Module):
         print(f'cut size: {self.cut_size}')
 
 
-
     def forward(self, input):
         sideY, sideX = input.shape[2:4]
         proportions = [1, 2, 3, 4]
         cutouts = []
         
         # white pad input to be square
-        input = F.pad(input, (0, sideX - sideY, 0, sideY - sideX))
-        save_tensor_as_image(input, "")
+        if sideY > sideX:
+            input = F.pad(input, (0, 0, 0, sideY - sideX), 'constant', 255)
+        elif sideX > sideY:
+            input = F.pad(input, (0, 0, sideX - sideY, 0), 'constant', 255)
+    
+        save_tensor_as_image(input, "test_outputs/padded.png")
 
         for prop in proportions:
             size = min(sideX, sideY) // prop

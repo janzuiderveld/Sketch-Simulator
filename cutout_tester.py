@@ -1,4 +1,4 @@
-from utils_old import MakeCutoutsDet
+from utils_old import MakeCutoutsDet, save_tensor_as_img
 
 cutter = MakeCutoutsDet(221)
 
