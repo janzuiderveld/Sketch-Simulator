@@ -106,7 +106,9 @@ class Prompt(nn.Module):
         self.register_buffer('stop', torch.as_tensor(stop))
         if levels:
             self.register_buffer('levels', levels)
-
+        else:
+            self.levels = None
+            
     def forward(self, input):
         input_normed = F.normalize(input.unsqueeze(1), dim=2)
         embed_normed = F.normalize(self.embed.unsqueeze(0), dim=2)
