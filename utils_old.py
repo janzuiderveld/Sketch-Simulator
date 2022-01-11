@@ -180,12 +180,13 @@ class MakeCutoutsDet(nn.Module):
         for prop in proportions:
             size = min(sideX, sideY) // prop
             restX, restY = sideX, sideY
+            endX, endY = 0, 0
             x = 0
             y = 0
             print("\nstarting loop")
-            while restX>0:
+            while endX <= max(sideX, sideY):
                 x+=1
-                while restY > 0:
+                while endY <= max(sideX, sideY):
                     y+=1
                     
                     startY, endY = sideY-restY, sideY-restY + size
