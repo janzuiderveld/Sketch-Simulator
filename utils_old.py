@@ -172,9 +172,8 @@ class MakeCutoutsDet(nn.Module):
         elif sideX > sideY:
             input = F.pad(input, (0, 0, sideX - sideY, 0), 'constant', 0)
 
-        # read image with cv2
-        cv2_img = cv2.imread(input.squeeze().permute(0, 1, 2).cpu().numpy(), cv2.COLOR_RGB2BGR)
-        cv2.imwrite('thrash/two_blobs_result.jpg',cv2_img)
+        # read torch array with cv2
+        img_cv2 = cv2.imread('/content/Sketch-Simulator/test_images/eedb70bc-7a45-41cd-98e1-1f91f6285803.jpeg')
         
         max_size = max(sideX, sideY)
         
@@ -185,6 +184,10 @@ class MakeCutoutsDet(nn.Module):
                 for j in range(len(coord)-1):
                     cutout = input[:, :, coord[i]:coord[i+1], coord[j]:coord[j+1]]
                     cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
+                    
+                    cv2.rectangle(img_cv2, (coord[j], coord[i]), (coord[j]+coord[j+1], coord[i]+coord[i+1]), (0, 0, 255), 2)
+
+        cv2.imwrite('/content/Sketch-Simulator/thrash/two_blobs_result.jpg',img_cv2) 
 
     """            
     def forward(self, input):
