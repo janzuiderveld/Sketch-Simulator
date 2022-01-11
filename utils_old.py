@@ -170,14 +170,15 @@ class MakeCutoutsDet(nn.Module):
         elif sideX > sideY:
             input = F.pad(input, (0, 0, sideX - sideY, 0), 'constant', 0)
 
+        max_size = max(sideX, sideY)
         
-        
-        for prop in range(3):
-            x_coord = np.linspace(0, sideX, prop)
-            y_coord = np.linspace(0, sideY, prop)
-            for  in x_coord: 
-                for y in y_coord:
-                    cutout = (input[:, :, int(y):int(y+self.cut_size), int(x):int(x+self.cut_size)])
+        for prop in range(1,3):
+            coord = np.linspace(0, max_size, prop)
+            print(coord)
+            for i in range(coord): 
+                for j in range(coord):
+                    cutout = input[:, :, coord[i]:coord[i+1], coord[j]:coord[j+1]]
+                    cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
 
     """            
     def forward(self, input):
