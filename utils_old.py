@@ -195,10 +195,10 @@ class MakeCutoutsDet(nn.Module):
                     save_tensor_as_img(cutout, f"thrash/{prop}_{x}_{y}.png")
 
                     cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
-                    restY -= size
+                    restY -= sideY - size
                     print(f'restY: {restY}')
 
-                restX -=  size
+                restX -=  sideX - size
                 print(restX, restY)
                 restY = sideY
 
