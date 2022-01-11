@@ -173,7 +173,7 @@ class MakeCutoutsDet(nn.Module):
             input = F.pad(input, (0, 0, sideX - sideY, 0), 'constant', 0)
 
         # read image with cv2
-        cv2_img = cv2.cvtColor(input.squeeze().permute(0, 1, 2).cpu().numpy(), cv2.COLOR_RGB2BGR)
+        cv2_img = cv2.imread(input.squeeze().permute(0, 1, 2).cpu().numpy(), cv2.COLOR_RGB2BGR)
         cv2.imwrite('thrash/two_blobs_result.jpg',cv2_img)
         
         max_size = max(sideX, sideY)
