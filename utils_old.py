@@ -152,8 +152,8 @@ def save_tensor_as_img(tensor, save_path):
     # set tensor to [0, 1]
     tensor = tensor / 255.
     tensor = tensor.clamp(0, 1)
-    # set type
     tensor = tensor.to(torch.float32)
+    print(tensor.shape)
     pil_img = TF.to_pil_image(tensor[0].cpu())
     pil_img.save(save_path)
 
