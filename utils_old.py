@@ -13,7 +13,7 @@ from PIL import ImageFile, Image
 import os 
 import numpy as np
 from torchvision.utils import save_image
-
+from torchvision.transforms import functional as TF
 
 def sinc(x):
     return torch.where(x != 0, torch.sin(math.pi * x) / (math.pi * x), x.new_ones([]))
@@ -145,10 +145,8 @@ class EMATensor(nn.Module):
         return self.average
 
 def save_tensor_as_img(tensor, save_path):
-    tensor = tensor.detach().squeeze().cpu().numpy()
-    tensor = np.transpose(tensor, (1, 2, 0))
-    tensor = (tensor * 255).astype(np.uint8)
-    Image.fromarray(tensor).save(save_path)
+    TF.to_pil_image(tensor[0].cpu()).save(save_path)
+
 
 class MakeCutoutsDet(nn.Module):
     def __init__(self, cut_size, cutn=None, cut_pow=None, augs=None):
