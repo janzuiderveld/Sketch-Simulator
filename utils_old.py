@@ -149,7 +149,7 @@ def save_tensor_as_img(tensor, save_path):
     # tensor = tensor / 255.
     # tensor = tensor.clamp(0, 1)
     # tensor = tensor.to(torch.float32)
-    print(tensor.shape)
+    # print(tensor.shape)
     pil_img = TF.to_pil_image(tensor[0].cpu())
     pil_img.save(save_path)
 
@@ -187,7 +187,9 @@ class MakeCutoutsDet(nn.Module):
                 while restY + size >= sideY:
                     y+=1
                     
-                    cutout = input[:, :, sideY-restY:sideY-restY + size, sideX-restX:sideX-restX + size]
+                    coordinates = (sideY-restY:sideY-restY + size, sideX-restX:sideX-restX + size)
+                    print(coordinates)
+                    cutout = input[:, :, coordinates]
                     save_tensor_as_img(cutout, f"thrash/{prop}_{x}_{y}.png")
 
                     cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
