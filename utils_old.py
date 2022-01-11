@@ -160,6 +160,8 @@ class MakeCutoutsDet(nn.Module):
         self.cut_size = cut_size
         print(f'cut size: {self.cut_size}')
 
+        self.testing = True
+
 
     def forward(self, input):
         sideY, sideX = input.shape[2:4]
@@ -172,8 +174,9 @@ class MakeCutoutsDet(nn.Module):
         elif sideX > sideY:
             input = F.pad(input, (0, 0, sideX - sideY, 0), 'constant', 0)
 
-        # read torch array with cv2
-        img_cv2 = cv2.imread('/content/Sketch-Simulator/test_images/eedb70bc-7a45-41cd-98e1-1f91f6285803.jpeg')
+        if self.testing:
+            # read torch array with cv2
+            img_cv2 = cv2.imread('/content/Sketch-Simulator/test_images/eedb70bc-7a45-41cd-98e1-1f91f6285803.jpeg')
         
         max_size = max(sideX, sideY)
         
@@ -185,9 +188,15 @@ class MakeCutoutsDet(nn.Module):
                     cutout = input[:, :, coord[i]:coord[i+1], coord[j]:coord[j+1]]
                     cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
                     
-                    cv2.rectangle(img_cv2, (coord[j], coord[i]), (coord[j]+coord[j+1], coord[i]+coord[i+1]), (0, 0, 255%prop*50), 2)
+                    if self.testing:
+                        cv2.rectangle(img_cv2, (coord[j], coord[i]), (coord[j]+coord[j+1], coord[i]+coord[i+1]), (0, 0, 255%prop*50), 2)
+        
+        
 
-        cv2.imwrite('/content/Sketch-Simulator/thrash/two_blobs_result.jpg',img_cv2) 
+        if self.testing:
+            print(len(cutouts))
+            cv2.imwrite('/content/Sketch-Simulator/thrash/test_rectangles.jpg',img_cv2) 
+
 
     """            
     def forward(self, input):
