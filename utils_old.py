@@ -143,12 +143,10 @@ class EMATensor(nn.Module):
         return self.average
 
 def save_tensor_as_img(tensor, save_path):
-    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    # os.makedirs(os.path.dirname(save_path), exist_ok=True)
     tensor = tensor.detach().cpu()
-    tensor = tensor.clamp(0, 1)
-    tensor = tensor.numpy()
-    tensor = tensor.squeeze().transpose(1, 2, 0)
-    tensor = (tensor * 255).astype(np.uint8)
+    # tensor = tensor.clamp(0, 1)
+    tensor = tensor.squeeze().numpy()
     Image.fromarray(tensor).save(save_path)
 
 class MakeCutoutsDet(nn.Module):
