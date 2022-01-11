@@ -160,7 +160,7 @@ class MakeCutoutsDet(nn.Module):
         self.cut_size = cut_size
         print(f'cut size: {self.cut_size}')
 
-        self.testing = True
+        self.testing = False
 
 
     def forward(self, input):
@@ -191,12 +191,14 @@ class MakeCutoutsDet(nn.Module):
                     if self.testing:
                         cv2.rectangle(img_cv2, (coord[j], coord[i]), (coord[j]+coord[j+1], coord[i]+coord[i+1]), (0, 0, 255%prop*50), 2)
         
-        
-
         if self.testing:
             print(len(cutouts))
             cv2.imwrite('/content/Sketch-Simulator/thrash/test_rectangles.jpg',img_cv2) 
 
+        cutouts = torch.cat(cutouts, dim=0)
+        cutouts = clamp_with_grad(cutouts, 0, 1)
+
+        return cutouts
 
     """            
     def forward(self, input):

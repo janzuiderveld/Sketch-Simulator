@@ -67,7 +67,7 @@ parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulato
 parser.add_argument('--prompts', type=str, default="8K HD detailed Wallpaper, digital illustration, artstation" )
 # parser.add_argument('--prompts', type=str, default="A charcoal drawing | 8K HD detailed Wallpaper, digital illustration.:0" )
 parser.add_argument('--altprompts', type=str, default="" )
-parser.add_argument('--flavor', type=str, default="cumin", help='"ginger", "cumin", "holywater"')
+parser.add_argument('--flavor', type=str, default="det", help='"ginger", "cumin", "holywater"')
 parser.add_argument('--noise_prompt_weights', type=list, default=[])
 
 parser.add_argument('--path', type=str, default="")
