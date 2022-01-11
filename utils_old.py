@@ -204,6 +204,8 @@ class MakeCutoutsDet(nn.Module):
                 restX -=  (sideX - size)
                 print(restX, restY)
                 restY = sideY
+                if sideX == size:
+                    break
 
             
 
