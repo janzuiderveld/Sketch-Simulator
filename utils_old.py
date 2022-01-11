@@ -166,7 +166,7 @@ class MakeCutoutsDet(nn.Module):
         elif sideX > sideY:
             input = F.pad(input, (0, 0, sideX - sideY, 0), 'constant', 0)
     
-        save_tensor_as_img(input[0], "test_outputs/padded.png")
+        save_tensor_as_img(input, "test_outputs/padded.png")
 
         for prop in proportions:
             size = min(sideX, sideY) // prop
