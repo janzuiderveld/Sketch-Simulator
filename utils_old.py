@@ -10,6 +10,8 @@ import kornia.augmentation as K
 sys.path.append('./taming-transformers')
 from taming.models import vqgan
 from PIL import ImageFile, Image
+import os 
+import numpy as np
 
 def sinc(x):
     return torch.where(x != 0, torch.sin(math.pi * x) / (math.pi * x), x.new_ones([]))
@@ -141,11 +143,11 @@ class EMATensor(nn.Module):
         return self.average
 
 def save_tensor_as_img(tensor, save_path):
-    os.make_dirs(os.path.dirname(save_path), exist_ok=True)
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
     tensor = tensor.detach().cpu()
     tensor = tensor.clamp(0, 1)
     tensor = tensor.numpy()
-    tensor = tensor.transpose(1, 2, 0)
+    tensor = tensor.squeeze().transpose(1, 2, 0)
     tensor = (tensor * 255).astype(np.uint8)
     Image.fromarray(tensor).save(save_path)
 
@@ -167,7 +169,7 @@ class MakeCutoutsDet(nn.Module):
         elif sideX > sideY:
             input = F.pad(input, (0, 0, sideX - sideY, 0), 'constant', 255)
     
-        save_tensor_as_image(input, "test_outputs/padded.png")
+        save_tensor_as_img(input, "test_outputs/padded.png")
 
         for prop in proportions:
             size = min(sideX, sideY) // prop
