@@ -145,10 +145,11 @@ class EMATensor(nn.Module):
 def save_tensor_as_img(tensor, save_path):
     # os.makedirs(os.path.dirname(save_path), exist_ok=True)
     tensor = tensor.detach().cpu().squeeze()
-    # tensor = tensor.clamp(0, 1)
+    tensor = tensor.clamp(0, 1)
+
     print(tensor.shape)
     tensor = tensor.numpy()
-
+    tensor = np.transpose(tensor, (1, 2, 0))
     Image.fromarray(tensor).save(save_path)
 
 class MakeCutoutsDet(nn.Module):
