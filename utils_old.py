@@ -175,8 +175,8 @@ class MakeCutoutsDet(nn.Module):
         for prop in range(1,3):
             coord = np.linspace(0, max_size, prop+1, endpoint=True, dtype=np.int)
             print(coord)
-            for i in range(coord): 
-                for j in range(coord):
+            for i in range(len(coord)-1): 
+                for j in range(len(coord)-1):
                     cutout = input[:, :, coord[i]:coord[i+1], coord[j]:coord[j+1]]
                     cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
 
