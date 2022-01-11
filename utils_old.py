@@ -181,7 +181,7 @@ class MakeCutoutsDet(nn.Module):
 
             x = 0
             y = 0
-            while restX + size > sideX:
+            while restX + size >= sideX:
                 x+=1
                 while restY + size > sideY:
                     y+=1
