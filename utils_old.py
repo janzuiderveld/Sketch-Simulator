@@ -146,9 +146,9 @@ class EMATensor(nn.Module):
 
 def save_tensor_as_img(tensor, save_path):
     # switch axis
-    print(tensor.shape)
-    tensor = tensor.permute(0, 3, 1, 2)
-    print(tensor.shape)
+    # print(tensor.shape)
+    # tensor = tensor.permute(0, 3, 1, 2)
+    # print(tensor.shape)
     # set tensor to [0, 1]
     tensor = tensor / 255.
     tensor = tensor.clamp(0, 1)
