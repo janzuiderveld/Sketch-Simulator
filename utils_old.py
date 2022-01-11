@@ -193,7 +193,7 @@ class MakeCutoutsDet(nn.Module):
         
         max_size = max(sideX, sideY)
         
-        for prop in range(1,7):
+        for prop in range(1,2):
             coord = np.linspace(0, max_size, prop+1, endpoint=True, dtype=np.int)
             for i in range(len(coord)-1): 
                 for j in range(len(coord)-1):
