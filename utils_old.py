@@ -181,6 +181,7 @@ class MakeCutoutsDet(nn.Module):
 
             x = 0
             y = 0
+            print("starting loop")
             while restX + size >= sideX:
                 x+=1
                 while restY + size >= sideY:
@@ -191,6 +192,7 @@ class MakeCutoutsDet(nn.Module):
 
                     cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
                     restY -= size
+
                 restX -=  size
                 print(restX, restY)
                 restY = 0
