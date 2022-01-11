@@ -165,7 +165,7 @@ class MakeCutoutsDet(nn.Module):
         proportions = [1, 2, 3, 4]
         cutouts = []
         
-        save_tensor_as_img(input, "test_outputs/input.png")
+        save_tensor_as_img(input, "thrash/input.png")
 
         # white pad input to be square
         if sideY > sideX:
@@ -173,15 +173,21 @@ class MakeCutoutsDet(nn.Module):
         elif sideX > sideY:
             input = F.pad(input, (0, 0, sideX - sideY, 0), 'constant', 0)
     
-        save_tensor_as_img(input, "test_outputs/padded.png")
+        save_tensor_as_img(input, "thrash/padded.png")
 
         for prop in proportions:
             size = min(sideX, sideY) // prop
             restX, restY = 0, 0
 
+            x = 0
+            y = 0
             while restX < sideX:
+                x+=1
                 while restY < sideY:
+                    y+=1
                     cutout = input[:, :, restY:restY + size, restX:restX + size]
+                    save_tensor_as_img(cutout, f"thrash/{prop}_{x}_{y}.png")
+
                     cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
                     restY += size
                 restX += size
