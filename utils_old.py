@@ -195,6 +195,7 @@ class MakeCutoutsDet(nn.Module):
 
                     cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
                     restY -= size
+                    print(f'restY: {restY}')
 
                 restX -=  size
                 print(restX, restY)
