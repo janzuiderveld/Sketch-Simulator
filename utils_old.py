@@ -186,7 +186,7 @@ class MakeCutoutsDet(nn.Module):
             print("\nstarting loop")
             while endX < max(sideX, sideY):
                 x+=1
-                while endY < max(sideX, sideY):
+                while endY <= max(sideX, sideY):
                     y+=1
                     
                     startY, endY = sideY-restY, sideY-restY + size
