@@ -99,17 +99,18 @@ def vector_quantize(x, codebook):
 
 
 class Prompt(nn.Module):
-    def __init__(self, embed, weight=1., stop=float('-inf'), index=False):
+    def __init__(self, embed, weight=1., stop=float('-inf'), levels=None):
         super().__init__()
         self.register_buffer('embed', embed)
         self.register_buffer('weight', torch.as_tensor(weight))
         self.register_buffer('stop', torch.as_tensor(stop))
-        self.index = index
+        if levels:
+            self.register_buffer('levels', levels)
 
     def forward(self, input):
         input_normed = F.normalize(input.unsqueeze(1), dim=2)
         embed_normed = F.normalize(self.embed.unsqueeze(0), dim=2)
-        if self.index:
+        if self.levels:
             dists = []
             for i in range(input_normed.shape[0]):
                 dist = input_normed[i:i+1].sub(embed_normed[i:i+1]).norm(dim=2).div(2).arcsin().pow(2).mul(2)
