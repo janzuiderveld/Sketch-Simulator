@@ -163,7 +163,7 @@ class MakeCutoutsDet(nn.Module):
     def forward(self, input):
         sideY, sideX = input.shape[2:4]
         proportions = [1, 2, 3, 4]
-        proportions = [1]
+        # proportions = [1]
         cutouts = []
         
         save_tensor_as_img(input, "thrash/input.png")
@@ -184,18 +184,21 @@ class MakeCutoutsDet(nn.Module):
             x = 0
             y = 0
             print("\nstarting loop")
-            while endX <= max(sideX, sideY):
+            while endX < max(sideX, sideY):
                 x+=1
-                while endY <= max(sideX, sideY):
+                while endY < max(sideX, sideY):
                     y+=1
                     
                     startY, endY = sideY-restY, sideY-restY + size
                     startX, endX = sideX-restX, sideX-restX + size
                     print(f'startX: {startX}, endX: {endX}, startY: {startY}, endY: {endY}')
+
+
                     cutout = input[:, :, sideY-restY:sideY-restY + size, sideX-restX:sideX-restX + size]
                     save_tensor_as_img(cutout, f"thrash/{prop}_{x}_{y}.png")
-
                     cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
+                    
+                    
                     restY -= (sideY - size)
                     print(f'restY: {restY}')
                     if sideY == size:
