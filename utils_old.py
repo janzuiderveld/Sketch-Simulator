@@ -187,9 +187,10 @@ class MakeCutoutsDet(nn.Module):
                 while restY + size >= sideY:
                     y+=1
                     
-                    coordinates = (sideY-restY:sideY-restY + size, sideX-restX:sideX-restX + size)
-                    print(coordinates)
-                    cutout = input[:, :, coordinates]
+                    startY, endY = sideY-restY, sideY-restY + size
+                    startX, endX = sideX-restX, sideX-restX + size
+                    print(f'startX: {startX}, endX: {endX}, startY: {startY}, endY: {endY}')
+                    cutout = input[:, :, sideY-restY:sideY-restY + size, sideX-restX:sideX-restX + size]
                     save_tensor_as_img(cutout, f"thrash/{prop}_{x}_{y}.png")
 
                     cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
