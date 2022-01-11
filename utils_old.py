@@ -148,8 +148,24 @@ class MakeCutoutsDet(nn.Module):
 
     def forward(self, input):
         sideY, sideX = input.shape[2:4]
-        max_size = min(sideX, sideY)
+        proportions = [1, 2, 3, 4]
+        cutouts = []
+        
+        # white pad input to be square
+        input = F.pad(input, (0, sideX - sideY, 0, sideY - sideX))
 
+        for prop in proportions:
+            size = min(sideX, sideY) // prop
+            restX, restY = 0, 0
+
+            while restX < sideX:
+                while restY < sideY:
+                    cutout = input[:, :, restY:restY + size, restX:restX + size]
+                    cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
+                    restY += size
+                restX += size
+                restY = 0
+            
 
 class MakeCutoutsCumin(nn.Module):
     #from https://colab.research.google.com/drive/1ZAus_gn2RhTZWzOWUpPERNC0Q8OhZRTZ
