@@ -174,17 +174,17 @@ class MakeCutoutsDet(nn.Module):
             input = F.pad(input, (0, 0, sideX - sideY, 0), 'constant', 0)
     
         save_tensor_as_img(input, "thrash/padded.png")
+        print("size", sideX, sideY)
 
         for prop in proportions:
             size = min(sideX, sideY) // prop
             restX, restY = sideX, sideY
-
             x = 0
             y = 0
-            print("starting loop")
-            while restX + size >= sideX:
+            print("\n starting loop")
+            while restX>0:
                 x+=1
-                while restY + size >= sideY:
+                while restY > 0:
                     y+=1
                     
                     startY, endY = sideY-restY, sideY-restY + size
