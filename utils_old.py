@@ -146,6 +146,7 @@ class EMATensor(nn.Module):
 
 def save_tensor_as_img(tensor, save_path):
     # switch axis
+    print(tensor.shape)
     tensor = tensor.permute(0, 2, 3, 1)
     print(tensor.shape)
     TF.to_pil_image(tensor[0].cpu()).save(save_path)
