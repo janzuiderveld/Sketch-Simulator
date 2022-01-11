@@ -181,16 +181,16 @@ class MakeCutoutsDet(nn.Module):
 
             x = 0
             y = 0
-            while restX + size <= sideX:
+            while restX + size > sideX:
                 x+=1
-                while restY + size <= sideY:
+                while restY + size > sideY:
                     y+=1
                     
                     cutout = input[:, :, restY:restY + size, restX:restX + size]
                     save_tensor_as_img(cutout, f"thrash/{prop}_{x}_{y}.png")
 
                     cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
-                    restY += sideY - size
+                    restY -= size
                     print(restX, restY)
                 restX += sideX - size
                 restY = 0
