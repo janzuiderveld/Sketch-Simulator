@@ -169,15 +169,19 @@ def save_tensor_as_img(tensor, save_path):
     pil_img.save(save_path)
 
 class MakeCutoutsDet(nn.Module):
-    def __init__(self, cut_size, cutn=None, cut_pow=None, augs=None):
+    def __init__(self, cut_size, cutn=None, cut_pow=None, augs=None, cut_levels=4, init=False, testing=False):
         super().__init__()
         self.cut_size = cut_size
         print(f'cut size: {self.cut_size}')
         
-        self.cutn = "det"
+        self.cut_levels = cut_levels
+        self.cutn_levels = [i**i for i in range(1, self.cut_levels)]
+        self.cutn = sum(cutn_levels) 
+
         self.cut_pow = "det"
 
-        self.testing = False   
+        self.init=init
+        self.testing = testing   
 
 
     def forward(self, input):
@@ -198,20 +202,19 @@ class MakeCutoutsDet(nn.Module):
         max_size = max(sideX, sideY)
         
 
-        for prop in range(1,4):
-            coord = np.linspace(0, max_size, prop+1, endpoint=True, dtype=np.int)
+        for level in range(1,self.cut_levels):
+            coord = np.linspace(0, max_size, level+1, endpoint=True, dtype=np.int)
             for i in range(len(coord)-1): 
                 for j in range(len(coord)-1):
                     cutout = input[:, :, coord[i]:coord[i+1], coord[j]:coord[j+1]]
 
                     # calculate average pixel value of cutout
                     cutout_avg = cutout.mean()
-
                     if cutout_avg > 0.9: # if cutout is mostly white
                         continue
 
                     cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
-                    # levels.append(torch.tensor(prop))
+                    levels.append(level)
                     
                     if self.testing:
                         cv2.rectangle(img_cv2, (coord[j], coord[i]), (coord[j]+coord[j+1], coord[i]+coord[i+1]), (0, 0, 255%prop*50), 2)
@@ -221,10 +224,10 @@ class MakeCutoutsDet(nn.Module):
             cv2.imwrite('/content/Sketch-Simulator/thrash/test_rectangles.jpg',img_cv2) 
 
         cutouts = torch.cat(cutouts, dim=0)
-        # levels = torch.cat(levels, dim=0)
+        levels = torch.tensor(levels)
         cutouts = clamp_with_grad(cutouts, 0, 1)
 
-        return cutouts #, levels
+        return cutouts, levels
 
     """            
     def forward(self, input):
