@@ -210,7 +210,7 @@ class MakeCutoutsDet(nn.Module):
 
                     # calculate average pixel value of cutout
                     cutout_avg = cutout.mean()
-                    if cutout_avg > 0.9: # if cutout is mostly white
+                    if cutout_avg > 0.95: # if cutout is mostly white
                         continue
 
                     cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
