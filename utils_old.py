@@ -15,7 +15,7 @@ import numpy as np
 from torchvision.utils import save_image
 from torchvision.transforms import functional as TF
 import cv2 
-
+import random
 def sinc(x):
     return torch.where(x != 0, torch.sin(math.pi * x) / (math.pi * x), x.new_ones([]))
 
@@ -113,7 +113,7 @@ class Prompt(nn.Module):
         input_normed = F.normalize(input.unsqueeze(1), dim=2)
         embed_normed = F.normalize(self.embed.unsqueeze(0), dim=2)
         # print(input_normed.shape, embed_normed.shape)
-        if self.levels:
+        if any(self.levels):
             dists = []
             for i in range(input_normed.shape[0]):
                 dist = input_normed[i:i+1, :, :].sub(embed_normed[:, i:i+1, :]).norm(dim=2).div(2).arcsin().pow(2).mul(2)
@@ -169,7 +169,7 @@ def save_tensor_as_img(tensor, save_path):
     pil_img.save(save_path)
 
 class MakeCutoutsDet(nn.Module):
-    def __init__(self, cut_size, cutn=None, cut_pow=None, augs=None, cut_levels=4, testing=False):
+    def __init__(self, cut_size, cutn=None, cut_pow=None, augs=None, cut_levels=4, testing=True):
         super().__init__()
         self.cut_size = cut_size
         print(f'cut size: {self.cut_size}')
@@ -211,29 +211,36 @@ class MakeCutoutsDet(nn.Module):
                     if init:
                         # calculate average pixel value of cutout
                         cutout_avg = cutout.mean()
-                        if cutout_avg > 0.95: # if cutout is mostly white
+                        if cutout_avg > 0.98: # if cutout is mostly white
                             continue
                         else:   
                             self.used_cutout_indices.append((level, i, j))
                             cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
                             levels.append(level)
+                        
+                        if self.testing:
+                            cv2.rectangle(img_cv2, (coord[j]+random.randint(-3, 3), coord[i]+random.randint(-3, 3)), (coord[j]+random.randint(-3, 3)+coord[j+1]+random.randint(-3, 3), coord[i]+random.randint(-3, 3)+coord[i+1]+random.randint(-3, 3)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), 2)
                     else:
                         if (level, i, j) in self.used_cutout_indices:
                             cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
                             levels.append(level)
                     
-                    if self.testing:
-                        cv2.rectangle(img_cv2, (coord[j], coord[i]), (coord[j]+coord[j+1], coord[i]+coord[i+1]), (0, 0, 255%prop*50), 2)
         
-        if self.testing:
+        if self.testing and init:
             print(len(cutouts))
+            os.makedirs("/content/Sketch-Simulator/thrash/", exist_ok=True)
             cv2.imwrite('/content/Sketch-Simulator/thrash/test_rectangles.jpg',img_cv2) 
+
 
         cutouts = torch.cat(cutouts, dim=0)
         levels = torch.tensor(levels)
         cutouts = clamp_with_grad(cutouts, 0, 1)
 
-        return cutouts, levels
+        if init:
+            print(self.used_cutout_indices)
+            return cutouts, levels
+
+        return cutouts
 
     """            
     def forward(self, input):

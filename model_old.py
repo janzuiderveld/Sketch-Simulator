@@ -206,10 +206,10 @@ class ModelHost:
         print("embed full target", Prompt(embed, weight, stop).embed.shape)
 
     if self.args.target_det_cuts:
-        batch = make_cutouts(TF.to_tensor(img).unsqueeze(0).to(device), init=True)
+        batch, levels = make_cutouts(TF.to_tensor(img).unsqueeze(0).to(device), init=True)
         embed = perceptor.encode_image(normalize(batch)).float()
         embed = embed - ovl_mean
-        pMs.append(Prompt(embed, weight, stop, levels=True).to(device))
+        pMs.append(Prompt(embed, weight, stop, levels=levels).to(device))
 
 
     # print("embed shape before: ", embed.shape)
