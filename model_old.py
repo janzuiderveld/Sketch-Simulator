@@ -152,7 +152,7 @@ class ModelHost:
     for prompt in self.args.prompts:
         txt, weight, stop = parse_prompt(prompt)
         embed = perceptor.encode_text(clip.tokenize(txt).to(device)).float()
-        pMs.append(Prompt(embed, weight, stop).to(device))
+        pMs.append(Prompt(embed, weight, stop, name="text").to(device))
     
     for prompt in self.args.altprompts:
         txt, weight, stop = parse_prompt(prompt)
@@ -196,20 +196,20 @@ class ModelHost:
         batch = make_cutouts(TF.to_tensor(img).unsqueeze(0).to(device))
         embed = perceptor.encode_image(normalize(batch)).float()
         embed = embed - ovl_mean
-        pMs.append(Prompt(embed, weight, stop).to(device))
+        pMs.append(Prompt(embed, weight, stop, name="image").to(device))
         print("embed target", Prompt(embed, weight, stop).embed.shape)
 
     if self.args.target_full_img:
         embed = self.embed_images_full([self.args.start_image])
         embed = embed - ovl_mean
-        pMs.append(Prompt(embed, weight, stop).to(device))
+        pMs.append(Prompt(embed, weight, stop, name="image").to(device))
         print("embed full target", Prompt(embed, weight, stop).embed.shape)
 
     if self.args.target_det_cuts:
         batch, levels = make_cutouts(TF.to_tensor(img).unsqueeze(0).to(device), init=True)
         embed = perceptor.encode_image(normalize(batch)).float()
         embed = embed - ovl_mean
-        pMs.append(Prompt(embed, weight, stop, levels=True).to(device))
+        pMs.append(Prompt(embed, weight, stop, name="image", levels=True).to(device))
 
 
     # print("embed shape before: ", embed.shape)
