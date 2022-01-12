@@ -99,7 +99,7 @@ def vector_quantize(x, codebook):
 
 
 class Prompt(nn.Module):
-    def __init__(self, embed, weight=1., stop=float('-inf'), levels=None):
+    def __init__(self, embed, weight=1., stop=float('-inf'), levels=None, name=""):
         super().__init__()
         self.register_buffer('embed', embed)
         self.register_buffer('weight', torch.as_tensor(weight))
@@ -110,6 +110,7 @@ class Prompt(nn.Module):
         # if levels:
         #     self.register_buffer('levels', levels)
         # else:
+        self.name = name
 
     def forward(self, input):
         # input_normed = F.normalize(input, dim=1)
@@ -147,7 +148,7 @@ class Prompt(nn.Module):
             dists = input_normed.sub(embed_normed).norm(dim=2).div(2).arcsin().pow(2).mul(2)
             dists = dists * self.weight.sign()
             print(dists.shape)
-            print("waut")
+            print(self.name)
         return self.weight.abs() * replace_grad(dists, torch.maximum(dists, self.stop)).mean()
 
 
