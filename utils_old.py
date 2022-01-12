@@ -177,7 +177,7 @@ class MakeCutoutsDet(nn.Module):
         self.cutn = "det"
         self.cut_pow = "det"
 
-        self.testing = False
+        self.testing = False   
 
 
     def forward(self, input):
@@ -197,11 +197,19 @@ class MakeCutoutsDet(nn.Module):
         
         max_size = max(sideX, sideY)
         
+
         for prop in range(1,4):
             coord = np.linspace(0, max_size, prop+1, endpoint=True, dtype=np.int)
             for i in range(len(coord)-1): 
                 for j in range(len(coord)-1):
                     cutout = input[:, :, coord[i]:coord[i+1], coord[j]:coord[j+1]]
+
+                    # calculate average pixel value of cutout
+                    cutout_avg = cutout.mean()
+
+                    if cutout_avg > 0.9: # if cutout is mostly white
+                        continue
+
                     cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
                     # levels.append(torch.tensor(prop))
                     
