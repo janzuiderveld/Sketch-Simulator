@@ -113,7 +113,7 @@ class Prompt(nn.Module):
         input_normed = F.normalize(input.unsqueeze(1), dim=2)
         embed_normed = F.normalize(self.embed.unsqueeze(0), dim=2)
         # print(input_normed.shape, embed_normed.shape)
-        if any(self.levels):
+        if self.levels is not None:
             dists = []
             for i in range(input_normed.shape[0]):
                 dist = input_normed[i:i+1, :, :].sub(embed_normed[:, i:i+1, :]).norm(dim=2).div(2).arcsin().pow(2).mul(2)
@@ -211,7 +211,7 @@ class MakeCutoutsDet(nn.Module):
                     if init:
                         # calculate average pixel value of cutout
                         cutout_avg = cutout.mean()
-                        if cutout_avg > 0.98: # if cutout is mostly white
+                        if cutout_avg > 0.99: # if cutout is mostly white
                             continue
                         else:   
                             self.used_cutout_indices.append((level, i, j))
