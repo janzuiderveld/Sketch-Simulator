@@ -141,13 +141,13 @@ class Prompt(nn.Module):
             # dists = input_normed.sub(embed_normed).norm(dim=2).div(2).arcsin().pow(2).mul(2)
             dists = dists * self.weight.sign()
         else:
-            step1 = input_normed.sub(embed_normed)
+            # step1 = input_normed.sub(embed_normed)
             # print(step1.shape)
-
-            dists = step1.norm(dim=2).div(2).arcsin().pow(2).mul(2)
-            print(dists.shape)
-            # dists = input_normed.sub(embed_normed).norm(dim=2).div(2).arcsin().pow(2).mul(2)
+            # dists = step1.norm(dim=2).div(2).arcsin().pow(2).mul(2)
+            dists = input_normed.sub(embed_normed).norm(dim=2).div(2).arcsin().pow(2).mul(2)
             dists = dists * self.weight.sign()
+            print(dists.shape)
+            print("waut")
         return self.weight.abs() * replace_grad(dists, torch.maximum(dists, self.stop)).mean()
 
 
