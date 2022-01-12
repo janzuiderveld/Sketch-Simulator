@@ -132,7 +132,7 @@ class Prompt(nn.Module):
         input_normed = F.normalize(input.unsqueeze(1), dim=2)
         embed_normed = F.normalize(self.embed.unsqueeze(0), dim=2)
         print(input_normed.shape, embed_normed.shape)
-        if self.levels is not None:
+        if self.levels:
             dists = []
             for i in range(input_normed.shape[0]):
                 dist = input_normed[i:i+1, :, :].sub(embed_normed[:, i:i+1, :]).norm(dim=2).div(2).arcsin().pow(2).mul(2)

@@ -209,7 +209,7 @@ class ModelHost:
         batch, levels = make_cutouts(TF.to_tensor(img).unsqueeze(0).to(device), init=True)
         embed = perceptor.encode_image(normalize(batch)).float()
         embed = embed - ovl_mean
-        pMs.append(Prompt(embed, weight, stop, levels=levels).to(device))
+        pMs.append(Prompt(embed, weight, stop, levels=True).to(device))
 
 
     # print("embed shape before: ", embed.shape)
