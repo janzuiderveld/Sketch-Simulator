@@ -105,24 +105,48 @@ class Prompt(nn.Module):
         self.register_buffer('weight', torch.as_tensor(weight))
         self.register_buffer('stop', torch.as_tensor(stop))
         self.levels = levels
+
+        self.cos = nn.CosineSimilarity(dim=1, eps=1e-6)
         # if levels:
         #     self.register_buffer('levels', levels)
         # else:
 
     def forward(self, input):
+        # input_normed = F.normalize(input, dim=1)
+        # embed_normed = F.normalize(self.embed, dim=1)
+        # print(input_normed.shape, embed_normed.shape)
+        # if self.levels is not None:
+        #     dists = []
+        #     for i in range(input_normed.shape[0]):
+        #         dist = input_normed[i:i+1, :, :].sub(embed_normed[:, i:i+1, :]).norm(dim=2).div(2).arcsin().pow(2).mul(2)
+        #         dists.append(dist)
+        #     dists = torch.cat(dists, dim=0)
+        #     # dists = input_normed.sub(embed_normed).norm(dim=2).div(2).arcsin().pow(2).mul(2)
+        #     dists = dists * self.weight.sign()
+        # else:
+        #     dists = self.cos(input_normed, embed_normed)
+        #     dists = dists * self.weight.sign()
+        # return self.weight.abs() * replace_grad(dists, torch.maximum(dists, self.stop)).mean()
+        
+        
         input_normed = F.normalize(input.unsqueeze(1), dim=2)
         embed_normed = F.normalize(self.embed.unsqueeze(0), dim=2)
-        # print(input_normed.shape, embed_normed.shape)
+        print(input_normed.shape, embed_normed.shape)
         if self.levels is not None:
             dists = []
             for i in range(input_normed.shape[0]):
                 dist = input_normed[i:i+1, :, :].sub(embed_normed[:, i:i+1, :]).norm(dim=2).div(2).arcsin().pow(2).mul(2)
                 dists.append(dist)
             dists = torch.cat(dists, dim=0)
-            dists = input_normed.sub(embed_normed).norm(dim=2).div(2).arcsin().pow(2).mul(2)
+            # dists = input_normed.sub(embed_normed).norm(dim=2).div(2).arcsin().pow(2).mul(2)
             dists = dists * self.weight.sign()
         else:
-            dists = input_normed.sub(embed_normed).norm(dim=2).div(2).arcsin().pow(2).mul(2)
+            step1 = input_normed.sub(embed_normed)
+            # print(step1.shape)
+
+            dists = step1.norm(dim=2).div(2).arcsin().pow(2).mul(2)
+            print(dists.shape)
+            # dists = input_normed.sub(embed_normed).norm(dim=2).div(2).arcsin().pow(2).mul(2)
             dists = dists * self.weight.sign()
         return self.weight.abs() * replace_grad(dists, torch.maximum(dists, self.stop)).mean()
 
@@ -169,7 +193,7 @@ def save_tensor_as_img(tensor, save_path):
     pil_img.save(save_path)
 
 class MakeCutoutsDet(nn.Module):
-    def __init__(self, cut_size, cutn=None, cut_pow=None, augs=None, cut_levels=4, testing=True):
+    def __init__(self, cut_size, cutn=None, cut_pow=None, augs=None, cut_levels=5, testing=True):
         super().__init__()
         self.cut_size = cut_size
         print(f'cut size: {self.cut_size}')
@@ -198,28 +222,33 @@ class MakeCutoutsDet(nn.Module):
         if self.testing:
             # read torch array with cv2
             img_cv2 = cv2.imread('/content/Sketch-Simulator/test_images/eedb70bc-7a45-41cd-98e1-1f91f6285803.jpeg')
-        
+            # reshape to sideX x sideY
+            img_cv2 = cv2.resize(img_cv2, (sideX, sideY))
+
         max_size = max(sideX, sideY)
         
 
         for level in range(1,self.cut_levels):
-            coord = np.linspace(0, max_size, level+1, endpoint=True, dtype=np.int)
+            coord = np.linspace(0, max_size, level+1, dtype=np.int)
             for i in range(len(coord)-1): 
                 for j in range(len(coord)-1):
                     cutout = input[:, :, coord[i]:coord[i+1], coord[j]:coord[j+1]]
-                    
+                     
+
                     if init:
                         # calculate average pixel value of cutout
                         cutout_avg = cutout.mean()
-                        if cutout_avg > 0.99: # if cutout is mostly white
+                        if cutout_avg > 0.98 and level != 1: # if cutout is mostly white
                             continue
-                        else:   
-                            self.used_cutout_indices.append((level, i, j))
-                            cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
-                            levels.append(level)
+                    
+                        self.used_cutout_indices.append((level, i, j))
+                        cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
+                        save_tensor_as_img(cutout, f'/content/Sketch-Simulator/thrash/cutout_{level}_{i}_{j}.png')
+                        levels.append(level)
                         
                         if self.testing:
-                            cv2.rectangle(img_cv2, (coord[j]+random.randint(-3, 3), coord[i]+random.randint(-3, 3)), (coord[j]+random.randint(-3, 3)+coord[j+1]+random.randint(-3, 3), coord[i]+random.randint(-3, 3)+coord[i+1]+random.randint(-3, 3)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), 2)
+                            cv2.rectangle(img_cv2, (coord[j]+random.randint(-3, 3), coord[i]+random.randint(-3, 3)), (coord[j+1]+random.randint(-3, 3), coord[i+1]+random.randint(-3, 3)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), 2)
+                            # cv2.rectangle(img_cv2, (0,0, 800, 800), (0,0,0), 2)
                     else:
                         if (level, i, j) in self.used_cutout_indices:
                             cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
@@ -242,57 +271,7 @@ class MakeCutoutsDet(nn.Module):
 
         return cutouts
 
-    """            
-    def forward(self, input):
-        sideY, sideX = input.shape[2:4]
-        proportions = [1, 2, 3, 4]
-        proportions = [1, 2]
-        cutouts = []
-        
-        save_tensor_as_img(input, "thrash/input.png")
-
-        # white pad input to be square
-        if sideY > sideX:
-            input = F.pad(input, (0, 0, 0, sideY - sideX), 'constant', 0)
-        elif sideX > sideY:
-            input = F.pad(input, (0, 0, sideX - sideY, 0), 'constant', 0)
-    
-        save_tensor_as_img(input, "thrash/padded.png")
-        print("size", sideX, sideY)
-
-        for prop in proportions:
-            size = min(sideX, sideY) // prop
-            restX, restY = sideX, sideY
-            endX, endY = 0, 0
-            x = 0
-            y = 0
-            print("\nstarting loop")
-            while endX < sideX:
-                x+=1
-                while endY < sideY:
-                    y+=1
-                    
-                    startY, endY = sideY-restY, sideY-restY + size
-                    startX, endX = sideX-restX, sideX-restX + size
-                    print(f'startX: {startX}, endX: {endX}, startY: {startY}, endY: {endY}')
-
-
-                    cutout = input[:, :, sideY-restY:sideY-restY + size, sideX-restX:sideX-restX + size]
-                    save_tensor_as_img(cutout, f"thrash/{prop}_{x}_{y}.png")
-                    cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
-                    
-                    
-                    restY -= (sideY - size)
-                    print(f'restY: {restY}')
-                    if sideY == size:
-                        break
-
-                restX -=  (sideX - size)
-                print(restX, restY)
-                restY = sideY
-                if sideX == size: break
-                if restX < 0: break
-"""
+   
             
 
 class MakeCutoutsCumin(nn.Module):
