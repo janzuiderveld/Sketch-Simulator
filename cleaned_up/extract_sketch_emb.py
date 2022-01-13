@@ -10,6 +10,8 @@ from torchvision.transforms import functional as TF
 from PIL import ImageFile, Image
 from model import *
 import train
+import sys
+sys.path.append("../")
 
 def get_quickdraw_data(items_per_class, save_root, pad_images):
     d = QuickDrawData(jit_loading=True)
