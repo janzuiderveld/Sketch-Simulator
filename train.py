@@ -65,7 +65,7 @@ parser.add_argument('--flavor', type=str, default="ginger", help='"ginger", "cum
 
 # parser.add_argument('--reset_img_prompt_every', type=int, default= 0)
 
-parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/0.png" )
+parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/n07753592_10233-3.png" )
 parser.add_argument('--prompts', type=str, default="a painting in the style of Salvador Dali" )
 # parser.add_argument('--prompts', type=str, default="A charcoal drawing | 8K HD detailed Wallpaper, digital illustration.:0" )
 parser.add_argument('--altprompts', type=str, default="" )
