@@ -87,7 +87,7 @@ def extract_sketch_embedding(paths):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()    
-    parser.add_argument('--path', type=list, default = "", help='image path(s). If empty, will use quickdraw')
+    parser.add_argument('--path', type=str, default = "", help='image path(s). If empty, will use quickdraw')
     parser.add_argument('--items_per_class', type=int, default = 1000, help='Number of items to analyze per quickdraw class')
     parser.add_argument('--save_root', type=str, default = "", help='Root directory to save')
     parser.add_argument('--pad_images', type=int, default = 0, help='If to pad images, if so which ratio to add on each side')
