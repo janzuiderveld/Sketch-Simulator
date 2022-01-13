@@ -110,8 +110,20 @@ def Main():
     else:
         config = args
 
-    mh = ModelHost(config)
-    mh.run()
+    if "*" in args.start_image:
+        import glob
+        start_images = glob.glob(args.start_image)
+        print(start_images)
+        for image in start_images:
+            print(image)
+            args.start_image = image
+            args.init_image = image
+            args.image_prompts = [image]
+            mh = ModelHost(config)
+            mh.run()
+    else:
+        mh = ModelHost(config)
+        mh.run()
 
 if __name__ == "__main__":
     os.makedirs("steps", exist_ok=True)

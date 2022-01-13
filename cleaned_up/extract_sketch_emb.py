@@ -100,4 +100,6 @@ if __name__ == "__main__":
         get_quickdraw_data(args.items_per_class, args.save_root, args.pad_images)
         extract_sketch_emb_qd(args.items_per_class, args.save_root)
     else:
-        extract_sketch_embedding(args.path)
+        import glob
+        path = glob.glob(args.path)
+        extract_sketch_embedding(path)

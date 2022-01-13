@@ -37,7 +37,8 @@ class ModelHost:
 
   def setup_metadata(self, seed):
     metadata = {k:v for k,v in vars(self.args).items()}
-    metadata = metadata['_items']
+    if self.args.wandb:
+        metadata = metadata['_items']
     metadata['seed'] = seed
     if (metadata['init_image']):
       path = metadata['init_image']
