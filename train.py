@@ -38,7 +38,7 @@ parser.add_argument('--max_iterations', type=int, default=50)
 parser.add_argument('--seed', type=int, default=-1 )
 parser.add_argument('--width', type=int, default= 400 )
 parser.add_argument('--height', type=int, default= 400 )
-parser.add_argument('--wandb', type=int, default=1)
+parser.add_argument('--wandb', type=int, default=0)
 parser.add_argument('--experiment_name', type=str, default="")
 
 parser.add_argument('--cutn', type=int, default=32 )
@@ -65,8 +65,9 @@ parser.add_argument('--flavor', type=str, default="ginger", help='"ginger", "cum
 
 # parser.add_argument('--reset_img_prompt_every', type=int, default= 0)
 
-parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/n02834778_10158-2.png" )
-parser.add_argument('--prompts', type=str, default="a painting in the style of Salvador Dali" )
+parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/*" )
+# parser.add_argument('--prompts', type=str, default="a painting in the style of Salvador Dali" )
+parser.add_argument('--prompts', type=str, default="a photorealistic 3D render in Unreal Engine" )
 # parser.add_argument('--prompts', type=str, default="A charcoal drawing | 8K HD detailed Wallpaper, digital illustration.:0" )
 parser.add_argument('--altprompts', type=str, default="" )
 parser.add_argument('--noise_prompt_weights', type=list, default=[])
