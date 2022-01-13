@@ -72,13 +72,14 @@ def extract_sketch_emb_qd(args):
 def extract_sketch_embedding(paths):
     mh = ModelHost(train.args)
     os.makedirs(f"{args.save_root}/results", exist_ok=True)
-    paths = paths.split(",")
-    all_items = []
-    for path in paths:
-        items = glob.glob(f"{path.strip()}/*")
-        all_items.extend(items)
 
-    embeddings = mh.embed_images_cuts(all_items, width = args.width, height = args.height)
+    # paths = paths.split(",")
+    # all_items = []
+    # for path in paths:
+    #     items = glob.glob(f"{path.strip()}/*")
+    #     all_items.extend(items)
+
+    embeddings = mh.embed_images_cuts(paths, width = args.width, height = args.height)
     print(embeddings.shape)
     ovl_mean = torch.mean(embeddings, dim=0).unsqueeze(0)
     torch.save(ovl_mean, f"{args.save_root}/results/ovl_mean_sketch_new.pth")
@@ -86,7 +87,7 @@ def extract_sketch_embedding(paths):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()    
-    parser.add_argument('--path', type=str, default = "", help='image folder path(s), separated by ",". If empty, will use quickdraw')
+    parser.add_argument('--path', type=list, default = "", help='image path(s). If empty, will use quickdraw')
     parser.add_argument('--items_per_class', type=int, default = 1000, help='Number of items to analyze per quickdraw class')
     parser.add_argument('--save_root', type=str, default = "", help='Root directory to save')
     parser.add_argument('--pad_images', type=int, default = 0, help='If to pad images, if so which ratio to add on each side')
