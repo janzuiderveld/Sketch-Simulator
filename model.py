@@ -17,7 +17,7 @@ import imageio
 
 import wandb
 
-from utils_old import *
+from utils import *
 
 class ModelHost:
   def __init__(self, args):

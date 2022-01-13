@@ -1,8 +1,8 @@
 import os
 import random
 import argparse
-from model_old import *
-from utils_old import *
+from model import *
+from utils import *
 import wandb
 
 # TODO
@@ -34,7 +34,7 @@ parser.add_argument('--vqgan_model', type=str, default='ImageNet' )
 parser.add_argument('--clip_model', type=str, default='ViT-B/32' )
 parser.add_argument('--display_freq', type=int, default= 10 )
 parser.add_argument('--log_edges', type=int, default=0)
-parser.add_argument('--max_iterations', type=int, default=300)
+parser.add_argument('--max_iterations', type=int, default=50)
 parser.add_argument('--seed', type=int, default=-1 )
 parser.add_argument('--width', type=int, default= 400 )
 parser.add_argument('--height', type=int, default= 400 )
@@ -58,15 +58,15 @@ parser.add_argument('--edge_weight', type=int, default= 5)
 parser.add_argument('--sketch_embed_weight', type=int, default= 0)
 parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketch.pth")
 
-parser.add_argument('--target_avg_cuts', type=int, default=0)
-parser.add_argument('--target_det_cuts', type=int, default=1)
+parser.add_argument('--target_avg_cuts', type=int, default=1)
+parser.add_argument('--target_det_cuts', type=int, default=0)
 parser.add_argument('--target_full_img', type=int, default=0)
-parser.add_argument('--flavor', type=str, default="det", help='"ginger", "cumin", "holywater", "det"')
+parser.add_argument('--flavor', type=str, default="ginger", help='"ginger", "cumin", "holywater", "det"')
 
 # parser.add_argument('--reset_img_prompt_every', type=int, default= 0)
 
-parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/eedb70bc-7a45-41cd-98e1-1f91f6285803.jpeg" )
-parser.add_argument('--prompts', type=str, default="8K HD detailed Wallpaper, digital illustration, artstation" )
+parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/0.png" )
+parser.add_argument('--prompts', type=str, default="a painting in the style of Salvador Dali" )
 # parser.add_argument('--prompts', type=str, default="A charcoal drawing | 8K HD detailed Wallpaper, digital illustration.:0" )
 parser.add_argument('--altprompts', type=str, default="" )
 parser.add_argument('--noise_prompt_weights', type=list, default=[])
