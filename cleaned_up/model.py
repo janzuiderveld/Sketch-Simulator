@@ -17,7 +17,6 @@ import wandb
 
 from utils import *
 
-
 class ModelHost:
     def __init__(self, args):
         self.args = args
@@ -150,7 +149,8 @@ class ModelHost:
         toksX, toksY = width // self.f, width // self.f
         sideX, sideY = toksX * self.f, toksY * self.f
         embeddings = []
-        for path in image_prompts:
+        from tqdm import tqdm
+        for path in tqdm(image_prompts):
             img = resize_image(Image.open(path).convert('RGB'), (sideX, sideY))
             batch = self.make_cutouts(TF.to_tensor(img).unsqueeze(0).to(self.device))
             embed = self.perceptor.encode_image(self.normalize(batch)).float()
