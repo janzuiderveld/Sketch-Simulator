@@ -17,6 +17,7 @@ import wandb
 
 from utils import *
 
+
 class ModelHost:
     def __init__(self, args):
         self.args = args
