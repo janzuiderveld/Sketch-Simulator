@@ -301,10 +301,10 @@ class ModelHost:
           TF.to_pil_image(out[0].cpu()).save(batchpath)
 
           if self.args.wandb:
-              wandb.log({'edge_loss': edge_loss})
-              wandb.log({'concept_loss': concept_loss})
-              for key, value in text_loss.items():
-                  wandb.log({f'text_loss_{key}': value})
+              # wandb.log({'edge_loss': edge_loss})
+              # wandb.log({'concept_loss': concept_loss})
+              # for key, value in text_loss.items():
+              #     wandb.log({f'text_loss_{key}': value})
               
               wandb.log({f"step {self.counter}": wandb.Image(im_path)})
 
