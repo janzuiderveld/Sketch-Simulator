@@ -112,14 +112,16 @@ class ModelHost:
     
     from PIL import Image
 
-    if self.args.start_image:
-        pil_image = Image.open(self.args.start_image).convert('RGB')
+    if self.args.init_image:
+        pil_image = Image.open(self.args.init_image).convert('RGB')
 
-        pil_image = self.resize_image_custom(pil_image, sideX, sideY)
+        pil_image = self.resize_image_custom(pil_image, sideX, sideY, padding=self.args.padding)
         # pil_image = resize_image(pil_image, (sideX, sideY))
 
-        init_img = TF.to_tensor(pil_image).to(device).unsqueeze(0) * 2 - 1
-        z, *_ = model.encode(init_img)
+        # init_img = TF.to_tensor(pil_image).to(device).unsqueeze(0) * 2 - 1
+
+        init_img = TF.to_tensor(pil_image).to(device).unsqueeze(0)
+        z, *_ = model.encode(init_img * 2 - 1)
 
     else:
         one_hot = F.one_hot(torch.randint(n_toks, [toksY * toksX], device=device), n_toks).float()
@@ -182,27 +184,28 @@ class ModelHost:
     # IMAGE CONTENT PROMPT BIZZ ##########################$########
     path, weight, stop = parse_prompt(self.args.start_image)
     print("image weight", weight)
-    img = self.resize_image_custom(Image.open(path).convert('RGB'), sideX, sideY)
+    # img = self.resize_image_custom(Image.open(path).convert('RGB'), sideX, sideY)
 
     ovl_mean = torch.load(self.args.embedding_avg)
 
 
     # set random cuts as target. Prompt class uses alll cuts, todo check how the distance to all of these is calculated, avg?
     if self.args.target_avg_cuts:
-        batch = make_cutouts(TF.to_tensor(img).unsqueeze(0).to(device))
+        batch = make_cutouts(init_img)
+        # batch = make_cutouts(TF.to_tensor(img).unsqueeze(0).to(device))
         embed = perceptor.encode_image(normalize(batch)).float()
         embed = embed - ovl_mean
         pMs.append(Prompt(embed, weight, stop, name="image").to(device))
         print("embed target", Prompt(embed, weight, stop).embed.shape)
 
     if self.args.target_full_img:
-        embed = self.embed_images_full([self.args.start_image])
+        embed = self.embed_images_full([self.args.init_img])
         embed = embed - ovl_mean
         pMs.append(Prompt(embed, weight, stop, name="image").to(device))
         print("embed full target", Prompt(embed, weight, stop).embed.shape)
 
     if self.args.target_det_cuts:
-        batch, levels = make_cutouts(TF.to_tensor(img).unsqueeze(0).to(device), init=True)
+        batch, levels = make_cutouts(init_img, init=True)
         embed = perceptor.encode_image(normalize(batch)).float()
         embed = embed - ovl_mean
         pMs.append(Prompt(embed, weight, stop, name="image", levels=True).to(device))
