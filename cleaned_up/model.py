@@ -64,6 +64,7 @@ class ModelHost:
         if self.args.init_image:
             pil_image = Image.open(self.args.init_image).convert('RGB')
 
+            
 
             # enlarge image to fit in sideX, sideY, retaining its ratio
             if pil_image.size[0] > pil_image.size[1]:
@@ -79,8 +80,6 @@ class ModelHost:
             new_image.paste(pil_image, ((sideX - new_size[0]) // 2, (sideY - new_size[1]) // 2))
             pil_image = new_image
             print("Init image size:", pil_image.size)
-
-
 
             init_img = TF.to_tensor(pil_image).to(device).unsqueeze(0) * 2 - 1
             z, *_ = model.encode(init_img)

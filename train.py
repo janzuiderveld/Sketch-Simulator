@@ -120,6 +120,7 @@ def Main():
             # args.start_image = image
             # args.init_image = image
             # args.image_prompts = [image]
+            wandb.config.update(allow_val_change=True)  
             wandb.config.update({"start_image": image, 'init_image': image, 'image_prompts': [image]})  
             mh = ModelHost(config)
             mh.run()
