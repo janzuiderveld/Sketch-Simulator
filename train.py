@@ -32,13 +32,13 @@ import wandb
 parser = argparse.ArgumentParser()    
 parser.add_argument('--vqgan_model', type=str, default='ImageNet' )
 parser.add_argument('--clip_model', type=str, default='ViT-B/32' )
-parser.add_argument('--display_freq', type=int, default= 10 )
+parser.add_argument('--display_freq', type=int, default= 10)
 parser.add_argument('--log_edges', type=int, default=0)
 parser.add_argument('--max_iterations', type=int, default=50)
 parser.add_argument('--seed', type=int, default=-1 )
 parser.add_argument('--width', type=int, default= 400 )
 parser.add_argument('--height', type=int, default= 400 )
-parser.add_argument('--wandb', type=int, default=0)
+parser.add_argument('--wandb', type=int, default=1)
 parser.add_argument('--experiment_name', type=str, default="")
 
 parser.add_argument('--cutn', type=int, default=32 )
@@ -55,7 +55,7 @@ parser.add_argument('--rectify', type=float, default=0)
 parser.add_argument('--beta1', type=float, default=0.9)
 parser.add_argument('--epsilon', type=float, default=1e-16)
 parser.add_argument('--edge_weight', type=int, default= 5)
-parser.add_argument('--sketch_embed_weight', type=int, default= 0)
+# parser.add_argument('--sketch_embed_weight', type=int, default= 0)
 parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketch.pth")
 
 parser.add_argument('--target_avg_cuts', type=int, default=1)
@@ -103,7 +103,7 @@ def Main():
         if not args.experiment_name:
             experiment_name = wandb.util.generate_id()
         else: experiment_name = args.experiment_name
-        run = wandb.init(project="Sketch-sim", 
+        run = wandb.init(project="Sketch-to-image", 
                         group=experiment_name)
         config = wandb.config
         config.update(args)
