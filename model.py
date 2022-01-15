@@ -307,7 +307,7 @@ class ModelHost:
               # for key, value in text_loss.items():
               #     wandb.log({f'text_loss_{key}': value})
               
-              wandb.log({f"step {self.counter}": wandb.Image(batchpath)})
+              wandb.log({f"{self.args.init_image.split("/")[-1]}": wandb.Image(batchpath)})
 
               # if self.args.log_edges != 0:
               #     init_edges: np.ndarray = kornia.tensor_to_image(init_img_edges.byte())
