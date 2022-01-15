@@ -63,7 +63,25 @@ class ModelHost:
 
         if self.args.init_image:
             pil_image = Image.open(self.args.init_image).convert('RGB')
-            pil_image = pil_image.resize((sideX, sideY), Image.LANCZOS)
+
+
+            # enlarge image to fit in sideX, sideY, retaining its ratio
+            if pil_image.size[0] > pil_image.size[1]:
+                new_size = (sideX, int(sideX * pil_image.size[1] / pil_image.size[0]))
+            else:
+                new_size = (int(sideY * pil_image.size[0] / pil_image.size[1]), sideY)
+
+            pil_image = pil_image.resize(new_size, Image.LANCZOS)
+
+            # # resize image using white padding
+            # # pad enlarged image to fit in sideX, sideY. Original image centered
+            new_image = Image.new('RGB', (sideX, sideY), (255, 255, 255))
+            new_image.paste(pil_image, ((sideX - new_size[0]) // 2, (sideY - new_size[1]) // 2))
+            pil_image = new_image
+            print("Init image size:", pil_image.size)
+
+
+
             init_img = TF.to_tensor(pil_image).to(device).unsqueeze(0) * 2 - 1
             z, *_ = model.encode(init_img)
         else:
