@@ -185,8 +185,6 @@ class ModelHost:
     # IMAGE CONTENT PROMPT BIZZ ##########################$########
     path, weight, stop = parse_prompt(self.args.start_image)
     print("image weight", weight)
-    # embed = self.embed_images([path])
-    # img = resize_image(Image.open(path).convert('RGB'), (sideX, sideY))
     img = self.resize_image_custom(Image.open(path).convert('RGB'), sideX, sideY)
 
     ovl_mean = torch.load(self.args.embedding_avg)
@@ -306,7 +304,7 @@ class ModelHost:
               # for key, value in text_loss.items():
               #     wandb.log({f'text_loss_{key}': value})
               
-              wandb.log({f"step {self.counter}": wandb.Image(im_path)})
+              wandb.log({f"step {self.counter}": wandb.Image(batchpath)})
 
               # if self.args.log_edges != 0:
               #     init_edges: np.ndarray = kornia.tensor_to_image(init_img_edges.byte())
