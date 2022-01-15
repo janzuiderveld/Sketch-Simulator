@@ -117,9 +117,10 @@ def Main():
         print(start_images)
         for image in start_images:
             print(image)
-            args.start_image = image
-            args.init_image = image
-            args.image_prompts = [image]
+            # args.start_image = image
+            # args.init_image = image
+            # args.image_prompts = [image]
+            wandb.config.update({start_image: image, 'init_image': image, 'image_prompts': [image]})  
             mh = ModelHost(config)
             mh.run()
     else:
