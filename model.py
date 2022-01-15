@@ -219,12 +219,15 @@ class ModelHost:
         if(self.usealtprompts):
           altpMs.append(Prompt(embed, weight).to(device))
 
-  def resize_image_custom(self, pil_image, sideX, sideY):
+  def resize_image_custom(self, pil_image, sideX, sideY, padding = 0):
     # enlarge image to fit in sideX, sideY, retaining its ratio
     if pil_image.size[0] > pil_image.size[1]:
         new_size = (sideX, int(sideX * pil_image.size[1] / pil_image.size[0]))
     else:
         new_size = (int(sideY * pil_image.size[0] / pil_image.size[1]), sideY)
+
+    if padding > 0:
+        new_size = (new_size[0] - padding, new_size[1] - padding)
 
     pil_image = pil_image.resize(new_size, Image.LANCZOS)
     
