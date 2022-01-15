@@ -299,6 +299,28 @@ class ModelHost:
           os.makedirs(self.args.output_dir, exist_ok=True)
           batchpath = self.unique_index("./"+self.args.output_dir)
           TF.to_pil_image(out[0].cpu()).save(batchpath)
+
+          if self.args.wandb:
+              wandb.log({'edge_loss': edge_loss})
+              wandb.log({'concept_loss': concept_loss})
+              for key, value in text_loss.items():
+                  wandb.log({f'text_loss_{key}': value})
+              
+              wandb.log({f"step {self.counter}": wandb.Image(im_path)})
+
+              # if self.args.log_edges != 0:
+              #     init_edges: np.ndarray = kornia.tensor_to_image(init_img_edges.byte())
+              #     out_edges: np.ndarray = kornia.tensor_to_image(out_edges.byte())
+              #     mask_img = wandb.Image(im_path, masks={
+              #             "out_edges": {
+              #                 "mask_data": out_edges.astype(int),
+              #             },
+              #             "init_edges": {
+              #                 "mask_data": init_edges.astype(int)
+              #             }
+              #         })
+              #     wandb.log({f"step {i} w/ edges": mask_img})
+
       #TF.to_pil_image(out[0].cpu()).save('progress.png')
       #self.add_metadata('progress.png', i)
       #display.display(display.Image('progress.png'))
