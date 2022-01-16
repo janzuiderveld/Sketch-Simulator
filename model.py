@@ -199,7 +199,7 @@ class ModelHost:
         print("embed target", Prompt(embed, weight, stop).embed.shape)
 
     if self.args.target_full_img:
-        embed = self.embed_images_full([self.args.init_img])
+        embed = self.embed_images_full([self.args.init_image])
         embed = embed - ovl_mean
         pMs.append(Prompt(embed, weight, stop, name="image").to(device))
         print("embed full target", Prompt(embed, weight, stop).embed.shape)
