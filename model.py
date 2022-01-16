@@ -82,7 +82,7 @@ class ModelHost:
             #K.RandomGaussianNoise(p=0.5),
             #K.RandomElasticTransform(kernel_size=(33, 33), sigma=(7,7), p=0.2),
             K.RandomAffine(degrees=30, translate=0.1, p=0.8, padding_mode='border'), # padding_mode=2
-            K.RandomPerspective(0.2,p=0.4, ),
+            K.RandomPerspective(0.2,p=0.4, padding_mode='border'),
             
             # induces background details
             K.ColorJitter(hue=0.01, saturation=0.01, p=0.35),
@@ -97,7 +97,7 @@ class ModelHost:
             #K.RandomGaussianNoise(p=0.5),
             #K.RandomElasticTransform(kernel_size=(33, 33), sigma=(7,7), p=0.2),
             K.RandomAffine(degrees=30, translate=0.1, p=0.8, padding_mode='border'), # padding_mode=2
-            K.RandomPerspective(0.2,p=0.4, ),
+            K.RandomPerspective(0.2,p=0.4, padding_mode='border'),
             
             # K.ColorJitter(hue=0.01, saturation=0.01, p=0.7),
             # K.RandomErasing((.1, .4), (.3, 1/.3), same_on_batch=True, p=0.7),
