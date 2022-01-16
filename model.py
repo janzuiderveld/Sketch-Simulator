@@ -96,7 +96,8 @@ class ModelHost:
 
             #K.RandomGaussianNoise(p=0.5),
             #K.RandomElasticTransform(kernel_size=(33, 33), sigma=(7,7), p=0.2),
-            K.RandomAffine(degrees=60, translate=0, p=0.8, padding_mode='border'), # padding_mode=2
+            # K.RandomAffine(degrees=60, translate=0.1, p=0.8, padding_mode='border'), # padding_mode=2
+            K.RandomAffine(degrees=60, translate=0, shear=5, p=0.8, padding_mode='border'), # padding_mode=2
             K.RandomPerspective(0.2,p=0.4, ),
             
             # K.ColorJitter(hue=0.01, saturation=0.01, p=0.7),
