@@ -23,7 +23,7 @@ def extract_sketch_embedding(paths):
         init_img = mh.load_init_image(path, 400, 400, mh.device)
         batch = mh.make_cutouts_init(init_img)
         # batch = make_cutouts(TF.to_tensor(img).unsqueeze(0).to(device))
-        embed = perceptor.encode_image(mh.normalize(batch)).float()
+        embed = mh.perceptor.encode_image(mh.normalize(batch)).float()
 
     # paths = paths.split(",")
     # all_items = []
