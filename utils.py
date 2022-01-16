@@ -288,17 +288,17 @@ class MakeCutoutsCumin(nn.Module):
         self.max_pool = nn.AdaptiveMaxPool2d((self.cut_size, self.cut_size))
         self.augs = augs
         
-        nn.Sequential(
-          #K.RandomHorizontalFlip(p=0.5),
-          #K.RandomSharpness(0.3,p=0.4),
-          #K.RandomGaussianBlur((3,3),(10.5,10.5),p=0.2),
-          #K.RandomGaussianNoise(p=0.5),
-          #K.RandomElasticTransform(kernel_size=(33, 33), sigma=(7,7), p=0.2),
-          K.RandomAffine(degrees=15, translate=0.1, p=0.7, padding_mode='border'),
-          K.RandomPerspective(0.7,p=0.7),
-          K.ColorJitter(hue=0.1, saturation=0.1, p=0.7),
-          K.RandomErasing((.1, .4), (.3, 1/.3), same_on_batch=True, p=0.7),
-          )
+        # nn.Sequential(
+        #   #K.RandomHorizontalFlip(p=0.5),
+        #   #K.RandomSharpness(0.3,p=0.4),
+        #   #K.RandomGaussianBlur((3,3),(10.5,10.5),p=0.2),
+        #   #K.RandomGaussianNoise(p=0.5),
+        #   #K.RandomElasticTransform(kernel_size=(33, 33), sigma=(7,7), p=0.2),
+        #   K.RandomAffine(degrees=15, translate=0.1, p=0.7, padding_mode='border'),
+        #   K.RandomPerspective(0.7,p=0.7),
+        #   K.ColorJitter(hue=0.1, saturation=0.1, p=0.7),
+        #   K.RandomErasing((.1, .4), (.3, 1/.3), same_on_batch=True, p=0.7),
+        #   )
             
     def set_cut_pow(self, cut_pow):
       self.cut_pow = cut_pow
@@ -316,18 +316,20 @@ class MakeCutoutsCumin(nn.Module):
         lower_bound = float(self.cut_size/min_size_width)
         
         for ii in range(self.cutn):
-            
-            
-          # size = int(torch.rand([])**self.cut_pow * (max_size - min_size) + min_size)
-          randsize = torch.zeros(1,).normal_(mean=.8, std=.3).clip(lower_bound,1.)
-          size_mult = randsize ** self.cut_pow
-          size = int(min_size_width * (size_mult.clip(lower_bound, 1.))) # replace .5 with a result for 224 the default large size is .95
-          # size = int(min_size_width*torch.zeros(1,).normal_(mean=.9, std=.3).clip(lower_bound, .95)) # replace .5 with a result for 224 the default large size is .95
+          avg_pixel = 0.
+          while avg_pixel > 0.98: 
+            # size = int(torch.rand([])**self.cut_pow * (max_size - min_size) + min_size)
+            randsize = torch.zeros(1,).normal_(mean=.8, std=.3).clip(lower_bound,1.)
+            size_mult = randsize ** self.cut_pow
+            size = int(min_size_width * (size_mult.clip(lower_bound, 1.))) # replace .5 with a result for 224 the default large size is .95
+            # size = int(min_size_width*torch.zeros(1,).normal_(mean=.9, std=.3).clip(lower_bound, .95)) # replace .5 with a result for 224 the default large size is .95
 
-          offsetx = torch.randint(0, sideX - size + 1, ())
-          offsety = torch.randint(0, sideY - size + 1, ())
-          cutout = input[:, :, offsety:offsety + size, offsetx:offsetx + size]
-          cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
+            offsetx = torch.randint(0, sideX - size + 1, ())
+            offsety = torch.randint(0, sideY - size + 1, ())
+            cutout = input[:, :, offsety:offsety + size, offsetx:offsetx + size]
+            avg_pixel = torch.mean(cutout)
+
+            cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
         
         
         cutouts = torch.cat(cutouts, dim=0)
