@@ -15,6 +15,7 @@ import glob
 sys.path.append("../")
 
 def extract_sketch_embedding(paths):
+    train.args.init_image = glob.glob(paths)[0]
     mh = ModelHost(train.args)
     os.makedirs(f"{args.save_root}/results", exist_ok=True)
 
