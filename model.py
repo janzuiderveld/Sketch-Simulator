@@ -180,7 +180,7 @@ class ModelHost:
     self.opt = opt
     self.normalize = normalize
     self.z, self.z_orig, self.z_min, self.z_max = z, z_orig, z_min, z_max
-    self.setup_metadata(seed)
+    # self.setup_metadata(seed)
     self.mse_weight = self.args.init_weight
 
     self.counter = 0
