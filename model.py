@@ -84,6 +84,7 @@ class ModelHost:
             K.RandomAffine(degrees=30, translate=0.1, p=1, padding_mode='border'), # padding_mode=2
             K.RandomPerspective(0.2,p=1, ),
             
+            # induces background details
             K.ColorJitter(hue=0.01, saturation=0.01, p=0.7),
             K.RandomErasing((.1, .4), (.3, 1/.3), same_on_batch=True, p=0.7),
             )
