@@ -318,7 +318,7 @@ class MakeCutoutsCumin(nn.Module):
         #############################
         overall_avg = torch.mean(input)
         print(f'overall avg: {overall_avg}')
-########################################
+        ########################################
         for ii in range(self.cutn):
 
         ###########################
