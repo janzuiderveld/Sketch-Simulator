@@ -88,6 +88,8 @@ class ModelHost:
             
             # induces background details
             K.ColorJitter(hue=0.01, saturation=0.01, p=0.35), # og p =0.7
+
+            # This one really needed?
             K.RandomErasing((.1, .4), (.3, 1/.3), same_on_batch=True, p=0.35), # og p =0.7 
             )
 
@@ -106,7 +108,7 @@ class ModelHost:
             # K.RandomErasing((.1, .4), (.3, 1/.3), same_on_batch=True, p=0.7),
             )
 
-    make_cutouts_init = flavordict[self.args.flavor](cut_size, 256, cut_pow=0.3,augs=augs_init)
+    make_cutouts_init = flavordict[self.args.flavor](cut_size, self.args.init_cutn, cut_pow=0.3,augs=augs_init)
     make_cutouts = flavordict[self.args.flavor](cut_size, self.args.cutn, cut_pow=self.args.cut_pow,augs=augs)
     
     n_toks = model.quantize.n_e
@@ -298,7 +300,7 @@ class ModelHost:
     imfile = PngImageFile(path)
     meta = PngInfo()
     step_meta = {'iterations':i}
-    step_meta.update(self.metadata)
+    # step_meta.update(self.metadata)
     #meta.add_itxt('vqgan-params', json.dumps(step_meta), zip=True)
     imfile.save(path, pnginfo=meta)
 
@@ -319,8 +321,11 @@ class ModelHost:
               # for key, value in text_loss.items():
               #     wandb.log({f'text_loss_{key}': value})
               
-              wandb.log({f"{self.args.init_image[0].split('/')[-1]} out": wandb.Image(batchpath)})
-              wandb.log({f"{self.args.init_image[0].split('/')[-1]} init": wandb.Image(self.args.init_image[0])})
+              wandb.log({
+                        f"{self.args.init_image[0].split('/')[-1]} out": wandb.Image(batchpath),
+                        f"{self.args.init_image[0].split('/')[-1]} init": wandb.Image(self.args.init_image)
+                        })
+              wandb.log({})
 
               # if self.args.log_edges != 0:
               #     init_edges: np.ndarray = kornia.tensor_to_image(init_img_edges.byte())

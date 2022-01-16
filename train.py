@@ -42,6 +42,7 @@ parser.add_argument('--wandb', type=int, default=1)
 parser.add_argument('--experiment_name', type=str, default="")
 
 parser.add_argument('--cutn', type=int, default=32 )
+parser.add_argument('--init_cutn', type=int, default=256)
 parser.add_argument('--cut_pow', type=float, default=0.75)
 parser.add_argument('--optim', type=str, default='adam')
 parser.add_argument('--step_size', type=float, default=0.87)
@@ -57,7 +58,8 @@ parser.add_argument('--epsilon', type=float, default=1e-16)
 parser.add_argument('--edge_weight', type=int, default= 5)
 # parser.add_argument('--sketch_embed_weight', type=int, default= 0)
 
-parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketch.pth")
+parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy_cutouts.pt")
+# parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketch.pth")
 # parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_small.pth")
 # parser.add_argument('--embedding_avg', type=str, default="/content/drive/MyDrive/AI/sketch-to-image/overall_embeddings/ovl_mean_sketchy_vanilla.pt")
 
@@ -75,8 +77,8 @@ parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/
 
 parser.add_argument('--padding', type=int, default=100)
 
-parser.add_argument('--prompts', type=str, default="a painting in the style of Salvador Dali, trending on ArtStation:1.5" )
-# parser.add_argument('--prompts', type=str, default="a photorealistic 3D render in Unreal Engine, trending on ArtStation:1.5" )
+# parser.add_argument('--prompts', type=str, default="a painting in the style of Salvador Dali, trending on ArtStation:1.5" )
+parser.add_argument('--prompts', type=str, default="a photorealistic 3D render in Unreal Engine, trending on ArtStation:1.5" )
 # parser.add_argument('--prompts', type=str, default="A charcoal drawing | 8K HD detailed Wallpaper, digital illustration.:0" )
 
 parser.add_argument('--altprompts', type=str, default="" )

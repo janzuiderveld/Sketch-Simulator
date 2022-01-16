@@ -13,3 +13,6 @@ wandb/
 .history/
 steps/
 thrash/
+rendered_256x256.7z
+256x256/
+test_outputs/
