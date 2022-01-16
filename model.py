@@ -301,6 +301,7 @@ class ModelHost:
       print(f'i: {self.counter}, loss: {sum(losses).item():g}, losses: {losses_str}')
       print(f'cutn: {self.make_cutouts.cutn}, cut_pow: {self.make_cutouts.cut_pow}, step_size: {self.cur_step_size}')
       out = self.synth(self.z.average)
+      print(self.args.init_image, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<,")
       if self.counter == self.args.max_iterations:
           os.makedirs(self.args.output_dir, exist_ok=True)
           batchpath = self.unique_index("./"+self.args.output_dir)
