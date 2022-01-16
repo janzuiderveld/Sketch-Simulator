@@ -76,7 +76,7 @@ parser.add_argument('--padding', type=int, default=100)
 # parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/*" )
 # parser.add_argument('--prompts', type=str, default="a painting in the style of Salvador Dali" )
 
-parser.add_argument('--prompts', type=str, default="a photorealistic 3D render in Unreal Engine, trending on artstation:2" )
+parser.add_argument('--prompts', type=str, default="a photorealistic 3D render in Unreal Engine, trending on artstation:1.5" )
 # parser.add_argument('--prompts', type=str, default="A charcoal drawing | 8K HD detailed Wallpaper, digital illustration.:0" )
 
 parser.add_argument('--altprompts', type=str, default="" )
