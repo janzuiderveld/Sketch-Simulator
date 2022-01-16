@@ -297,7 +297,8 @@ class MakeCutoutsCumin(nn.Module):
           K.RandomAffine(degrees=15, translate=0.1, p=0.7, padding_mode='border'),
           K.RandomPerspective(0.7,p=0.7),
           K.ColorJitter(hue=0.1, saturation=0.1, p=0.7),
-          K.RandomErasing((.1, .4), (.3, 1/.3), same_on_batch=True, p=0.7),)
+          K.RandomErasing((.1, .4), (.3, 1/.3), same_on_batch=True, p=0.7),
+          )
             
     def set_cut_pow(self, cut_pow):
       self.cut_pow = cut_pow
