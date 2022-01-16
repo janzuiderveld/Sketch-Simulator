@@ -38,7 +38,7 @@ parser.add_argument('--max_iterations', type=int, default=50)
 parser.add_argument('--seed', type=int, default=-1 )
 parser.add_argument('--width', type=int, default= 400 )
 parser.add_argument('--height', type=int, default= 400 )
-parser.add_argument('--wandb', type=int, default=0)
+parser.add_argument('--wandb', type=int, default=1)
 parser.add_argument('--experiment_name', type=str, default="")
 
 parser.add_argument('--cutn', type=int, default=32 )
@@ -68,8 +68,8 @@ parser.add_argument('--flavor', type=str, default="cumin", help='"ginger", "cumi
 
 # parser.add_argument('--reset_img_prompt_every', type=int, default= 0)
 
-# parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/clip_prototypical/*")
-parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/clip_prototypical/crocodilian.png")
+parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/clip_prototypical/*")
+# parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/clip_prototypical/crocodilian.png")
 # parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/0.png")
 
 parser.add_argument('--padding', type=int, default=100)
