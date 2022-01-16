@@ -58,7 +58,8 @@ parser.add_argument('--edge_weight', type=int, default= 5)
 # parser.add_argument('--sketch_embed_weight', type=int, default= 0)
 
 # parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketch.pth")
-parser.add_argument('--embedding_avg', type=str, default="/content/drive/MyDrive/AI/sketch-to-image/overall_embeddings/ovl_mean_sketchy_vanilla.pt")
+parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_small.pth")
+# parser.add_argument('--embedding_avg', type=str, default="/content/drive/MyDrive/AI/sketch-to-image/overall_embeddings/ovl_mean_sketchy_vanilla.pt")
 
 parser.add_argument('--target_avg_cuts', type=int, default=1)
 parser.add_argument('--target_det_cuts', type=int, default=0)
