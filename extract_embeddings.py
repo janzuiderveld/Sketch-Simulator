@@ -15,7 +15,7 @@ import glob
 sys.path.append("../")
 
 def extract_sketch_embedding(paths):
-    train.args.init_image = glob.glob(paths)[0]
+    train.args.init_image = paths[0]
     mh = ModelHost(train.args)
     os.makedirs(f"{args.save_root}/results", exist_ok=True)
 
@@ -39,7 +39,7 @@ def extract_sketch_embedding(paths):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()    
-    parser.add_argument('--path', type=str, default = "", help='image path(s).')
+    parser.add_argument('--path', type=str, default = f"/content/drive/MyDrive/AI/sketch-to-image/clip_prototypical/*", help='image path(s).')
     parser.add_argument('--items_per_class', type=int, default = 1000, help='Number of items to analyze per quickdraw class')
     parser.add_argument('--save_root', type=str, default = "", help='Root directory to save')
     parser.add_argument('--padding', type=int, default = 0, help='If to pad images, if so which ratio to add on each side')
