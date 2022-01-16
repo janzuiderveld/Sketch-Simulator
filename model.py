@@ -91,8 +91,9 @@ class ModelHost:
 
     augs_init = nn.Sequential(
             K.RandomHorizontalFlip(p=0.5),
-            K.RandomSharpness(0.3,p=0.4),
-            K.RandomGaussianBlur((3,3),(4.5,4.5),p=0.3),
+            # K.RandomSharpness(0.3,p=0.4),
+            # K.RandomGaussianBlur((3,3),(4.5,4.5),p=0.3),
+            
             #K.RandomGaussianNoise(p=0.5),
             #K.RandomElasticTransform(kernel_size=(33, 33), sigma=(7,7), p=0.2),
             K.RandomAffine(degrees=30, translate=0.1, p=0.8, padding_mode='border'), # padding_mode=2
@@ -206,6 +207,8 @@ class ModelHost:
         print("embed full target", Prompt(embed, weight, stop).embed.shape)
 
     if self.args.target_det_cuts:
+        # use TORCH.NN.FUNCTIONAL.GRID_SAMPLE and TORCH.NN.FUNCTIONAL.AFFINE_GRID?
+
         batch, levels = make_cutouts(init_img, init=True)
         embed = perceptor.encode_image(normalize(batch)).float()
         embed = embed - ovl_mean
