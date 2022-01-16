@@ -45,7 +45,7 @@ parser.add_argument('--cutn', type=int, default=32 )
 parser.add_argument('--cut_pow', type=float, default=0.75)
 parser.add_argument('--optim', type=str, default='adam')
 parser.add_argument('--step_size', type=float, default=0.87)
-parser.add_argument('--ema_val', type=float, default=0.98)
+parser.add_argument('--ema_val', type=float, default=0.0)
 parser.add_argument('--init_weight', type=float, default=0.1)
 parser.add_argument('--decay_rate', type=float, default=100)
 
