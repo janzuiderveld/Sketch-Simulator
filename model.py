@@ -85,8 +85,8 @@ class ModelHost:
             K.RandomPerspective(0.2,p=0.4, ),
             
             # induces background details
-            K.ColorJitter(hue=0.01, saturation=0.01, p=0.35),
-            K.RandomErasing((.1, .4), (.3, 1/.3), same_on_batch=True, p=0.35),
+            K.ColorJitter(hue=0.01, saturation=0.01, p=0.35), # og p =0.7
+            K.RandomErasing((.1, .4), (.3, 1/.3), same_on_batch=True, p=0.35), # og p =0.7 
             )
 
     augs_init = nn.Sequential(
@@ -131,7 +131,6 @@ class ModelHost:
         z = z.view([-1, toksY, toksX, e_dim]).permute(0, 3, 1, 2)
     z = EMATensor(z, self.args.ema_val)
     
-    print(self.args.init_image, "<<<<<<<<<<<<<<<<<<<<,,,,,,")
         # pil_image = Image.open(self.args.init_image).convert('RGB')
         # pil_image = pil_image.resize((sideX, sideY), Image.LANCZOS)
         # z, *_ = model.encode(TF.to_tensor(pil_image).to(device).unsqueeze(0) * 2 - 1)
@@ -165,12 +164,12 @@ class ModelHost:
     from PIL import Image
     # img_embeddings = self.embed_images(self.args.start_image)
 
-
     self.z_init = z_init
     self.init_img = init_img
     self.device = device
     self.cut_size = cut_size
     self.model, self.perceptor = model, perceptor
+    self.make_cutouts_init = make_cutouts_init
     self.make_cutouts = make_cutouts
     self.f = f
     self.imageSize = (sideX, sideY)
@@ -312,7 +311,8 @@ class ModelHost:
               # for key, value in text_loss.items():
               #     wandb.log({f'text_loss_{key}': value})
               
-              wandb.log({f"{self.args.init_image[0].split('/')[-1]}": wandb.Image(batchpath)})
+              wandb.log({f"{self.args.init_image[0].split('/')[-1]} out": wandb.Image(batchpath)})
+              wandb.log({f"{self.args.init_image[0].split('/')[-1]} init": wandb.Image(self.args.init_image[0])})
 
               # if self.args.log_edges != 0:
               #     init_edges: np.ndarray = kornia.tensor_to_image(init_img_edges.byte())
