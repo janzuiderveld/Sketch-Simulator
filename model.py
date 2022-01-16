@@ -233,7 +233,7 @@ class ModelHost:
         new_size = (new_size[0] - padding, new_size[1] - padding)
 
     pil_image = pil_image.resize(new_size, Image.LANCZOS)
-    
+    print(pil_image.size)
     # # resize image using white padding
     # # pad enlarged image to fit in sideX, sideY. Original image centered
     new_image = Image.new('RGB', (sideX, sideY), (255, 255, 255))
@@ -307,7 +307,7 @@ class ModelHost:
               # for key, value in text_loss.items():
               #     wandb.log({f'text_loss_{key}': value})
               
-              wandb.log({f"{self.args.init_image.split("/")[-1]}": wandb.Image(batchpath)})
+              wandb.log({f"{self.args.init_image.split('/')[-1]}": wandb.Image(batchpath)})
 
               # if self.args.log_edges != 0:
               #     init_edges: np.ndarray = kornia.tensor_to_image(init_img_edges.byte())

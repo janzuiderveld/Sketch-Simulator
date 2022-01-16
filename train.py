@@ -41,7 +41,7 @@ parser.add_argument('--height', type=int, default= 400 )
 parser.add_argument('--wandb', type=int, default=1)
 parser.add_argument('--experiment_name', type=str, default="")
 
-parser.add_argument('--cutn', type=int, default=32 )
+parser.add_argument('--cutn', type=int, default=64 )
 parser.add_argument('--cut_pow', type=float, default=0.75)
 parser.add_argument('--optim', type=str, default='adam')
 parser.add_argument('--step_size', type=float, default=0.87)
@@ -56,7 +56,9 @@ parser.add_argument('--beta1', type=float, default=0.9)
 parser.add_argument('--epsilon', type=float, default=1e-16)
 parser.add_argument('--edge_weight', type=int, default= 5)
 # parser.add_argument('--sketch_embed_weight', type=int, default= 0)
-parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketch.pth")
+
+# parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketch.pth")
+parser.add_argument('--embedding_avg', type=str, default="/content/drive/MyDrive/AI/sketch-to-image/overall_embeddings/ovl_mean_sketchy_vanilla.pt")
 
 parser.add_argument('--target_avg_cuts', type=int, default=1)
 parser.add_argument('--target_det_cuts', type=int, default=0)
@@ -65,12 +67,17 @@ parser.add_argument('--flavor', type=str, default="cumin", help='"ginger", "cumi
 
 # parser.add_argument('--reset_img_prompt_every', type=int, default= 0)
 
-parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/clip_prototypical/*")
-parser.add_argument('--padding', type=int, default=40)
+# parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/clip_prototypical/*")
+parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/clip_prototypical/crocodilian.png")
+# parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/0.png")
+
+parser.add_argument('--padding', type=int, default=200)
 # parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/*" )
 # parser.add_argument('--prompts', type=str, default="a painting in the style of Salvador Dali" )
+
 parser.add_argument('--prompts', type=str, default="a photorealistic 3D render in Unreal Engine" )
 # parser.add_argument('--prompts', type=str, default="A charcoal drawing | 8K HD detailed Wallpaper, digital illustration.:0" )
+
 parser.add_argument('--altprompts', type=str, default="" )
 parser.add_argument('--noise_prompt_weights', type=list, default=[])
 
