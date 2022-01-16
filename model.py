@@ -116,14 +116,14 @@ class ModelHost:
     from PIL import Image
 
     if self.args.init_image:
-        pil_image = Image.open(self.args.init_image).convert('RGB')
-
-        pil_image = self.resize_image_custom(pil_image, sideX, sideY, padding=self.args.padding)
+        init_img = self.load_init_image(self.args.init_image, sideX, sideY, device) 
+        
+        # pil_image = Image.open(self.args.init_image).convert('RGB')
+        # pil_image = self.resize_image_custom(pil_image, sideX, sideY, padding=self.args.padding)
+        # init_img = TF.to_tensor(pil_image).to(device).unsqueeze(0)
+        
         # pil_image = resize_image(pil_image, (sideX, sideY))
-
         # init_img = TF.to_tensor(pil_image).to(device).unsqueeze(0) * 2 - 1
-
-        init_img = TF.to_tensor(pil_image).to(device).unsqueeze(0)
         z, *_ = model.encode(init_img * 2 - 1)
     else:
         one_hot = F.one_hot(torch.randint(n_toks, [toksY * toksX], device=device), n_toks).float()
@@ -225,6 +225,12 @@ class ModelHost:
         pMs.append(Prompt(embed, weight).to(device))
         if(self.usealtprompts):
           altpMs.append(Prompt(embed, weight).to(device))
+
+  def load_init_image(self, image_path, sideX, sideY, device):
+    pil_image = Image.open(image_path).convert('RGB')
+    pil_image = self.resize_image_custom(pil_image, sideX, sideY, padding=self.args.padding)
+    init_img = TF.to_tensor(pil_image).to(device).unsqueeze(0)
+    return init_img
 
   def resize_image_custom(self, pil_image, sideX, sideY, padding = 0):
     # enlarge image to fit in sideX, sideY, retaining its ratio
