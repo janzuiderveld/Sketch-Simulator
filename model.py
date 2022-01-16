@@ -76,14 +76,16 @@ class ModelHost:
     f = 2**(model.decoder.num_resolutions - 1)
 
     augs = nn.Sequential(
-            K.RandomHorizontalFlip(p=0.5),
-            K.RandomSharpness(0.3,p=0.4),
-            K.RandomGaussianBlur((3,3),(4.5,4.5),p=0.3),
+            # K.RandomHorizontalFlip(p=0.5),
+            # K.RandomSharpness(0.3,p=0.4),
+            # K.RandomGaussianBlur((3,3),(4.5,4.5),p=0.3),
             #K.RandomGaussianNoise(p=0.5),
             #K.RandomElasticTransform(kernel_size=(33, 33), sigma=(7,7), p=0.2),
             K.RandomAffine(degrees=30, translate=0.1, p=0.8, padding_mode='border'), # padding_mode=2
             K.RandomPerspective(0.2,p=0.4, ),
-            K.ColorJitter(hue=0.01, saturation=0.01, p=0.7),)
+            K.ColorJitter(hue=0.01, saturation=0.01, p=0.7),
+            K.RandomErasing((.1, .4), (.3, 1/.3), same_on_batch=True, p=0.7),
+            )
 
     altaugs = nn.Sequential(
                 K.RandomHorizontalFlip(p=0.5),
