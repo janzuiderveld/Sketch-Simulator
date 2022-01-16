@@ -315,9 +315,17 @@ class MakeCutoutsCumin(nn.Module):
         min_size_width = min(sideX, sideY)
         lower_bound = float(self.cut_size/min_size_width)
         
+        #############################
+        overall_avg = torch.mean(input)
+        print(f'overall avg: {overall_avg}')
+########################################
         for ii in range(self.cutn):
-          avg_pixel = 0.
-          while avg_pixel > 0.98: 
+
+        ###########################
+          avg_pixel = 1.2
+          while avg_pixel > overall_avg*1.1: 
+
+        ###########################
             # size = int(torch.rand([])**self.cut_pow * (max_size - min_size) + min_size)
             randsize = torch.zeros(1,).normal_(mean=.8, std=.3).clip(lower_bound,1.)
             size_mult = randsize ** self.cut_pow
@@ -327,11 +335,13 @@ class MakeCutoutsCumin(nn.Module):
             offsetx = torch.randint(0, sideX - size + 1, ())
             offsety = torch.randint(0, sideY - size + 1, ())
             cutout = input[:, :, offsety:offsety + size, offsetx:offsetx + size]
+            
+            #######################
             avg_pixel = torch.mean(cutout)
-
-            cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
+            ###########################
+          cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
         
-        
+    
         cutouts = torch.cat(cutouts, dim=0)
         cutouts = clamp_with_grad(cutouts, 0, 1)
 
