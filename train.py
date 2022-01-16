@@ -72,7 +72,7 @@ parser.add_argument('--flavor', type=str, default="cumin", help='"ginger", "cumi
 parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/clip_prototypical/crocodilian.png")
 # parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/0.png")
 
-parser.add_argument('--padding', type=int, default=120)
+parser.add_argument('--padding', type=int, default=200)
 # parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/*" )
 # parser.add_argument('--prompts', type=str, default="a painting in the style of Salvador Dali" )
 
