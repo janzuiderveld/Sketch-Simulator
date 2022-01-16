@@ -125,13 +125,13 @@ class ModelHost:
 
         init_img = TF.to_tensor(pil_image).to(device).unsqueeze(0)
         z, *_ = model.encode(init_img * 2 - 1)
-
     else:
         one_hot = F.one_hot(torch.randint(n_toks, [toksY * toksX], device=device), n_toks).float()
         z = one_hot @ model.quantize.embedding.weight
         z = z.view([-1, toksY, toksX, e_dim]).permute(0, 3, 1, 2)
     z = EMATensor(z, self.args.ema_val)
     
+    print(self.args.init_image, "<<<<<<<<<<<<<<<<<<<<,,,,,,")
         # pil_image = Image.open(self.args.init_image).convert('RGB')
         # pil_image = pil_image.resize((sideX, sideY), Image.LANCZOS)
         # z, *_ = model.encode(TF.to_tensor(pil_image).to(device).unsqueeze(0) * 2 - 1)
@@ -301,7 +301,6 @@ class ModelHost:
       print(f'i: {self.counter}, loss: {sum(losses).item():g}, losses: {losses_str}')
       print(f'cutn: {self.make_cutouts.cutn}, cut_pow: {self.make_cutouts.cut_pow}, step_size: {self.cur_step_size}')
       out = self.synth(self.z.average)
-      print(self.args.init_image, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<,")
       if self.counter == self.args.max_iterations:
           os.makedirs(self.args.output_dir, exist_ok=True)
           batchpath = self.unique_index("./"+self.args.output_dir)
@@ -313,7 +312,7 @@ class ModelHost:
               # for key, value in text_loss.items():
               #     wandb.log({f'text_loss_{key}': value})
               
-              wandb.log({f"{self.args.init_image.split('/')[-1]}": wandb.Image(batchpath)})
+              wandb.log({f"{self.args.init_image[0].split('/')[-1]}": wandb.Image(batchpath)})
 
               # if self.args.log_edges != 0:
               #     init_edges: np.ndarray = kornia.tensor_to_image(init_img_edges.byte())
