@@ -108,7 +108,7 @@ class ModelHost:
             # K.RandomErasing((.1, .4), (.3, 1/.3), same_on_batch=True, p=0.7),
             )
 
-    make_cutouts_init = flavordict[self.args.flavor](cut_size, self.args.init_cutn, cut_pow=0.3,augs=augs_init)
+    make_cutouts_init = flavordict[self.args.flavor](cut_size, self.args.init_cutn, cut_pow=self.args.init_cut_pow, augs=augs_init)
     make_cutouts = flavordict[self.args.flavor](cut_size, self.args.cutn, cut_pow=self.args.cut_pow,augs=augs)
     
     n_toks = model.quantize.n_e
@@ -157,9 +157,11 @@ class ModelHost:
 
     for prompt in self.args.prompts:
         txt, weight, stop = parse_prompt(prompt)
-        embed = perceptor.encode_text(clip.tokenize(txt).to(device)).float()
-        pMs.append(Prompt(embed, weight, stop, name="text").to(device))
+        # embed = perceptor.encode_text(clip.tokenize(txt).to(device)).float()
+        # pMs.append(Prompt(embed, weight, stop, name="text").to(device))
     
+        txt_embed = perceptor.encode_text(clip.tokenize(txt).to(device)).float()
+
     for prompt in self.args.altprompts:
         txt, weight, stop = parse_prompt(prompt)
         embed = perceptor.encode_text(clip.tokenize(txt).to(device)).float()
@@ -200,7 +202,11 @@ class ModelHost:
         batch = make_cutouts_init(init_img)
         # batch = make_cutouts(TF.to_tensor(img).unsqueeze(0).to(device))
         embed = perceptor.encode_image(normalize(batch)).float()
-        embed = (embed - ovl_mean) 
+        
+        # embed = (embed - ovl_mean)
+
+        embed = (embed - ovl_mean + txt_embed) 
+
         pMs.append(Prompt(embed, weight, stop, name="image").to(device))
         print("embed target", Prompt(embed, weight, stop).embed.shape)
 
@@ -312,8 +318,17 @@ class ModelHost:
       out = self.synth(self.z.average)
       if self.counter == self.args.max_iterations:
           os.makedirs(self.args.output_dir, exist_ok=True)
-          batchpath = self.unique_index("./"+self.args.output_dir)
-          TF.to_pil_image(out[0].cpu()).save(batchpath)
+        #   batchpath = self.unique_index("./"+self.args.output_dir)
+          batchpath = self.args.output_dir + '/' + self.args.init_image.split('/')[-1] 
+
+          input_img_array = TF.to_pil_image(self.init_img.cpu().squeeze())
+          output_img_array = TF.to_pil_image(out[0].cpu())
+          
+          # concatenate input and output images in a single image
+          im = Image.new('RGB', (input_img_array.width + output_img_array.width, input_img_array.height))
+          im.paste(input_img_array, (0, 0))
+          im.paste(output_img_array, (input_img_array.width, 0))
+          im.save(batchpath)
 
           if self.args.wandb:
               # wandb.log({'edge_loss': edge_loss})

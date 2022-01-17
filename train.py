@@ -43,6 +43,7 @@ parser.add_argument('--experiment_name', type=str, default="")
 
 parser.add_argument('--cutn', type=int, default=32 )
 parser.add_argument('--init_cutn', type=int, default=256)
+parser.add_argument('--init_cut_pow', type=int, default=0.3)
 parser.add_argument('--cut_pow', type=float, default=0.75)
 parser.add_argument('--optim', type=str, default='adam')
 parser.add_argument('--step_size', type=float, default=0.87)
@@ -70,7 +71,8 @@ parser.add_argument('--flavor', type=str, default="cumin", help='"ginger", "cumi
 
 # parser.add_argument('--reset_img_prompt_every', type=int, default= 0)
 
-parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/clip_prototypical/*")
+# parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/clip_prototypical/*")
+parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/*")
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/clip_prototypical/crocodilian.png")
 # parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/0.png")
 # parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/*" )
@@ -79,16 +81,30 @@ parser.add_argument('--padding', type=int, default=100)
 
 # parser.add_argument('--prompts', type=str, default="a painting in the style of Salvador Dali, trending on ArtStation:1.5" )
 parser.add_argument('--prompts', type=str, default="a photorealistic 3D render in Unreal Engine, trending on ArtStation:1.5" )
-# parser.add_argument('--prompts', type=str, default="A charcoal drawing | 8K HD detailed Wallpaper, digital illustration.:0" )
+# parser.add_argument('--prompts', type=str, default="Charcoal on canvas, 8K HD detailed black and white Wallpaper, trending on ArtStation:1.5" )
 
 parser.add_argument('--altprompts', type=str, default="" )
 parser.add_argument('--noise_prompt_weights', type=list, default=[])
 
 parser.add_argument('--path', type=str, default="")
-parser.add_argument('--save_root', type=str, default="")
-parser.add_argument('--output_dir', type=str, default="test_outputs")
+parser.add_argument('--save_root', type=str, default="/content/drive/MyDrive/AI/sketch-to-image/outputs")
+parser.add_argument('--output_dir', type=str, default="")
+
 
 args = parser.parse_args()
+
+if args.output_dir == "":
+    # generate a unique output directory number
+    import time
+    args.output_dir = f'{args.save_root}/{time.strftime("%Y%m%d-%H%M%S")}'
+else:
+    args.output_dir = f'{args.save_root}/{args.output_dir}'
+os.makedirs(args.output_dir, exist_ok=True)
+
+# save args as yaml file
+import yaml
+with open(f'{args.output_dir}/args.yaml', 'w') as f:
+    yaml.dump(args, f)
 
 args.image_prompts = args.start_image
 args.init_image = args.start_image
