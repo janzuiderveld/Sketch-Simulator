@@ -200,12 +200,23 @@ class ModelHost:
     # set random cuts as target. Prompt class uses alll cuts, todo check how the distance to all of these is calculated, avg?
     if self.args.target_avg_cuts:
         batch = make_cutouts_init(init_img)
-        # batch = make_cutouts(TF.to_tensor(img).unsqueeze(0).to(device))
         embed = perceptor.encode_image(normalize(batch)).float()
         
         # embed = (embed - ovl_mean)
-
+    
         embed = (embed - ovl_mean + txt_embed) 
+
+        # Target ovl_mean as style for testing ############    
+        # tgt_style = torch.load("/content/Sketch-Simulator/results/ovl_mean_sketchy_cutouts.pt")    
+        # embed = (embed - ovl_mean + tgt_style) 
+
+        # Target ovl_mean for testing ############        
+        # embed = ovl_mean.unsqueeze(0)
+
+        # Target a image for testing ############        
+        # init_img = self.load_init_image("/content/Sketch-Simulator/test_images/0.png", sideX, sideY, device)
+        # batch = make_cutouts_init(init_img)
+        # embed = perceptor.encode_image(normalize(batch)).float()
 
         pMs.append(Prompt(embed, weight, stop, name="image").to(device))
         print("embed target", Prompt(embed, weight, stop).embed.shape)

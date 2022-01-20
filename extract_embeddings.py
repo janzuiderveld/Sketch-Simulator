@@ -22,7 +22,7 @@ def extract_sketch_embedding(paths):
     mh = ModelHost(train.args)
     os.makedirs(f"{args.save_root}/results", exist_ok=True)
 
-    # sample 10% of paths
+    # sample 20% of paths
     paths = random.sample(paths, int(len(paths) * 0.2))
 
     avg_embeddings = []
@@ -50,13 +50,14 @@ def extract_sketch_embedding(paths):
     total_avg = torch.mean(avg_embeddings, dim=0)
     print(total_avg.shape)
 
-    torch.save(total_avg, f"{args.save_root}/results/ovl_mean_sketchy_cutouts.pt")
+    torch.save(total_avg, f"{args.save_root}/results/ovl_mean_sketchy_photo_cutouts.pt")
 
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()    
-    parser.add_argument('--path', type=str, default = f"/content/Sketch-Simulator/256x256/sketch/**/**/*.png", help='image path(s).')
+    # parser.add_argument('--path', type=str, default = f"/content/Sketch-Simulator/256x256/sketch/**/**/*.png", help='image path(s).')
+    parser.add_argument('--path', type=str, default = f"/content/Sketch-Simulator/256x256/photo/**/**/*.jpg", help='image path(s).')
     parser.add_argument('--items_per_class', type=int, default = 1000, help='Number of items to analyze per quickdraw class')
     parser.add_argument('--save_root', type=str, default = "/content/Sketch-Simulator/", help='Root directory to save')
     parser.add_argument('--padding', type=int, default = 0, help='If to pad images, if so which ratio to add on each side')
