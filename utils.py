@@ -367,7 +367,6 @@ class MakeCutoutsCumin(nn.Module):
         ###################
         if len(cutouts.shape) == 5:
           for i, cutout_level in enumerate(cutouts):
-            print("ooos__soo", i)
             cutouts[i] = self.augs(cutout_level)
         ###############
         else:

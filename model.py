@@ -241,13 +241,14 @@ class ModelHost:
 
 
 ############################
-        embed = 
+        embed =[]
         for i, cutout_set in enumerate(batch):
-          embed = perceptor.encode_image(normalize(cutout_set)).float()
+          embed.append(perceptor.encode_image(normalize(cutout_set)).float().unsqueeze(0))
+        embed = torch.cat(embed, dim = 0)
 ########################
         # embed = perceptor.encode_image(normalize(batch)).float()
 
-
+        print(embed.shape)
         # embed = embed - ovl_mean + txt_embed
         embed = embed - ovl_mean
 
