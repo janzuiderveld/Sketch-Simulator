@@ -152,8 +152,9 @@ class Prompt(nn.Module):
 
             for (level_input, level_embed) in zip(input_normed, embed_normed):
               print(level_input.shape, level_embed.shape)
-              dists = input_normed.sub(embed_normed).norm(dim=2).div(2).arcsin().pow(2).mul(2)
-              dists = dists * self.weight.sign()
+              dist = input_normed.sub(embed_normed).norm(dim=2).div(2).arcsin().pow(2).mul(2)
+              dists.append(dist)
+              # dists = dists * self.weight.sign()
 
             
             dists = torch.cat(dists, dim=0)
