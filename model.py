@@ -239,9 +239,19 @@ class ModelHost:
         batch = make_cutouts_init(batch)
         # print(batch.shape)
 
-        embed = perceptor.encode_image(normalize(batch)).float()
+
+############################
+        embed = 
+        for i, cutout_set in enumerate(batch):
+          embed = perceptor.encode_image(normalize(cutout_set)).float()
+########################
+        # embed = perceptor.encode_image(normalize(batch)).float()
+
+
         # embed = embed - ovl_mean + txt_embed
         embed = embed - ovl_mean
+
+
         pMs.append(Prompt(embed, weight, stop, name="image", levels=levels, levels_bool=True, cutn=self.args.cutn, init_cutn=self.args.init_cutn).to(device))
 
 
