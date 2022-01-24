@@ -136,13 +136,13 @@ class Prompt(nn.Module):
         
         # input_normed = F.normalize(input.unsqueeze(1), dim=2)
         # embed_normed = F.normalize(self.embed.unsqueeze(0), dim=2)
-        input_normed = F.normalize(input.unsqueeze(2), dim=2)
-        embed_normed = F.normalize(self.embed.unsqueeze(1), dim=2)
+        input_normed = F.normalize(input.unsqueeze(2), dim=3)
+        embed_normed = F.normalize(self.embed.unsqueeze(1), dim=3)
 
         print("lalalala", self.name, self.levels_bool)
         print(input_normed.shape, embed_normed.shape)
         # print(self.levels)
-        if self.levels_bool:
+        if embed.shape[0] != 1:
             dists = []
             
             
@@ -152,12 +152,20 @@ class Prompt(nn.Module):
 
             for (level_input, level_embed) in zip(input_normed, embed_normed):
               print(level_input.shape, level_embed.shape)
-            
+
             
             dists = torch.cat(dists, dim=0)
             # dists = input_normed.sub(embed_normed).norm(dim=2).div(2).arcsin().pow(2).mul(2)
             dists = dists * self.weight.sign()
+       
         else:
+            input_normed = input_normed.squeeze(2)
+            embed_normed = embed_normed.squeeze(2)
+            print(level_input.shape, level_embed.shape)
+            dists = input_normed.sub(embed_normed).norm(dim=2).div(2).arcsin().pow(2).mul(2)
+            dists = dists * self.weight.sign()
+       
+        if 0:
             # step1 = input_normed.sub(embed_normed)
             # print(step1.shape)
             # dists = step1.norm(dim=2).div(2).arcsin().pow(2).mul(2)
@@ -165,6 +173,7 @@ class Prompt(nn.Module):
             dists = dists * self.weight.sign()
             # print(dists.shape)
             # print(self.name)
+
         return self.weight.abs() * replace_grad(dists, torch.maximum(dists, self.stop)).mean()
 
 
