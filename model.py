@@ -111,6 +111,7 @@ class ModelHost:
 
     make_cutouts_init = flavordict[self.args.flavor](cut_size, self.args.init_cutn, cut_pow=self.args.init_cut_pow, augs=augs_init)
     make_cutouts = flavordict[self.args.flavor](cut_size, self.args.cutn, cut_pow=self.args.cut_pow,augs=augs)
+    make_cutouts_det = flavordict["det"](cut_size, self.args.cutn, cut_pow=self.args.cut_pow,augs=augs)
     
     n_toks = model.quantize.n_e
     toksX, toksY = self.args.size[0] // f, self.args.size[1] // f
@@ -178,6 +179,7 @@ class ModelHost:
     self.model, self.perceptor = model, perceptor
     self.make_cutouts_init = make_cutouts_init
     self.make_cutouts = make_cutouts
+    self.make_cutouts_det = make_cutouts_det
     self.f = f
     self.imageSize = (sideX, sideY)
     self.prompts = pMs
@@ -232,7 +234,7 @@ class ModelHost:
         # use TORCH.NN.FUNCTIONAL.GRID_SAMPLE and TORCH.NN.FUNCTIONAL.AFFINE_GRID?
         # torch.nn.functional.affine_grid()
 
-        batch, levels = make_cutouts(init_img, init=True)
+        batch, levels = make_cutouts_det(init_img, init=True)
         embed = perceptor.encode_image(normalize(batch)).float()
         embed = embed - ovl_mean + txt_embed
         pMs.append(Prompt(embed, weight, stop, name="image", levels=True).to(device))
