@@ -99,7 +99,7 @@ def vector_quantize(x, codebook):
 
 
 class Prompt(nn.Module):
-    def __init__(self, embed, weight=1., stop=float('-inf'), levels=None, levels_bool=False, name=""):
+    def __init__(self, embed, weight=1., stop=float('-inf'), levels=None, levels_bool=False, cutn=0, init_cutn=0, name=""):
         super().__init__()
         self.register_buffer('embed', embed)
         self.register_buffer('weight', torch.as_tensor(weight))
@@ -107,7 +107,10 @@ class Prompt(nn.Module):
         self.levels_bool = levels_bool
         self.levels = levels
 
-        self.cos = nn.CosineSimilarity(dim=1, eps=1e-6)
+        self.cutn = cutn
+        self.init_cutn = init_cutn
+
+        # self.cos = nn.CosineSimilarity(dim=1, eps=1e-6)
         # if levels:
         #     self.register_buffer('levels', levels)
         # else:
@@ -138,8 +141,8 @@ class Prompt(nn.Module):
         # print(self.levels)
         if self.levels_bool:
             dists = []
-            for i in range(0, input_normed.shape[0], len(self.levels)):
-                dist = input_normed[i:i+len(self.levels), :, :].sub(embed_normed[:, i:i+len(self.levels), :]).norm(dim=2).div(2).arcsin().pow(2).mul(2)
+            for i in range(len(self.levels)):
+                dist = input_normed[i*self.cutn*self.levels:(i+1)*len(self.levels)*self.cutn, :, :].sub(embed_normed[i*self.init_cutn*self.levels:(i+1)*len(self.levels)*self.init_cutn:, :]).norm(dim=2).div(2).arcsin().pow(2).mul(2)
                 dists.append(dist)
             dists = torch.cat(dists, dim=0)
             # dists = input_normed.sub(embed_normed).norm(dim=2).div(2).arcsin().pow(2).mul(2)
