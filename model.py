@@ -233,7 +233,7 @@ class ModelHost:
 
         batch, levels = make_cutouts(init_img, init=True)
         embed = perceptor.encode_image(normalize(batch)).float()
-        embed = embed - ovl_mean
+        embed = embed - ovl_mean + txt_embed
         pMs.append(Prompt(embed, weight, stop, name="image", levels=True).to(device))
 
 

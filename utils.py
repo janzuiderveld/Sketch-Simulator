@@ -132,7 +132,7 @@ class Prompt(nn.Module):
         
         input_normed = F.normalize(input.unsqueeze(1), dim=2)
         embed_normed = F.normalize(self.embed.unsqueeze(0), dim=2)
-        print(input_normed.shape, embed_normed.shape)
+        # print(input_normed.shape, embed_normed.shape)
         if self.levels:
             dists = []
             for i in range(input_normed.shape[0]):
@@ -147,8 +147,8 @@ class Prompt(nn.Module):
             # dists = step1.norm(dim=2).div(2).arcsin().pow(2).mul(2)
             dists = input_normed.sub(embed_normed).norm(dim=2).div(2).arcsin().pow(2).mul(2)
             dists = dists * self.weight.sign()
-            print(dists.shape)
-            print(self.name)
+            # print(dists.shape)
+            # print(self.name)
         return self.weight.abs() * replace_grad(dists, torch.maximum(dists, self.stop)).mean()
 
 
@@ -317,7 +317,7 @@ class MakeCutoutsCumin(nn.Module):
         
         #############################
         overall_avg = torch.mean(input)
-        print(f'overall avg: {overall_avg}')
+        # print(f'overall avg: {overall_avg}')
         ########################################
         
         for ii in range(self.cutn):
