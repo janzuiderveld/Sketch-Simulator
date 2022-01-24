@@ -1,4 +1,7 @@
 # Sketch Simulator
+
+WARNING: Currently under development, messy
+
 An architecture that makes any doodle realistic, in any specified style, using VQGAN, CLIP and some basic embedding arithmetics.
 
 See the final cell output of the colab below for some examples with and without subtracting sketch embedding averages.
