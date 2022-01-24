@@ -410,7 +410,10 @@ class ModelHost:
       if self.args.target_det_cuts:
         out_grid = self.make_cutouts_det(out)
         print(out_grid.shape)
-        iii = self.perceptor.encode_image(self.normalize(self.make_cutouts(out_grid))).float()
+        out_grid_cuts = self.make_cutouts(out_grid)
+        print(out_grid_cuts.shape)
+
+        iii = self.perceptor.encode_image(self.normalize(out_grid_cuts)).float()
       else:
         iii = self.perceptor.encode_image(self.normalize(self.make_cutouts(out))).float()
       
