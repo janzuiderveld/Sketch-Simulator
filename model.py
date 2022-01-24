@@ -159,7 +159,7 @@ class ModelHost:
 
     for prompt in self.args.prompts:
         txt, weight, stop = parse_prompt(prompt)
-        embed = perceptor.encode_text(clip.tokenize(txt).to(device)).float()
+        embed = perceptor.encode_text(clip.tokenize(txt).to(device)).float().unsqueeze(0)
         pMs.append(Prompt(embed, weight, stop, name="text").to(device))
     
         # txt_embed = perceptor.encode_text(clip.tokenize(txt).to(device)).float()
@@ -424,9 +424,10 @@ class ModelHost:
 
       else:
 
+
         iii =[]
         for i, cutout_set in enumerate(out_grid_cuts):
-          iii.append(self.perceptor.encode_image(self.normalize(cutout_set)).float())
+          iii.append(self.perceptor.encode_image(self.normalize(cutout_set)).float().unsqueeze(0))
         iii = torch.cat(embed, dim = 0)
         
         # iii = self.perceptor.encode_image(self.normalize(self.make_cutouts(out))).float()
