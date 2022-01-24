@@ -99,7 +99,7 @@ def vector_quantize(x, codebook):
 
 
 class Prompt(nn.Module):
-    def __init__(self, embed, weight=1., stop=float('-inf'), levels=None, levels_bool=False name=""):
+    def __init__(self, embed, weight=1., stop=float('-inf'), levels=None, levels_bool=False, name=""):
         super().__init__()
         self.register_buffer('embed', embed)
         self.register_buffer('weight', torch.as_tensor(weight))
