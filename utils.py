@@ -200,7 +200,7 @@ def save_tensor_as_img(tensor, save_path):
     pil_img.save(save_path)
 
 class MakeCutoutsDet(nn.Module):
-    def __init__(self, cut_size, cutn=None, cut_pow=None, augs=None, cut_levels=5, testing=True):
+    def __init__(self, cut_size, cutn=None, cut_pow=None, augs=None, cut_levels=3, testing=True):
         super().__init__()
         self.cut_size = cut_size
         print(f'cut size: {self.cut_size}')
@@ -245,7 +245,7 @@ class MakeCutoutsDet(nn.Module):
                     if init:
                         # calculate average pixel value of cutout
                         cutout_avg = cutout.mean()
-                        if cutout_avg > 0.98 and level != 1: # if cutout is mostly white
+                        if cutout_avg > 0.95 and level != 1: # if cutout is mostly white
                             continue
                     
                         self.used_cutout_indices.append((level, i, j))
