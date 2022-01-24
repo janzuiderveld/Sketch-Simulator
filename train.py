@@ -34,14 +34,14 @@ parser.add_argument('--vqgan_model', type=str, default='ImageNet' )
 parser.add_argument('--clip_model', type=str, default='ViT-B/32' )
 parser.add_argument('--display_freq', type=int, default= 10)
 parser.add_argument('--log_edges', type=int, default=0)
-parser.add_argument('--max_iterations', type=int, default=50)
+parser.add_argument('--max_iterations', type=int, default=80)
 parser.add_argument('--seed', type=int, default=-1 )
 parser.add_argument('--width', type=int, default= 400 )
 parser.add_argument('--height', type=int, default= 400 )
 parser.add_argument('--wandb', type=int, default=0)
 parser.add_argument('--experiment_name', type=str, default="")
 
-parser.add_argument('--cutn', type=int, default=32 )
+parser.add_argument('--cutn', type=int, default=64 )
 parser.add_argument('--init_cutn', type=int, default=256)
 parser.add_argument('--init_cut_pow', type=int, default=0.3)
 parser.add_argument('--cut_pow', type=float, default=0.75)
@@ -56,7 +56,7 @@ parser.add_argument('--weight_decouple', type=float, default=1)
 parser.add_argument('--rectify', type=float, default=0)
 parser.add_argument('--beta1', type=float, default=0.9)
 parser.add_argument('--epsilon', type=float, default=1e-16)
-parser.add_argument('--edge_weight', type=int, default= 5)
+parser.add_argument('--edge_weight', type=int, default= 0)
 # parser.add_argument('--sketch_embed_weight', type=int, default= 0)
 
 parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy_cutouts.pt")
@@ -75,7 +75,10 @@ parser.add_argument('--flavor', type=str, default="cumin", help='"ginger", "cumi
 # parser.add_argument('--start_image', type=str, default=f"/content/Sketch-Simulator/test_images/white_noise.jpeg")
 # parser.add_argument('--start_image', type=str, default=f"/content/Sketch-Simulator/256x256/photo/tx_000000000000/cat/n02121620_51.jpg")
 
-parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/*")
+
+# parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/selection/aalarge_456166_SgKZE8YnT3MAmlfpZUjjnmEZ3*")
+parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/selection/*")
+# parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/*")
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/clip_prototypical/*")
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/clip_prototypical/crocodilian.png")
 # parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/0.png")
@@ -83,7 +86,8 @@ parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/
 
 parser.add_argument('--padding', type=int, default=100)
 
-parser.add_argument('--prompts', type=str, default="a painting in the style of Salvador Dali, trending on ArtStation:1.5" )
+parser.add_argument('--prompts', type=str, default="A painting in the style of Salvador Dali, trending on ArtStation|A photorealistic 3D render in Unreal Engine, trending on ArtStation|Charcoal on canvas, 8K HD detailed black and white Wallpaper, trending on ArtStation" )
+# parser.add_argument('--prompts', type=str, default="a painting in the style of Salvador Dali, trending on ArtStation:1.5" )
 # parser.add_argument('--prompts', type=str, default="a photorealistic 3D render in Unreal Engine, trending on ArtStation:1.5" )
 # parser.add_argument('--prompts', type=str, default="Charcoal on canvas, 8K HD detailed black and white Wallpaper, trending on ArtStation:1.5" )
 # parser.add_argument('--prompts', type=str, default="")
@@ -93,7 +97,9 @@ parser.add_argument('--noise_prompt_weights', type=list, default=[])
 
 parser.add_argument('--path', type=str, default="")
 parser.add_argument('--save_root', type=str, default="/content/drive/MyDrive/AI/sketch-to-image/outputs")
-parser.add_argument('--output_dir', type=str, default="")
+parser.add_argument('--output_dir', type=str, default="selection3")
+parser.add_argument('--save_bef_aft', type=int, default=0)
+parser.add_argument('--never_stop', type=int, default=1)
 
 
 args = parser.parse_args()
@@ -126,12 +132,9 @@ if args.image_prompts == "None" or not args.image_prompts:
 else:
     args.image_prompts = args.image_prompts.split("|")
     args.image_prompts = [image.strip() for image in args.image_prompts]
-args.prompts = [phrase.strip() for phrase in args.prompts.split("|")]
-if args.prompts == ['']:
-    args.prompts = []
 
 def Main():
-    print(args.prompts)
+    # print(args.prompts)
     if args.wandb:
         if not args.experiment_name:
             experiment_name = wandb.util.generate_id()
@@ -143,24 +146,40 @@ def Main():
     else:
         config = args
 
-    if "*" in args.start_image:
-        import glob
-        start_images = glob.glob(args.start_image)
-        print(start_images)
-        for image in start_images:
-            print(image)
-            if args.wandb:
-                wandb.config.update({"start_image": image, 'init_image': image, 'image_prompts': [image]}, allow_val_change=True)  
-            else:
-                args.start_image = image
-                args.init_image = image
-                args.image_prompts = [image]
-            print("changed config")
-            mh = ModelHost(config)
-            mh.run()
+    print(args.prompts)
+    if "|" in args.prompts:
+        prompts = args.prompts.split("|")
     else:
-        mh = ModelHost(config)
-        mh.run()
+        prompts = [args.prompts]
+
+    # prompts = [phrase.strip() for phrase in args.prompts.split("|")]
+    # if args.prompts == ['']:
+    #     args.prompts = []
+        
+    print(prompts)
+    while True:
+        for prompt in prompts:
+            if "*" in args.start_image:
+                import glob
+                start_images = glob.glob(args.start_image)
+                print(start_images)
+                for image in start_images:
+                    print(image)
+                    if args.wandb:
+                        wandb.config.update({"start_image": image, 'init_image': image, 'image_prompts': [image]}, allow_val_change=True)  
+                    else:
+                        args.start_image = image
+                        args.init_image = image
+                        args.image_prompts = [image]
+                        args.prompts = [prompt]
+                    print("changed config")
+                    mh = ModelHost(config)
+                    mh.run()
+            else:
+                args.prompts = [prompt]
+                mh = ModelHost(config)
+                mh.run()
+        if not args.never_stop: break
 
 if __name__ == "__main__":
     os.makedirs("steps", exist_ok=True)

@@ -69,6 +69,7 @@ class ModelHost:
     torch.manual_seed(seed)
     print('Using seed:', seed)
 
+    print('Using prompt:', self.args.prompts)
     model = load_vqgan_model(f'{self.args.vqgan_model}.yaml', f'{self.args.vqgan_model}.ckpt').to(device)
     perceptor = clip.load(self.args.clip_model, jit=False)[0].eval().requires_grad_(False).to(device)
 
@@ -329,17 +330,20 @@ class ModelHost:
       out = self.synth(self.z.average)
       if self.counter == self.args.max_iterations:
           os.makedirs(self.args.output_dir, exist_ok=True)
-        #   batchpath = self.unique_index("./"+self.args.output_dir)
-          batchpath = self.args.output_dir + '/' + self.args.init_image.split('/')[-1] 
+          batchpath = self.unique_index(self.args.output_dir)
+        #   batchpath = self.args.output_dir + '/' + self.args.init_image.split('/')[-1] 
 
           input_img_array = TF.to_pil_image(self.init_img.cpu().squeeze())
           output_img_array = TF.to_pil_image(out[0].cpu())
           
-          # concatenate input and output images in a single image
-          im = Image.new('RGB', (input_img_array.width + output_img_array.width, input_img_array.height))
-          im.paste(input_img_array, (0, 0))
-          im.paste(output_img_array, (input_img_array.width, 0))
-          im.save(batchpath)
+          if self.args.save_bef_aft:
+            # concatenate input and output images in a single image
+            im = Image.new('RGB', (input_img_array.width + output_img_array.width, input_img_array.height))
+            im.paste(input_img_array, (0, 0))
+            im.paste(output_img_array, (input_img_array.width, 0))
+            im.save(batchpath)
+          else:
+            output_img_array.save(batchpath)
 
           if self.args.wandb:
               # wandb.log({'edge_loss': edge_loss})
@@ -377,10 +381,10 @@ class ModelHost:
   def unique_index(self, batchpath):
       i = 0
       while i < 10000:
-          if os.path.isfile(batchpath+"/"+str(i)+".png"):
+          if os.path.isfile(batchpath+"/"+ self.args.init_image.split('/')[-1].split(".")[0]  +str(i)+".png"):
               i = i+1
           else:
-              return batchpath+"/"+str(i)+".png"
+              return batchpath+"/"+ self.args.init_image.split('/')[-1].split(".")[0]  +str(i)+".png"
 
   def ascend_txt(self):
       out = self.synth(self.z.tensor)
