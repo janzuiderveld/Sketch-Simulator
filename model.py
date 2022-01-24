@@ -159,10 +159,10 @@ class ModelHost:
 
     for prompt in self.args.prompts:
         txt, weight, stop = parse_prompt(prompt)
-        # embed = perceptor.encode_text(clip.tokenize(txt).to(device)).float()
-        # pMs.append(Prompt(embed, weight, stop, name="text").to(device))
+        embed = perceptor.encode_text(clip.tokenize(txt).to(device)).float()
+        pMs.append(Prompt(embed, weight, stop, name="text").to(device))
     
-        txt_embed = perceptor.encode_text(clip.tokenize(txt).to(device)).float()
+        # txt_embed = perceptor.encode_text(clip.tokenize(txt).to(device)).float()
 
     for prompt in self.args.altprompts:
         txt, weight, stop = parse_prompt(prompt)
@@ -205,9 +205,9 @@ class ModelHost:
         batch = make_cutouts_init(init_img)
         embed = perceptor.encode_image(normalize(batch)).float()
         
-        # embed = (embed - ovl_mean)
+        embed = (embed - ovl_mean)
     
-        embed = (embed - ovl_mean + txt_embed) 
+        # embed = (embed - ovl_mean + txt_embed) 
 
         # Target ovl_mean as style for testing ############    
         # tgt_style = torch.load("/content/Sketch-Simulator/results/ovl_mean_sketchy_cutouts.pt")    
@@ -240,7 +240,8 @@ class ModelHost:
         # print(batch.shape)
 
         embed = perceptor.encode_image(normalize(batch)).float()
-        embed = embed - ovl_mean + txt_embed
+        # embed = embed - ovl_mean + txt_embed
+        embed = embed - ovl_mean
         pMs.append(Prompt(embed, weight, stop, name="image", levels=levels, levels_bool=True).to(device))
 
 
