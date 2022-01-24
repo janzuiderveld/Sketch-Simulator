@@ -142,7 +142,7 @@ class Prompt(nn.Module):
         print("lalalala", self.name, self.levels_bool)
         print(input_normed.shape, embed_normed.shape)
         # print(self.levels)
-        if embed.shape[0] != 1:
+        if embed_normed.shape[0] != 1:
             dists = []
             
             
@@ -152,6 +152,8 @@ class Prompt(nn.Module):
 
             for (level_input, level_embed) in zip(input_normed, embed_normed):
               print(level_input.shape, level_embed.shape)
+              dists = input_normed.sub(embed_normed).norm(dim=2).div(2).arcsin().pow(2).mul(2)
+              dists = dists * self.weight.sign()
 
             
             dists = torch.cat(dists, dim=0)
@@ -159,9 +161,9 @@ class Prompt(nn.Module):
             dists = dists * self.weight.sign()
        
         else:
-            input_normed = input_normed.squeeze(2)
             embed_normed = embed_normed.squeeze(2)
-            print(level_input.shape, level_embed.shape)
+            input_normed = input_normed.reshape((input_normed.shape[0]*input_normed.shape[1], 1, 512))
+            print(input_normed.shape, embed_normed.shape)
             dists = input_normed.sub(embed_normed).norm(dim=2).div(2).arcsin().pow(2).mul(2)
             dists = dists * self.weight.sign()
        
