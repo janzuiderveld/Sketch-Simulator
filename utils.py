@@ -137,6 +137,7 @@ class Prompt(nn.Module):
         input_normed = F.normalize(input.unsqueeze(1), dim=2)
         embed_normed = F.normalize(self.embed.unsqueeze(0), dim=2)
 
+        print("lalalala")
         print(input_normed.shape, embed_normed.shape)
         # print(self.levels)
         if self.levels_bool:
