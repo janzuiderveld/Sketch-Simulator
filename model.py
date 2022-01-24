@@ -230,6 +230,7 @@ class ModelHost:
 
     if self.args.target_det_cuts:
         # use TORCH.NN.FUNCTIONAL.GRID_SAMPLE and TORCH.NN.FUNCTIONAL.AFFINE_GRID?
+        # torch.nn.functional.affine_grid()
 
         batch, levels = make_cutouts(init_img, init=True)
         embed = perceptor.encode_image(normalize(batch)).float()
