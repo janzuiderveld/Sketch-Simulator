@@ -355,7 +355,7 @@ class MakeCutoutsCumin(nn.Module):
             cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
 
         ###################
-        if len(cutouts.shape) == 5:
+        if cutouts[0].shape[0] > 1:
           cutouts = torch.cat(cutouts, dim=1)
         ###############
         else:
