@@ -364,14 +364,12 @@ class MakeCutoutsCumin(nn.Module):
         cutouts = clamp_with_grad(cutouts, 0, 1)
 
 
-        ###################
-        print(cutouts.shape)
+        ##################
         cutouts_list = []
         if len(cutouts.shape) == 5:
           for i, cutout_level in enumerate(cutouts):
             cutouts_list.append(self.augs(cutout_level).unsqueeze(0))
           cutouts = torch.cat(cutouts_list, dim = 0)
-          print(cutouts.shape)
         ###############
         else:
           cutouts = self.augs(cutouts)
