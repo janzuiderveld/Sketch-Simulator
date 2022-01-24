@@ -416,7 +416,7 @@ class ModelHost:
 
         iii =[]
         for i, cutout_set in enumerate(out_grid_cuts):
-          iii.append(self.perceptor.encode_image(self.normalize(cutout_set)).float())
+          iii.append(self.perceptor.encode_image(self.normalize(cutout_set)).float().unsqueeze(0))
         iii = torch.cat(iii, dim = 0)
         
         # iii = self.perceptor.encode_image(self.normalize(out_grid_cuts)).float()
