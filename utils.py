@@ -134,8 +134,10 @@ class Prompt(nn.Module):
         # return self.weight.abs() * replace_grad(dists, torch.maximum(dists, self.stop)).mean()
         
         
-        input_normed = F.normalize(input.unsqueeze(1), dim=2)
-        embed_normed = F.normalize(self.embed.unsqueeze(0), dim=2)
+        # input_normed = F.normalize(input.unsqueeze(1), dim=2)
+        # embed_normed = F.normalize(self.embed.unsqueeze(0), dim=2)
+        input_normed = F.normalize(input.unsqueeze(2), dim=2)
+        embed_normed = F.normalize(self.embed.unsqueeze(1), dim=2)
 
         print("lalalala", self.name)
         print(input_normed.shape, embed_normed.shape)
