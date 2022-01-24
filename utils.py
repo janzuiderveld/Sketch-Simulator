@@ -370,15 +370,21 @@ class MakeCutoutsCumin(nn.Module):
             print("ooos__soo", i)
             cutouts[i] = self.augs(cutout_level)
         ###############
-        print(cutouts.shape)
-        print(cutouts[i].shape)
         else:
         #if args.use_augs:
           cutouts = self.augs(cutouts)
-        ###################        
-        # if len(cutouts.shape) == 5:
+          
+        print(cutouts.shape)
+        print(cutouts[i].shape)
+        
+        
         if self.noise_fac:
-          facs = cutouts.new_empty([cutouts.shape[0], 1, 1, 1]).uniform_(0, self.noise_fac)
+          ###################        
+          if len(cutouts.shape) == 5:
+            facs = cutouts.new_empty([cutouts.shape[0], cutouts.shape[1], 1, 1, 1]).uniform_(0, self.noise_fac)
+          ########################          
+          else:
+            facs = cutouts.new_empty([cutouts.shape[0], 1, 1, 1]).uniform_(0, self.noise_fac)
           cutouts = cutouts + facs * torch.randn_like(cutouts)
         return cutouts
 
