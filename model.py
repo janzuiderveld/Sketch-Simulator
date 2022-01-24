@@ -235,9 +235,9 @@ class ModelHost:
         # torch.nn.functional.affine_grid()
 
         batch, levels = make_cutouts_det(init_img, init=True)
-        print(batch.shape)
+        # print(batch.shape)
         batch = make_cutouts_init(batch)
-        print(batch.shape)
+        # print(batch.shape)
 
         embed = perceptor.encode_image(normalize(batch)).float()
         embed = embed - ovl_mean + txt_embed
