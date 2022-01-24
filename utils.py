@@ -246,7 +246,7 @@ class MakeCutoutsDet(nn.Module):
                         self.used_cutout_indices.append((level, i, j))
                         cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
                         save_tensor_as_img(cutout, f'/content/Sketch-Simulator/thrash/cutout_{level}_{i}_{j}.png')
-                        levels.append(level)
+                        levels.append((level, i, j))
                         
                         if self.testing:
                             cv2.rectangle(img_cv2, (coord[j]+random.randint(-3, 3), coord[i]+random.randint(-3, 3)), (coord[j+1]+random.randint(-3, 3), coord[i+1]+random.randint(-3, 3)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), 2)
