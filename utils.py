@@ -99,11 +99,12 @@ def vector_quantize(x, codebook):
 
 
 class Prompt(nn.Module):
-    def __init__(self, embed, weight=1., stop=float('-inf'), levels=None, name=""):
+    def __init__(self, embed, weight=1., stop=float('-inf'), levels=None, levels_bool=False name=""):
         super().__init__()
         self.register_buffer('embed', embed)
         self.register_buffer('weight', torch.as_tensor(weight))
         self.register_buffer('stop', torch.as_tensor(stop))
+        self.levels_bool = levels_bool
         self.levels = levels
 
         self.cos = nn.CosineSimilarity(dim=1, eps=1e-6)
@@ -133,7 +134,7 @@ class Prompt(nn.Module):
         input_normed = F.normalize(input.unsqueeze(1), dim=2)
         embed_normed = F.normalize(self.embed.unsqueeze(0), dim=2)
         # print(input_normed.shape, embed_normed.shape)
-        if self.levels:
+        if self.levels_bool:
             dists = []
             for i in range(input_normed.shape[0]):
                 dist = input_normed[i:i+1, :, :].sub(embed_normed[:, i:i+1, :]).norm(dim=2).div(2).arcsin().pow(2).mul(2)
