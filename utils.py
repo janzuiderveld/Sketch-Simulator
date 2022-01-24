@@ -349,13 +349,17 @@ class MakeCutoutsCumin(nn.Module):
           
           ###################
           if cutout.shape[0] > 1:
-            cutouts.append(resample(cutout, (self.cut_size, self.cut_size)).unsqueeze(0))
+            cutouts.append(resample(cutout, (self.cut_size, self.cut_size)).unsqueeze(1))
           ##############################
           else:
             cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
 
-
-        cutouts = torch.cat(cutouts, dim=0)
+        ###################
+        if len(cutouts.shape) == 5:
+          cutouts = torch.cat(cutouts, dim=1)
+        ###############
+        else:
+          cutouts = torch.cat(cutouts, dim=0)
         cutouts = clamp_with_grad(cutouts, 0, 1)
 
         #if args.use_augs:
