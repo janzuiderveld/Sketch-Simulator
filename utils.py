@@ -354,6 +354,7 @@ class MakeCutoutsCumin(nn.Module):
           else:
             cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
 
+
         ###################
         if cutouts[0].shape[0] > 1:
           cutouts = torch.cat(cutouts, dim=1)
@@ -362,16 +363,20 @@ class MakeCutoutsCumin(nn.Module):
           cutouts = torch.cat(cutouts, dim=0)
         cutouts = clamp_with_grad(cutouts, 0, 1)
 
+
         ###################
         if len(cutouts.shape) == 5:
           for i, cutout_level in enumerate(cutouts):
             print("ooos__soo", i)
             cutouts[i] = self.augs(cutout_level)
-
         ###############
+        print(cutouts.shape)
+        print(cutouts[i].shape)
         else:
         #if args.use_augs:
           cutouts = self.augs(cutouts)
+        ###################        
+        # if len(cutouts.shape) == 5:
         if self.noise_fac:
           facs = cutouts.new_empty([cutouts.shape[0], 1, 1, 1]).uniform_(0, self.noise_fac)
           cutouts = cutouts + facs * torch.randn_like(cutouts)
