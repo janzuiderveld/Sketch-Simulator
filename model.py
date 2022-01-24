@@ -241,7 +241,7 @@ class ModelHost:
 
         embed = perceptor.encode_image(normalize(batch)).float()
         embed = embed - ovl_mean + txt_embed
-        pMs.append(Prompt(embed, weight, stop, name="image", levels=True).to(device))
+        pMs.append(Prompt(embed, weight, stop, name="image", levels=levels, levels_bool=True).to(device))
 
 
     # print("embed shape before: ", embed.shape)
