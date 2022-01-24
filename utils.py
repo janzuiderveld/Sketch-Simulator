@@ -253,7 +253,7 @@ class MakeCutoutsDet(nn.Module):
                     else:
                         if (level, i, j) in self.used_cutout_indices:
                             cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
-                            levels.append(level)
+                            levels.append((level, i, j))
                     
         
         if self.testing and init:
