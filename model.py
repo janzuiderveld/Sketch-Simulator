@@ -396,8 +396,10 @@ class ModelHost:
   def ascend_txt(self):
       out = self.synth(self.z.tensor)
       if self.args.target_det_cuts:
-        out = self.make_cutouts_det(out)
-      iii = self.perceptor.encode_image(self.normalize(self.make_cutouts(out))).float()
+        out_grid = self.make_cutouts_det(out)
+        iii = self.perceptor.encode_image(self.normalize(self.make_cutouts(out_grid))).float()
+      else:
+        iii = self.perceptor.encode_image(self.normalize(self.make_cutouts(out))).float()
       
 
       result = []

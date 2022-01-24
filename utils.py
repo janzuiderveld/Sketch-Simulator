@@ -133,11 +133,13 @@ class Prompt(nn.Module):
         
         input_normed = F.normalize(input.unsqueeze(1), dim=2)
         embed_normed = F.normalize(self.embed.unsqueeze(0), dim=2)
-        # print(input_normed.shape, embed_normed.shape)
+
+        print(input_normed.shape, embed_normed.shape)
+        # print(self.levels)
         if self.levels_bool:
             dists = []
-            for i in range(input_normed.shape[0]):
-                dist = input_normed[i:i+1, :, :].sub(embed_normed[:, i:i+1, :]).norm(dim=2).div(2).arcsin().pow(2).mul(2)
+            for i in range(0, input_normed.shape[0], len(self.levels)):
+                dist = input_normed[i:i+len(self.levels), :, :].sub(embed_normed[:, i:i+len(self.levels), :]).norm(dim=2).div(2).arcsin().pow(2).mul(2)
                 dists.append(dist)
             dists = torch.cat(dists, dim=0)
             # dists = input_normed.sub(embed_normed).norm(dim=2).div(2).arcsin().pow(2).mul(2)
@@ -325,7 +327,7 @@ class MakeCutoutsCumin(nn.Module):
 
         ###########################
           avg_pixel = 1.2
-          while avg_pixel > overall_avg*1.1: 
+          while avg_pixel > overall_avg*self.args.avg_pixel_thresh: 
         ###########################
 
             # size = int(torch.rand([])**self.cut_pow * (max_size - min_size) + min_size)
