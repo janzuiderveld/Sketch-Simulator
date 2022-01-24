@@ -346,15 +346,16 @@ class MakeCutoutsCumin(nn.Module):
             #######################
             avg_pixel = torch.mean(cutout)
             ###########################
-            
-          cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
-        
-        ###################
-        if input.shape[0] > 1:
-            cutouts = torch.cat(cutouts.unsqueeze(0), dim=0)
-        ##############################
-        else:
-            cutouts = torch.cat(cutouts, dim=0)
+          
+          ###################
+          if cutout.shape[0] > 1:
+            cutouts.append(resample(cutout, (self.cut_size, self.cut_size)).unsqueeze(0))
+          ##############################
+          else:
+            cutouts.append(resample(cutout, (self.cut_size, self.cut_size)))
+
+
+        cutouts = torch.cat(cutouts, dim=0)
         cutouts = clamp_with_grad(cutouts, 0, 1)
 
         #if args.use_augs:
