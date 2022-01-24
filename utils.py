@@ -142,7 +142,7 @@ class Prompt(nn.Module):
         if self.levels_bool:
             dists = []
             for i in range(len(self.levels)):
-                dist = input_normed[i*self.cutn*self.levels:(i+1)*len(self.levels)*self.cutn, :, :].sub(embed_normed[i*self.init_cutn*self.levels:(i+1)*len(self.levels)*self.init_cutn:, :]).norm(dim=2).div(2).arcsin().pow(2).mul(2)
+                dist = input_normed[i*self.cutn*len(self.levels):(i+1)*len(self.levels)*self.cutn, :, :].sub(embed_normed[i*self.init_cutn*len(self.levels):(i+1)*len(self.levels)*self.init_cutn:, :]).norm(dim=2).div(2).arcsin().pow(2).mul(2)
                 dists.append(dist)
             dists = torch.cat(dists, dim=0)
             # dists = input_normed.sub(embed_normed).norm(dim=2).div(2).arcsin().pow(2).mul(2)
