@@ -68,7 +68,7 @@ parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simula
 parser.add_argument('--target_avg_cuts', type=int, default=0)
 parser.add_argument('--target_det_cuts', type=int, default=1)
 parser.add_argument('--target_full_img', type=int, default=0)
-parser.add_argument('--flavor', type=str, default="det", help='"ginger", "cumin", "holywater", "det"')
+parser.add_argument('--flavor', type=str, default="cumin", help='"ginger", "cumin", "holywater", "det"')
 
 # parser.add_argument('--reset_img_prompt_every', type=int, default= 0)
 
