@@ -65,8 +65,8 @@ parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simula
 # parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_small.pth")
 # parser.add_argument('--embedding_avg', type=str, default="/content/drive/MyDrive/AI/sketch-to-image/overall_embeddings/ovl_mean_sketchy_vanilla.pt")
 
-parser.add_argument('--target_avg_cuts', type=int, default=1)
-parser.add_argument('--target_det_cuts', type=int, default=0)
+parser.add_argument('--target_avg_cuts', type=int, default=0)
+parser.add_argument('--target_det_cuts', type=int, default=1)
 parser.add_argument('--target_full_img', type=int, default=0)
 parser.add_argument('--flavor', type=str, default="cumin", help='"ginger", "cumin", "holywater", "det"')
 
@@ -97,8 +97,8 @@ parser.add_argument('--noise_prompt_weights', type=list, default=[])
 
 parser.add_argument('--path', type=str, default="")
 parser.add_argument('--save_root', type=str, default="/content/drive/MyDrive/AI/sketch-to-image/outputs")
-parser.add_argument('--output_dir', type=str, default="hybrid1")
-parser.add_argument('--save_bef_aft', type=int, default=0)
+parser.add_argument('--output_dir', type=str, default="hybrid2")
+parser.add_argument('--save_bef_aft', type=int, default=1)
 parser.add_argument('--never_stop', type=int, default=1)
 
 
