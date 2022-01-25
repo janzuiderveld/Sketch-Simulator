@@ -43,7 +43,7 @@ parser.add_argument('--experiment_name', type=str, default="")
 
 parser.add_argument('--cutn', type=int, default=64 )
 parser.add_argument('--init_cutn', type=int, default=512)
-parser.add_argument('--cut_pow', type=float, default=0.7)
+parser.add_argument('--cut_pow', type=float, default=1)
 parser.add_argument('--init_cut_pow', type=int, default=1)
 parser.add_argument('--optim', type=str, default='adam')
 parser.add_argument('--step_size', type=float, default=0.87)

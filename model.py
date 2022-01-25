@@ -122,7 +122,7 @@ class ModelHost:
     from PIL import Image
 
     if self.args.init_image:
-        init_img = self.load_init_image(self.args.init_image, sideX, sideY, device) 
+        init_img = self.load_init_image(self.args.init_image, sideX, sideY, device) * 2-1
         
         # pil_image = Image.open(self.args.init_image).convert('RGB')
         # pil_image = self.resize_image_custom(pil_image, sideX, sideY, padding=self.args.padding)
@@ -132,7 +132,7 @@ class ModelHost:
         # init_img = TF.to_tensor(pil_image).to(device).unsqueeze(0) * 2 - 1
         
         # z, *_ = model.encode(init_img * 2 - 1)
-        z, *_ = model.encode(init_img*2-1)
+        z, *_ = model.encode(init_img)
     else:
         one_hot = F.one_hot(torch.randint(n_toks, [toksY * toksX], device=device), n_toks).float()
         z = one_hot @ model.quantize.embedding.weight
