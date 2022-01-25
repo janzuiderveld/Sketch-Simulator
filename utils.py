@@ -165,7 +165,7 @@ class Prompt(nn.Module):
             dists = dists * self.weight.sign()
        
         else:
-            embed_normed = embed_normed.squeeze(2)
+            embed_normed = embed_normed.squeeze(1)
             input_normed = input_normed.reshape((input_normed.shape[0]*input_normed.shape[1], 1, 512))
             print(input_normed.shape, embed_normed.shape)
             dists = input_normed.sub(embed_normed).norm(dim=2).div(2).arcsin().pow(2).mul(2)
@@ -225,7 +225,7 @@ def save_tensor_as_img(tensor, save_path):
     pil_img.save(save_path)
 
 class MakeCutoutsDet(nn.Module):
-    def __init__(self, cut_size, cutn=None, cut_pow=None, augs=None, cut_levels=3, testing=True):
+    def __init__(self, cut_size, cutn=None, cut_pow=None, augs=None, cut_levels=2, testing=True):
         super().__init__()
         self.cut_size = cut_size
         print(f'cut size: {self.cut_size}')
