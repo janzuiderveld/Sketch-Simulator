@@ -159,8 +159,9 @@ class ModelHost:
 
     for prompt in self.args.prompts:
         txt, weight, stop = parse_prompt(prompt)
-        embed = perceptor.encode_text(clip.tokenize(txt).to(device)).float().unsqueeze(0)
-        pMs.append(Prompt(embed, weight, stop, name="text").to(device))
+        if txt:
+          embed = perceptor.encode_text(clip.tokenize(txt).to(device)).float().unsqueeze(0)
+          pMs.append(Prompt(embed, weight, stop, name="text").to(device))
     
         # txt_embed = perceptor.encode_text(clip.tokenize(txt).to(device)).float()
 
@@ -193,9 +194,9 @@ class ModelHost:
     self.counter = 0
 
     # IMAGE CONTENT PROMPT BIZZ ##########################$########
-    if self.args.embedding_tgt:
-      embed = torch.load(self.args.embedding_tgt).unsqueeze(0)
-      pMs.append(Prompt(embed, 3, -np.inf, name="tgt_embed").to(device))
+    # if self.args.embedding_tgt:
+    #   embed = torch.load(self.args.embedding_tgt).unsqueeze(0).unsqueeze(0)
+    #   pMs.append(Prompt(embed, 3, -np.inf, name="tgt_embed").to(device))
 
     path, weight, stop = parse_prompt(self.args.start_image)
     print("image weight", weight)
