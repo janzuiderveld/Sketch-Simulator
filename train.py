@@ -92,10 +92,10 @@ parser.add_argument('--padding', type=int, default=100)
 # parser.add_argument('--padding', type=int, default=100)
 
 # Art Deco | Art Nouveau? | 
-# parser.add_argument('--prompts', type=str, default="A painting in the style of Salvador Dali, trending on ArtStation:1.5|A photorealistic 3D render in Unreal Engine, trending on ArtStation:1.5" )
+parser.add_argument('--prompts', type=str, default="A painting in the style of Salvador Dali, trending on ArtStation:1.5|an 8K HD National Geographic photo taken with Fujifilm Superia:1.5" )
 # parser.add_argument('--prompts', type=str, default="an 8K HD National Geographic photo taken with Fujifilm Superia" )
 # parser.add_argument('--prompts', type=str, default="a painting in the style of Salvador Dali, trending on ArtStation:1.5" )
-parser.add_argument('--prompts', type=str, default="a photorealistic 3D render in Unreal Engine, trending on ArtStation:1.5" )
+# parser.add_argument('--prompts', type=str, default="a photorealistic 3D render in Unreal Engine, trending on ArtStation:1.5" )
 # parser.add_argument('--prompts', type=str, default="Charcoal on canvas, 8K HD detailed black and white Wallpaper, trending on ArtStation:1.5" )
 # parser.add_argument('--prompts', type=str, default="")
 
@@ -104,7 +104,7 @@ parser.add_argument('--noise_prompt_weights', type=list, default=[])
 
 parser.add_argument('--path', type=str, default="")
 parser.add_argument('--save_root', type=str, default="/content/drive/MyDrive/AI/sketch-to-image/outputs")
-parser.add_argument('--output_dir', type=str, default="afrontpage_3d_after_only")
+parser.add_argument('--output_dir', type=str, default="bird_phot_dali_after_only")
 parser.add_argument('--save_bef_aft', type=int, default=0)
 parser.add_argument('--never_stop', type=int, default=1)
 
