@@ -42,7 +42,7 @@ parser.add_argument('--wandb', type=int, default=0)
 parser.add_argument('--experiment_name', type=str, default="")
 
 parser.add_argument('--cutn', type=int, default=64 )
-parser.add_argument('--avg_pixel_thresh', type=float, default=1.1 )
+
 parser.add_argument('--init_cutn', type=int, default=256)
 parser.add_argument('--init_cut_pow', type=int, default=0.3)
 parser.add_argument('--cut_pow', type=float, default=0.7)
@@ -66,8 +66,8 @@ parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simula
 # parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_small.pth")
 # parser.add_argument('--embedding_avg', type=str, default="/content/drive/MyDrive/AI/sketch-to-image/overall_embeddings/ovl_mean_sketchy_vanilla.pt")
 
-parser.add_argument('--target_avg_cuts', type=int, default=0)
-parser.add_argument('--target_det_cuts', type=int, default=1)
+parser.add_argument('--target_avg_cuts', type=int, default=1)
+parser.add_argument('--target_det_cuts', type=int, default=0)
 parser.add_argument('--target_full_img', type=int, default=0)
 parser.add_argument('--flavor', type=str, default="cumin", help='"ginger", "cumin", "holywater", "det"')
 
