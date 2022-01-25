@@ -409,9 +409,9 @@ class ModelHost:
       out = self.synth(self.z.tensor)
       if self.args.target_det_cuts:
         out_grid = self.make_cutouts_det(out)
-        print(out_grid.shape)
+        # print(out_grid.shape)
         out_grid_cuts = self.make_cutouts(out_grid)
-        print(out_grid_cuts.shape)
+        # print(out_grid_cuts.shape)
       
 
         iii =[]
