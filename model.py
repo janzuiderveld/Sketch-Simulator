@@ -194,8 +194,8 @@ class ModelHost:
 
     # IMAGE CONTENT PROMPT BIZZ ##########################$########
     if self.args.embedding_tgt:
-      embed = torch.load(self.args.embedding_tgt)
-      pMs.append(Prompt(embed, 1, -np.inf, name="tgt_embed").to(device))
+      embed = torch.load(self.args.embedding_tgt).unsqueeze(0)
+      pMs.append(Prompt(embed, 3, -np.inf, name="tgt_embed").to(device))
 
     path, weight, stop = parse_prompt(self.args.start_image)
     print("image weight", weight)
