@@ -43,8 +43,8 @@ parser.add_argument('--experiment_name', type=str, default="")
 
 parser.add_argument('--cutn', type=int, default=64 )
 parser.add_argument('--init_cutn', type=int, default=512)
-parser.add_argument('--cut_pow', type=float, default=0.3)
-parser.add_argument('--init_cut_pow', type=int, default=0.3)
+parser.add_argument('--cut_pow', type=float, default=0.7)
+parser.add_argument('--init_cut_pow', type=int, default=1)
 parser.add_argument('--optim', type=str, default='adam')
 parser.add_argument('--step_size', type=float, default=0.87)
 parser.add_argument('--ema_val', type=float, default=0.98)
@@ -79,16 +79,16 @@ parser.add_argument('--flavor', type=str, default="cumin", help='"ginger", "cumi
 # parser.add_argument('--start_image', type=str, default=f"/content/Sketch-Simulator/256x256/photo/tx_000000000000/cat/n02121620_51.jpg")
 
 
-# parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/hybrid_sketches/raccoonflower.png")
-parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/selection/*")
+parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/hybrid_sketches/raccoonflower.png")
+# parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/selection/*")
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/*")
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/clip_prototypical/*")
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/clip_prototypical/crocodilian.png")
 # parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/0.png")
 # parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/*" )
 
-# parser.add_argument('--padding', type=int, default=0)
-parser.add_argument('--padding', type=int, default=150)
+parser.add_argument('--padding', type=int, default=0)
+# parser.add_argument('--padding', type=int, default=100)
 
 # Art Deco | Art Nouveau? | 
 # parser.add_argument('--prompts', type=str, default="A painting in the style of Salvador Dali, trending on ArtStation|A photorealistic 3D render in Unreal Engine, trending on ArtStation|Charcoal on canvas, 8K HD detailed black and white Wallpaper, trending on ArtStation" )
@@ -102,7 +102,7 @@ parser.add_argument('--noise_prompt_weights', type=list, default=[])
 
 parser.add_argument('--path', type=str, default="")
 parser.add_argument('--save_root', type=str, default="/content/drive/MyDrive/AI/sketch-to-image/outputs")
-parser.add_argument('--output_dir', type=str, default="highres_selection")
+parser.add_argument('--output_dir', type=str, default="hybrid_high0")
 parser.add_argument('--save_bef_aft', type=int, default=1)
 parser.add_argument('--never_stop', type=int, default=1)
 
