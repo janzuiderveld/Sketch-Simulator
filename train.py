@@ -68,8 +68,8 @@ parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simula
 # parser.add_argument('--embedding_tgt', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy_photo_cutouts.pt")
 parser.add_argument('--embedding_tgt', type=str, default="")
 
-parser.add_argument('--target_avg_cuts', type=int, default=0)
-parser.add_argument('--target_det_cuts', type=int, default=1)
+parser.add_argument('--target_avg_cuts', type=int, default=1)
+parser.add_argument('--target_det_cuts', type=int, default=0)
 parser.add_argument('--target_full_img', type=int, default=0)
 parser.add_argument('--flavor', type=str, default="cumin", help='"ginger", "cumin", "holywater", "det"')
 
@@ -79,12 +79,12 @@ parser.add_argument('--flavor', type=str, default="cumin", help='"ginger", "cumi
 # parser.add_argument('--start_image', type=str, default=f"/content/Sketch-Simulator/256x256/photo/tx_000000000000/cat/n02121620_51.jpg")
 
 
-# parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/hybrid_sketches/*")
+parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/hybrid_sketches/*")
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/selection/*")
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/*")
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/clip_prototypical/*")
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/clip_prototypical/crocodilian.png")
-parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/0.png")
+# parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/0.png")
 # parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/*" )
 
 parser.add_argument('--padding', type=int, default=0)
