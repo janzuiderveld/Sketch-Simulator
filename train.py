@@ -36,8 +36,8 @@ parser.add_argument('--display_freq', type=int, default= 10)
 parser.add_argument('--log_edges', type=int, default=0)
 parser.add_argument('--max_iterations', type=int, default=80)
 parser.add_argument('--seed', type=int, default=-1 )
-parser.add_argument('--width', type=int, default= 600 )
-parser.add_argument('--height', type=int, default= 600 )
+parser.add_argument('--width', type=int, default= 400 )
+parser.add_argument('--height', type=int, default= 400 )
 parser.add_argument('--wandb', type=int, default=0)
 parser.add_argument('--experiment_name', type=str, default="")
 
@@ -79,12 +79,12 @@ parser.add_argument('--flavor', type=str, default="cumin", help='"ginger", "cumi
 # parser.add_argument('--start_image', type=str, default=f"/content/Sketch-Simulator/256x256/photo/tx_000000000000/cat/n02121620_51.jpg")
 
 
-parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/hybrid_sketches/*")
+# parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/hybrid_sketches/*")
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/selection/*")
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/*")
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/clip_prototypical/*")
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/clip_prototypical/crocodilian.png")
-# parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/0.png")
+parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/0.png")
 # parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/*" )
 
 parser.add_argument('--padding', type=int, default=0)
