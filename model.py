@@ -253,6 +253,7 @@ class ModelHost:
 ########################
         # embed = perceptor.encode_image(normalize(batch)).float()
 
+        print("embed.shape")
         print(embed.shape)
         # embed = embed - ovl_mean + txt_embed
         embed = embed - ovl_mean

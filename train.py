@@ -68,8 +68,8 @@ parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simula
 # parser.add_argument('--embedding_tgt', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy_photo_cutouts.pt")
 parser.add_argument('--embedding_tgt', type=str, default="")
 
-parser.add_argument('--target_avg_cuts', type=int, default=1)
-parser.add_argument('--target_det_cuts', type=int, default=0)
+parser.add_argument('--target_avg_cuts', type=int, default=0)
+parser.add_argument('--target_det_cuts', type=int, default=1)
 parser.add_argument('--target_full_img', type=int, default=0)
 parser.add_argument('--flavor', type=str, default="cumin", help='"ginger", "cumin", "holywater", "det"')
 
@@ -87,13 +87,15 @@ parser.add_argument('--flavor', type=str, default="cumin", help='"ginger", "cumi
 parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/0.png")
 # parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/*" )
 
-parser.add_argument('--padding', type=int, default=100)
+parser.add_argument('--padding', type=int, default=0)
+# parser.add_argument('--padding', type=int, default=100)
+
 # Art Deco | Art Nouveau? | 
 # parser.add_argument('--prompts', type=str, default="A painting in the style of Salvador Dali, trending on ArtStation|A photorealistic 3D render in Unreal Engine, trending on ArtStation|Charcoal on canvas, 8K HD detailed black and white Wallpaper, trending on ArtStation" )
 # parser.add_argument('--prompts', type=str, default="a painting in the style of Salvador Dali, trending on ArtStation:1.5" )
-# parser.add_argument('--prompts', type=str, default="a photorealistic 3D render in Unreal Engine, trending on ArtStation:1.5" )
+parser.add_argument('--prompts', type=str, default="a photorealistic 3D render in Unreal Engine, trending on ArtStation:1.5" )
 # parser.add_argument('--prompts', type=str, default="Charcoal on canvas, 8K HD detailed black and white Wallpaper, trending on ArtStation:1.5" )
-parser.add_argument('--prompts', type=str, default="")
+# parser.add_argument('--prompts', type=str, default="")
 
 parser.add_argument('--altprompts', type=str, default="" )
 parser.add_argument('--noise_prompt_weights', type=list, default=[])
