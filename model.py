@@ -194,7 +194,7 @@ class ModelHost:
     self.counter = 0
 
     if self.args.embedding_tgt:
-      tgt_embed = torch.load(self.args.embedding_tgt).unsqueeze(0).unsqueeze(0)
+      tgt_embed = torch.load(self.args.embedding_tgt).reshape(1, 1, 512)
       pMs.append(Prompt(embed, 3, -np.inf, name="tgt_embed").to(device))
 
     # IMAGE CONTENT PROMPT BIZZ ##########################$########
