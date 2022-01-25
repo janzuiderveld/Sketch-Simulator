@@ -457,26 +457,26 @@ class ModelHost:
       _, init_img_edges = kornia.filters.canny(self.init_img)
       result.append(F.mse_loss(out_edges[init_img_edges>0], init_img_edges[init_img_edges>0]) * self.args.edge_weight)
       
-      if not self.counter % 10:
-        import matplotlib.pyplot as plt
-        # convert back to numpy
-        img_magnitude: np.ndarray = kornia.tensor_to_image(init_img_edges.byte())
-        img_canny: np.ndarray = kornia.tensor_to_image(out_edges.byte())
+      # if not self.counter % 10:
+      #   import matplotlib.pyplot as plt
+      #   # convert back to numpy
+      #   img_magnitude: np.ndarray = kornia.tensor_to_image(init_img_edges.byte())
+      #   img_canny: np.ndarray = kornia.tensor_to_image(out_edges.byte())
 
-        # plot the results ##########################################
-        # Create the plot
-        fig, axs = plt.subplots(1, 2, figsize=(16,16))
-        axs = axs.ravel()
+      #   # plot the results ##########################################
+      #   # Create the plot
+      #   fig, axs = plt.subplots(1, 2, figsize=(16,16))
+      #   axs = axs.ravel()
 
-        axs[0].axis('off')
-        axs[0].set_title('init image edge')
-        axs[0].imshow(img_magnitude)
+      #   axs[0].axis('off')
+      #   axs[0].set_title('init image edge')
+      #   axs[0].imshow(img_magnitude)
 
-        axs[1].axis('off')
-        axs[1].set_title('out init image edge')
-        axs[1].imshow(img_canny)
+      #   axs[1].axis('off')
+      #   axs[1].set_title('out init image edge')
+      #   axs[1].imshow(img_canny)
 
-        plt.show()
+      #   plt.show()
 
       self.counter += 1
 
