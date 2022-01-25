@@ -132,7 +132,7 @@ class ModelHost:
         # init_img = TF.to_tensor(pil_image).to(device).unsqueeze(0) * 2 - 1
         
         # z, *_ = model.encode(init_img * 2 - 1)
-        z, *_ = model.encode(init_img)
+        z, *_ = model.encode(init_img*2-1)
     else:
         one_hot = F.one_hot(torch.randint(n_toks, [toksY * toksX], device=device), n_toks).float()
         z = one_hot @ model.quantize.embedding.weight
