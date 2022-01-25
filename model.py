@@ -130,7 +130,9 @@ class ModelHost:
         
         # pil_image = resize_image(pil_image, (sideX, sideY))
         # init_img = TF.to_tensor(pil_image).to(device).unsqueeze(0) * 2 - 1
-        z, *_ = model.encode(init_img * 2 - 1)
+        
+        # z, *_ = model.encode(init_img * 2 - 1)
+        z, *_ = model.encode(init_img)
     else:
         one_hot = F.one_hot(torch.randint(n_toks, [toksY * toksX], device=device), n_toks).float()
         z = one_hot @ model.quantize.embedding.weight
@@ -207,7 +209,7 @@ class ModelHost:
 
     # set random cuts as target. Prompt class uses alll cuts, todo check how the distance to all of these is calculated, avg?
     if self.args.target_avg_cuts:
-        batch = make_cutouts_init(init_img* 2 - 1)
+        batch = make_cutouts_init(init_img)
         embed = perceptor.encode_image(normalize(batch.squeeze())).float().unsqueeze(0)
         
         embed = (embed - ovl_mean) 
