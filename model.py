@@ -207,7 +207,7 @@ class ModelHost:
 
     # set random cuts as target. Prompt class uses alll cuts, todo check how the distance to all of these is calculated, avg?
     if self.args.target_avg_cuts:
-        batch = make_cutouts_init(init_img)
+        batch = make_cutouts_init(init_img* 2 - 1)
         embed = perceptor.encode_image(normalize(batch.squeeze())).float().unsqueeze(0)
         
         embed = (embed - ovl_mean) 
@@ -437,7 +437,6 @@ class ModelHost:
         # iii =[]
         # for i, cutout_set in enumerate(out_grid_cuts):
         #   iii.append(self.perceptor.encode_image(self.normalize(cutout_set)).float().unsqueeze(0))
-        # iii = torch.cat(embed, dim = 0)
         
         iii = self.perceptor.encode_image(self.normalize(self.make_cutouts(out).squeeze())).float().unsqueeze(0)
 
@@ -500,7 +499,7 @@ class ModelHost:
     #   mse_decay = self.args.decay
       lossAll = self.ascend_txt()
 
-      if self.counter % self.args.display_freq == 0:
+      if self.counter % self.args.display_freq == 0 or self.counter == 1:
         self.checkin(lossAll)
          
       loss = sum(lossAll)
