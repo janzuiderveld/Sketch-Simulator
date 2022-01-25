@@ -430,8 +430,8 @@ class ModelHost:
         #   iii.append(self.perceptor.encode_image(self.normalize(cutout_set)).float().unsqueeze(0))
         # iii = torch.cat(embed, dim = 0)
         
-        iii = self.perceptor.encode_image(self.normalize(self.make_cutouts(out).squeeze())).float()
-      
+        iii = self.perceptor.encode_image(self.normalize(self.make_cutouts(out).squeeze())).float().unsqueeze(0)
+
 
 
       result = []
