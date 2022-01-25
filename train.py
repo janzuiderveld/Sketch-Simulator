@@ -87,7 +87,7 @@ parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/
 # parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/0.png")
 # parser.add_argument('--start_image', type=str, default="/content/Sketch-Simulator/test_images/*" )
 
-parser.add_argument('--padding', type=int, default=0)
+parser.add_argument('--padding', type=int, default=100)
 # parser.add_argument('--padding', type=int, default=100)
 
 # Art Deco | Art Nouveau? | 
@@ -103,7 +103,7 @@ parser.add_argument('--noise_prompt_weights', type=list, default=[])
 
 parser.add_argument('--path', type=str, default="")
 parser.add_argument('--save_root', type=str, default="/content/drive/MyDrive/AI/sketch-to-image/outputs")
-parser.add_argument('--output_dir', type=str, default="hybrid_high0")
+parser.add_argument('--output_dir', type=str, default="aselection_photo")
 parser.add_argument('--save_bef_aft', type=int, default=1)
 parser.add_argument('--never_stop', type=int, default=1)
 
