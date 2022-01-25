@@ -195,7 +195,7 @@ class ModelHost:
 
     if self.args.embedding_tgt:
       tgt_embed = torch.load(self.args.embedding_tgt).unsqueeze(0).unsqueeze(0)
-      # pMs.append(Prompt(embed, 3, -np.inf, name="tgt_embed").to(device))
+      pMs.append(Prompt(embed, 3, -np.inf, name="tgt_embed").to(device))
 
     # IMAGE CONTENT PROMPT BIZZ ##########################$########
 
@@ -210,7 +210,7 @@ class ModelHost:
         batch = make_cutouts_init(init_img)
         embed = perceptor.encode_image(normalize(batch.squeeze())).float().unsqueeze(0)
         
-        embed = (embed - ovl_mean) + tgt_embed
+        embed = (embed - ovl_mean) 
     
         # embed = (embed - ovl_mean + txt_embed) 
 
