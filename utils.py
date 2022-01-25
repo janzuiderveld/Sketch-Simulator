@@ -151,7 +151,7 @@ class Prompt(nn.Module):
             #     dists.append(dist)
 
             for i in range(len(self.levels)):
-                dist = input_normed[i,:, :, :].sub(embed_normed[:,i, :, :]).norm(dim=2).div(2).arcsin().pow(2).mul(2)
+                dist = input_normed[i,:, :, :].sub(embed_normed[i,:, :, :]).norm(dim=2).div(2).arcsin().pow(2).mul(2)
                 dists.append(dist)
 
             # for (level_input, level_embed) in zip(input_normed, embed_normed):
