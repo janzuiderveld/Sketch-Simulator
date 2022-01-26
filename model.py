@@ -365,7 +365,7 @@ class ModelHost:
 
           input_img_array = TF.to_pil_image(self.init_img.cpu().squeeze())
           output_img_array = TF.to_pil_image(out[0].cpu())
-          
+        
           if self.args.save_bef_aft:
             # concatenate input and output images in a single image
             im = Image.new('RGB', (input_img_array.width + output_img_array.width, input_img_array.height))
@@ -410,11 +410,12 @@ class ModelHost:
 
   def unique_index(self, batchpath):
       i = 0
-      while i < 10000:
-          if os.path.isfile(batchpath+"/"+ self.args.init_image.split('/')[-1].split(".")[0]  +str(i)+".png"):
+      fname = self.args.init_image.split('/')[-1].split(".")[0].split(" ")[0] + "_" + self.args.prompts[0].replace(" ", "") 
+      while True:
+          if os.path.isfile(batchpath+"/"+ fname + "_" +str(i)+".png"):
               i = i+1
           else:
-              return batchpath+"/"+ self.args.init_image.split('/')[-1].split(".")[0]  +str(i)+".png"
+              return batchpath+"/"+ fname + "_" +str(i)+".png"
 
   def ascend_txt(self):
       out = self.synth(self.z.tensor)
