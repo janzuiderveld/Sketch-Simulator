@@ -3,6 +3,8 @@ import glob
 items = "/content/drive/MyDrive/AI/sketch-to-image/outputs/bullshit/*.png"
 items = glob.glob(items)
 
+items_src = "/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/selection/*"
+items_src = glob.glob(items_src)
 
 srcs = set()
 styles = set()
@@ -13,11 +15,18 @@ for item in items:
     srcs.add(src)
     styles.add(style)
 
+
+
 from PIL import Image
 # fill a grid with images, style on x-axis, src on y-axis
 img_size = Image.open(items[0]).size
-grid_size = (len(styles), len(srcs))
+grid_size = (len(styles), len(srcs)+1)
 grid = Image.new("RGB", (img_size[0] * grid_size[0], img_size[1] * grid_size[1]))
+
+# first, set items src as the leftmost column
+for i, item_src in enumerate(items_src):
+    img = Image.open(item_src)
+    grid.paste(img, (0, i * img_size[1]))
 
 for i, src in enumerate(srcs):
     for j, style in enumerate(styles):
