@@ -20,7 +20,7 @@ for item in items:
 from PIL import Image
 # fill a grid with images, style on x-axis, src on y-axis
 img_size = Image.open(items[0]).size
-grid_size = (len(styles), len(srcs)+1)
+grid_size = (len(styles)+1, len(srcs))
 grid = Image.new("RGB", (img_size[0] * grid_size[0], img_size[1] * grid_size[1]))
 
 # first, set items src as the leftmost column
@@ -32,7 +32,7 @@ for i, src in enumerate(srcs):
     for j, style in enumerate(styles):
         item = [item for item in items if src in item and style in item][0]
         img = Image.open(item)
-        grid.paste(img, (j * img_size[0], i * img_size[1]))
+        grid.paste(img, (j+1 * img_size[0], i * img_size[1]))
 
 # save grid
 grid.save("/content/drive/MyDrive/AI/sketch-to-image/outputs/bullshit.png")
