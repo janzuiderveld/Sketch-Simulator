@@ -13,22 +13,17 @@ for item in items:
     srcs.add(src)
     styles.add(style)
 
-import matplotlib.pyplot as plt
+from PIL import Image
+# fill a grid with images, style on x-axis, src on y-axis
+img_size = Image.open(items[0]).size
+grid_size = (len(styles), len(srcs))
+grid = Image.new("RGB", (img_size[0] * grid_size[0], img_size[1] * grid_size[1]))
+
 for i, src in enumerate(srcs):
     for j, style in enumerate(styles):
-        # fill a grid with images, style on x-axis, src on y-axis
-        plt.subplot(len(styles), len(srcs), i * len(styles) + j + 1)
-        plt.xticks([])
-        plt.yticks([])
-        plt.grid(False)
-        plt.imshow(plt.imread(f"/content/drive/MyDrive/AI/sketch-to-image/outputs/bullshit/{src}_{style}_0.png"))
+        item = [item for item in items if src in item and style in item][0]
+        img = Image.open(item)
+        grid.paste(img, (j * img_size[0], i * img_size[1]))
 
-        # plt.subplot(len(srcs), len(styles), i*len(styles) + j + 1)
-        # plt.imshow(plt.imread(glob.glob(f"/content/drive/MyDrive/AI/sketch-to-image/outputs/bullshit/{src}_{style}_*")[0]))
-        # plt.axis('off')
-plt.show()
-plt.savefig("/content/drive/MyDrive/AI/sketch-to-image/outputs/bullshit.png")
-
-# scissors_An8KHDNationalGeographicphototakenwithFujifilmSuperia:1.5_0.png
-# scissors_An8KHDNationalGeographicphototakenwithFujifilmSuperia:1.5_0.png
-# plot
+# save grid
+grid.save("/content/drive/MyDrive/AI/sketch-to-image/outputs/bullshit.png")
