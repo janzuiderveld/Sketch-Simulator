@@ -92,7 +92,7 @@ parser.add_argument('--padding', type=int, default=100)
 # parser.add_argument('--padding', type=int, default=100)
 
 # Art Deco | Art Nouveau? | 
-parser.add_argument('--prompts', type=str, default="A painting in the style of Salvador Dali, trending on ArtStation:1.5|An 8K HD National Geographic photo taken with Fujifilm Superia:1.5" )
+parser.add_argument('--prompts', type=str, default="A painting in the style of Salvador Dali, trending on ArtStation:1.5|An 8K HD National Geographic photo taken with Fujifilm Superia:1.5|Charcoal on canvas, 8K HD detailed black and white Wallpaper, trending on ArtStation:1.5|a photorealistic 3D render in Unreal Engine, trending on ArtStation:1.5|A woodblock print in the style of Ukiyo-e, trending on ArtStation:1.5" )
 # parser.add_argument('--prompts', type=str, default="an 8K HD National Geographic photo taken with Fujifilm Superia" )
 # parser.add_argument('--prompts', type=str, default="a painting in the style of Salvador Dali, trending on ArtStation:1.5" )
 # parser.add_argument('--prompts', type=str, default="a photorealistic 3D render in Unreal Engine, trending on ArtStation:1.5" )
