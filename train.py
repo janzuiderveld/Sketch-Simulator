@@ -180,18 +180,20 @@ def Main():
     print(prompts)
     while True:
         for prompt in prompts:
-            for image in start_images:
-                print(image)
-                if args.wandb:
-                    wandb.config.update({"start_image": image, 'init_image': image, 'image_prompts': [image]}, allow_val_change=True)  
-                else:
-                    args.start_image = image
-                    args.init_image = image
-                    args.image_prompts = [image]
-                    args.prompts = [prompt]
-                print("changed config")
-                mh = ModelHost(config)
-                mh.run()
+            for avg_embed in avg_embeds:
+                for image in start_images:
+                    print(image)
+                    if args.wandb:
+                        wandb.config.update({"start_image": image, 'init_image': image, 'image_prompts': [image]}, allow_val_change=True)  
+                    else:
+                        args.start_image = image
+                        args.init_image = image
+                        args.image_prompts = [image]
+                        args.prompts = [prompt]
+                        args.embedding_avg = avg_embed
+                    print("changed config")
+                    mh = ModelHost(config)
+                    mh.run()
         if not args.never_stop: break
 
 if __name__ == "__main__":
