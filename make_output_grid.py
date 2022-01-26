@@ -28,7 +28,7 @@ grid = Image.new("RGB", (img_size[0] * grid_size[0], img_size[1] * grid_size[1])
 
 avgs = list(avgs)
 avgs = (list(reversed(list(sorted(avgs)))))
-avgs[-1] = avgs[0]
+# avgs[-1] = avgs[0]
 avgs = avgs[1:]
 
 print(avgs)
