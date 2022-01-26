@@ -24,10 +24,14 @@ grid_size = (len(styles)+1, len(srcs))
 grid = Image.new("RGB", (img_size[0] * grid_size[0], img_size[1] * grid_size[1]))
 
 # first, set items src as the leftmost column
-for i, item_src in enumerate(items_src):
+# for i, item_src in enumerate(items_src):
 
 for i, src in enumerate(srcs):
-    img = Image.open(items_src + src + ".png")
+    src_path = items_src + src + "*.png"
+    src_path = glob.glob(src_path)
+    img = Image.open(src_path[0])
+    # resize to fit
+    img = img.resize(img_size)
     grid.paste(img, (0, i * img_size[1]))
     for j, style in enumerate(styles):
         item = [item for item in items if src in item and style in item][0]
