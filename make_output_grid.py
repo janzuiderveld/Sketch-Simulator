@@ -9,7 +9,7 @@ styles = set()
 
 for item in items:
     print(item)
-    src, style, num = item.split("_")
+    src, style, num = item.split("/")[-1].split("_")
     srcs.add(src)
     styles.add(style)
 
@@ -27,8 +27,8 @@ for i, src in enumerate(srcs):
         # plt.imshow(plt.imread(glob.glob(f"/content/drive/MyDrive/AI/sketch-to-image/outputs/bullshit/{src}_{style}_*")[0]))
         # plt.axis('off')
 plt.show()
-plt.savefig("/content/drive/MyDrive/AI/sketch-to-image/outputs/bullshit/bullshit.png")
+plt.savefig("/content/drive/MyDrive/AI/sketch-to-image/outputs/bullshit.png")
 
-
-
+# scissors_An8KHDNationalGeographicphototakenwithFujifilmSuperia:1.5_0.png
+# scissors_An8KHDNationalGeographicphototakenwithFujifilmSuperia:1.5_0.png
 # plot
