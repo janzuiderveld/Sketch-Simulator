@@ -10,12 +10,14 @@ items_src = "/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_reco
 
 srcs = set()
 styles = set()
+avgs = set()
 
 for item in items:
     print(item)
-    src, style, num = item.split("/")[-1].split("_")
+    src, style, avg_emb, num = item.split("/")[-1].split("_")
     srcs.add(src)
     styles.add(style)
+    avgs.add(avg_emb)
 
 # fill a grid with images, style on x-axis, src on y-axis
 img_size = Image.open(items[0]).size
@@ -36,7 +38,8 @@ for i, src in enumerate(srcs):
     # pad with 100 pixels around
 
     grid.paste(img, (0, i * img_size[1]))
-    for j, style in enumerate(styles):
+    for j, style in enumerate(sorted(avgs)):
+    # for j, style in enumerate(styles):
         item = [item for item in items if src in item and style in item][0]
         img = Image.open(item)
         grid.paste(img, ((j+1) * img_size[0], i * img_size[1]))
