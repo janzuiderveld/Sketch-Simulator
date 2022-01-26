@@ -27,8 +27,11 @@ grid = Image.new("RGB", (img_size[0] * grid_size[0], img_size[1] * grid_size[1])
 
 
 avgs = list(avgs)
-print(list(reversed(list(sorted(avgs)))))
+avgs = (list(reversed(list(sorted(avgs)))))
+avgs[-1] = avgs[0]
+avgs = avgs[1:]
 
+print(avgs)
 
 for i, src in enumerate(srcs):
     src_path = items_src + src + "*.png"
@@ -40,7 +43,7 @@ for i, src in enumerate(srcs):
     img = img.resize(img_size)
 
     grid.paste(img, (0, i * img_size[1]))
-    for j, style in enumerate(sorted(avgs)):
+    for j, style in enumerate(avgs):
     # for j, style in enumerate(styles):
         
 
