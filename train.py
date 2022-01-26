@@ -60,7 +60,7 @@ parser.add_argument('--edge_weight', type=int, default= 5)
 # parser.add_argument('--sketch_embed_weight', type=int, default= 0)
 
 # parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy_cutouts.pt")
-parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy1_cutouts.pt|/content/Sketch-Simulator/results/ovl_mean_sketchy0_cutouts.pt")
+parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy0_cutouts.pt")
 # parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy100_cutouts.pt|/content/Sketch-Simulator/results/ovl_mean_sketchy1000_cutouts.pt|/content/Sketch-Simulator/results/ovl_mean_sketchy10000_cutouts.pt|/content/Sketch-Simulator/results/ovl_mean_sketchy_cutouts.pt")
 # parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy_photo_cutouts.pt")
 # parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketch.pth")
