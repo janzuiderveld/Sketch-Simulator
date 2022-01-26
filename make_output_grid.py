@@ -32,6 +32,9 @@ for i, src in enumerate(srcs):
     img = Image.open(src_path[0])
     # resize to fit
     img = img.resize(img_size)
+    # pad with 100 pixels around
+    img = ImageOps.expand(img, border=100, fill=(255, 255, 255))
+
     grid.paste(img, (0, i * img_size[1]))
     for j, style in enumerate(styles):
         item = [item for item in items if src in item and style in item][0]
