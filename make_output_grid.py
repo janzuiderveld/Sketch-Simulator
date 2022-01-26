@@ -35,11 +35,10 @@ for i, src in enumerate(srcs):
     img = img.resize(img_size)
     img = ImageOps.expand(img, border=70, fill=(255, 255, 255))
     img = img.resize(img_size)
-    # pad with 100 pixels around
 
     grid.paste(img, (0, i * img_size[1]))
-    for j, style in enumerate(sorted(avgs)):
-    # for j, style in enumerate(styles):
+    # for j, style in enumerate(sorted(avgs)):
+    for j, style in enumerate(styles):
         item = [item for item in items if src in item and style in item][0]
         img = Image.open(item)
         grid.paste(img, ((j+1) * img_size[0], i * img_size[1]))
