@@ -30,6 +30,7 @@ def extract_sketch_embedding(paths):
     for dataset_size in reversed([100000, 10000, 1000, 100]):
         # sample 20% of paths
         # paths = random.sample(paths, int(len(paths) * 0.2))
+        print(len(paths))
         paths = random.sample(paths, dataset_size)
 
         avg_embeddings = []
@@ -46,13 +47,14 @@ def extract_sketch_embedding(paths):
                 embed_avg = torch.mean(embed.double(), dim=0)
                 avg_embeddings.append((embed_avg.unsqueeze(0)))
                 batch = []
-                
-        elif batch:
-            batch = torch.cat(batch, dim=0)
-            embed = mh.perceptor.encode_image(batch).float()
-            embed_avg = torch.mean(embed.double(), dim=0)
-            avg_embeddings.append((embed_avg.unsqueeze(0)))
-            batch = []
+
+        else:
+            if batch:
+                batch = torch.cat(batch, dim=0)
+                embed = mh.perceptor.encode_image(batch).float()
+                embed_avg = torch.mean(embed.double(), dim=0)
+                avg_embeddings.append((embed_avg.unsqueeze(0)))
+                batch = []
 
             
 
