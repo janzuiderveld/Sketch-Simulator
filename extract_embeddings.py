@@ -27,7 +27,7 @@ def extract_sketch_embedding(paths):
     os.makedirs(f"{args.save_root}/results", exist_ok=True)
 
 
-    for dataset_size in reversed([100000, 10000, 1000, 100]):
+    for dataset_size in reversed([10]):
         # sample 20% of paths
         # paths = random.sample(paths, int(len(paths) * 0.2))
         print(len(paths))

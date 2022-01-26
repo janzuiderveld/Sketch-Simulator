@@ -60,7 +60,8 @@ parser.add_argument('--edge_weight', type=int, default= 5)
 # parser.add_argument('--sketch_embed_weight', type=int, default= 0)
 
 # parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy_cutouts.pt")
-parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy100_cutouts.pt|/content/Sketch-Simulator/results/ovl_mean_sketchy1000_cutouts.pt|/content/Sketch-Simulator/results/ovl_mean_sketchy10000_cutouts.pt|/content/Sketch-Simulator/results/ovl_mean_sketchy_cutouts.pt")
+parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy10_cutouts.pt")
+# parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy100_cutouts.pt|/content/Sketch-Simulator/results/ovl_mean_sketchy1000_cutouts.pt|/content/Sketch-Simulator/results/ovl_mean_sketchy10000_cutouts.pt|/content/Sketch-Simulator/results/ovl_mean_sketchy_cutouts.pt")
 # parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy_photo_cutouts.pt")
 # parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketch.pth")
 # parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_small.pth")
@@ -108,7 +109,7 @@ parser.add_argument('--path', type=str, default="")
 parser.add_argument('--save_root', type=str, default="/content/drive/MyDrive/AI/sketch-to-image/outputs")
 parser.add_argument('--output_dir', type=str, default="dataset_size_experiment")
 parser.add_argument('--save_bef_aft', type=int, default=0)
-parser.add_argument('--never_stop', type=int, default=1)
+parser.add_argument('--never_stop', type=int, default=0)
 
 
 args = parser.parse_args()

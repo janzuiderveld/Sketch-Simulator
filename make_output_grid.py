@@ -13,7 +13,7 @@ styles = set()
 avgs = set()
 
 for item in items:
-    print(item)
+    # print(item)
     src, avg_emb, style, num = item.split("/")[-1].split("_")
     srcs.add(src)
     styles.add(style)
@@ -21,11 +21,14 @@ for item in items:
 
 # fill a grid with images, style on x-axis, src on y-axis
 img_size = Image.open(items[0]).size
-grid_size = (len(styles)+1, len(srcs))
+# grid_size = (len(styles)+1, len(srcs))
+grid_size = (len(avgs)+1, len(srcs))
 grid = Image.new("RGB", (img_size[0] * grid_size[0], img_size[1] * grid_size[1]))
 
-# first, set items src as the leftmost column
-# for i, item_src in enumerate(items_src):
+
+avgs = list(avgs)
+print(sorted(avgs))
+
 
 for i, src in enumerate(srcs):
     src_path = items_src + src + "*.png"
@@ -37,8 +40,8 @@ for i, src in enumerate(srcs):
     img = img.resize(img_size)
 
     grid.paste(img, (0, i * img_size[1]))
-    # for j, style in enumerate(sorted(avgs)):
-    for j, style in enumerate(styles):
+    for j, style in enumerate(sorted(avgs)):
+    # for j, style in enumerate(styles):
         
 
         item = [item for item in items if src in item and style in item][0]
