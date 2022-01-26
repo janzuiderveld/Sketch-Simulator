@@ -35,7 +35,7 @@ for i, src in enumerate(srcs):
     img = Image.open(src_path[0])
     # resize to fit
     img = img.resize(img_size)
-    img = ImageOps.expand(img, border=100, fill=(255, 255, 255))
+    img = ImageOps.expand(img, border=70, fill=(255, 255, 255))
     img = img.resize(img_size)
     # pad with 100 pixels around
 
