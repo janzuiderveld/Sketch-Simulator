@@ -1,6 +1,8 @@
-
 import glob
-items = "/content/drive/MyDrive/AI/sketch-to-image/outputs/bullshit/*.png"
+from PIL import Image, ImageOps
+
+folder_name = "large_grid"
+items = f"/content/drive/MyDrive/AI/sketch-to-image/outputs/{folder_name}/*.png"
 items = glob.glob(items)
 
 items_src = "/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/selection/"
@@ -14,12 +16,6 @@ for item in items:
     src, style, num = item.split("/")[-1].split("_")
     srcs.add(src)
     styles.add(style)
-
-
-
-from PIL import Image, ImageOps
-
-
 
 # fill a grid with images, style on x-axis, src on y-axis
 img_size = Image.open(items[0]).size
@@ -46,4 +42,4 @@ for i, src in enumerate(srcs):
         grid.paste(img, ((j+1) * img_size[0], i * img_size[1]))
 
 # save grid
-grid.save("/content/drive/MyDrive/AI/sketch-to-image/outputs/bullshit.png")
+grid.save(f"/content/drive/MyDrive/AI/sketch-to-image/outputs/{folder_name}.png")
