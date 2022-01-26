@@ -21,7 +21,7 @@ for item in items:
 
 avgs = list(avgs)
 avgs = (list(reversed(list(sorted(avgs)))))
-avgs = avgs[2:-1]
+# avgs = avgs[2:-1]
 
 # fill a grid with images, style on x-axis, src on y-axis
 img_size = Image.open(items[0]).size
