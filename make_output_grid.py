@@ -1,11 +1,11 @@
 import glob
 from PIL import Image, ImageOps
 
-folder_name = "large_grid"
+folder_name = "dataset_size_experiment"
 items = f"/content/drive/MyDrive/AI/sketch-to-image/outputs/{folder_name}/*.png"
 items = glob.glob(items)
 
-items_src = "/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/selection/"
+items_src = "/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/selection2/"
 # items_src = glob.glob(items_src)
 
 srcs = set()
