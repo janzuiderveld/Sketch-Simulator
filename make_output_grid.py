@@ -14,7 +14,7 @@ avgs = set()
 
 for item in items:
     print(item)
-    src, style, avg_emb, num = item.split("/")[-1].split("_")
+    src, avg_emb, style, num = item.split("/")[-1].split("_")
     srcs.add(src)
     styles.add(style)
     avgs.add(avg_emb)
@@ -39,6 +39,8 @@ for i, src in enumerate(srcs):
     grid.paste(img, (0, i * img_size[1]))
     # for j, style in enumerate(sorted(avgs)):
     for j, style in enumerate(styles):
+        
+
         item = [item for item in items if src in item and style in item][0]
         img = Image.open(item)
         grid.paste(img, ((j+1) * img_size[0], i * img_size[1]))
