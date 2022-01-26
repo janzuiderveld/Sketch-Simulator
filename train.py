@@ -164,7 +164,7 @@ def Main():
     if "|" in args.embedding_avg:
         avg_embeds = args.prompts.split("|")
     else:
-        prompts = [args.prompts]
+        avg_embeds = [args.embedding_avg]
 
     # prompts = [phrase.strip() for phrase in args.prompts.split("|")]
     # if args.prompts == ['']:
