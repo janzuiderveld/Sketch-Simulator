@@ -105,9 +105,8 @@ parser.add_argument('--noise_prompt_weights', type=list, default=[])
 
 parser.add_argument('--path', type=str, default="")
 parser.add_argument('--save_root', type=str, default="/content/drive/MyDrive/AI/sketch-to-image/outputs")
-parser.add_argument('--output_dir', type=str, default="large_grid")
+parser.add_argument('--output_dir', type=str, default="dataset_size_experiment")
 parser.add_argument('--save_bef_aft', type=int, default=0)
-parser.add_argument('--save_as_grid_coordinates', type=int, default=1)
 parser.add_argument('--never_stop', type=int, default=1)
 
 
