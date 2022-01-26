@@ -31,11 +31,11 @@ def extract_sketch_embedding(paths):
         # sample 20% of paths
         # paths = random.sample(paths, int(len(paths) * 0.2))
         print(len(paths))
-        paths = random.sample(paths, dataset_size)
+        paths_sampled = random.sample(paths, dataset_size)
 
         avg_embeddings = []
         batch = []
-        for path in tqdm(paths):
+        for path in tqdm(paths_sampled):
             init_img = mh.load_init_image(path, 400, 400, mh.device)
             cuts = mh.make_cutouts_init(init_img)
             cuts_norm = mh.normalize(cuts.squeeze())
