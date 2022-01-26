@@ -60,7 +60,7 @@ parser.add_argument('--edge_weight', type=int, default= 5)
 # parser.add_argument('--sketch_embed_weight', type=int, default= 0)
 
 # parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy_cutouts.pt")
-parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy100_cutouts.pt|/content/Sketch-Simulator/results/ovl_mean_sketchy1000_cutouts.pt|/content/Sketch-Simulator/results/ovl_mean_sketchy10000_cutouts.pt")
+parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy100_cutouts.pt|/content/Sketch-Simulator/results/ovl_mean_sketchy1000_cutouts.pt|/content/Sketch-Simulator/results/ovl_mean_sketchy10000_cutouts.pt|/content/Sketch-Simulator/results/ovl_mean_sketchy_cutouts.pt")
 # parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy_photo_cutouts.pt")
 # parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketch.pth")
 # parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_small.pth")
@@ -82,7 +82,7 @@ parser.add_argument('--flavor', type=str, default="cumin", help='"ginger", "cumi
 
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/frontpage/*")
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/hybrid_sketches/*")
-parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/selection/*")
+# parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/selection/*")
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/*")
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/clip_prototypical/*")
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/clip_prototypical/crocodilian.png")
@@ -93,8 +93,8 @@ parser.add_argument('--padding', type=int, default=100)
 # parser.add_argument('--padding', type=int, default=100)
 
 # Art Deco | Art Nouveau? | 
-parser.add_argument('--prompts', type=str, default="A painting in the style of Salvador Dali, trending on ArtStation:1.5|An 8K HD National Geographic photo taken with Fujifilm Superia:1.5|Charcoal on canvas, 8K HD detailed black and white Wallpaper, trending on ArtStation:1.5|a photorealistic 3D render in Unreal Engine, trending on ArtStation:1.5|A woodblock print in the style of Ukiyo-e, trending on ArtStation:1.5" )
-# parser.add_argument('--prompts', type=str, default="an 8K HD National Geographic photo taken with Fujifilm Superia" )
+# parser.add_argument('--prompts', type=str, default="A painting in the style of Salvador Dali, trending on ArtStation:1.5|An 8K HD National Geographic photo taken with Fujifilm Superia:1.5|Charcoal on canvas, 8K HD detailed black and white Wallpaper, trending on ArtStation:1.5|a photorealistic 3D render in Unreal Engine, trending on ArtStation:1.5|A woodblock print in the style of Ukiyo-e, trending on ArtStation:1.5" )
+parser.add_argument('--prompts', type=str, default="an 8K HD National Geographic photo taken with Fujifilm Superia" )
 # parser.add_argument('--prompts', type=str, default="a painting in the style of Salvador Dali, trending on ArtStation:1.5" )
 # parser.add_argument('--prompts', type=str, default="a photorealistic 3D render in Unreal Engine, trending on ArtStation:1.5" )
 # parser.add_argument('--prompts', type=str, default="Charcoal on canvas, 8K HD detailed black and white Wallpaper, trending on ArtStation:1.5" )
@@ -158,6 +158,11 @@ def Main():
     print(args.prompts)
     if "|" in args.prompts:
         prompts = args.prompts.split("|")
+    else:
+        prompts = [args.prompts]
+
+    if "|" in args.embedding_avg:
+        avg_embeds = args.prompts.split("|")
     else:
         prompts = [args.prompts]
 
