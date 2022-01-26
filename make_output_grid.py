@@ -17,7 +17,10 @@ for item in items:
 
 
 
-from PIL import Image
+from PIL import Image, ImageOps
+
+
+
 # fill a grid with images, style on x-axis, src on y-axis
 img_size = Image.open(items[0]).size
 grid_size = (len(styles)+1, len(srcs))
@@ -30,10 +33,10 @@ for i, src in enumerate(srcs):
     src_path = items_src + src + "*.png"
     src_path = glob.glob(src_path)
     img = Image.open(src_path[0])
+    img = ImageOps.expand(img, border=100, fill=(255, 255, 255))
     # resize to fit
     img = img.resize(img_size)
     # pad with 100 pixels around
-    img = ImageOps.expand(img, border=100, fill=(255, 255, 255))
 
     grid.paste(img, (0, i * img_size[1]))
     for j, style in enumerate(styles):
