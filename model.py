@@ -205,11 +205,14 @@ class ModelHost:
     print("image weight", weight)
     # img = self.resize_image_custom(Image.open(path).convert('RGB'), sideX, sideY)
 
-    ovl_mean = torch.load(self.args.embedding_avg)
 
     if "0" in self.args.embedding_avg:
+      ovl_mean = torch.load("/content/Sketch-Simulator/results/ovl_mean_sketchy_cutouts.pt")
       ovl_mean = torch.zeros_like(ovl_mean)
       print("zero")
+    else:
+      ovl_mean = torch.load(self.args.embedding_avg)
+
 
     # set random cuts as target. Prompt class uses alll cuts, todo check how the distance to all of these is calculated, avg?
     if self.args.target_avg_cuts:
