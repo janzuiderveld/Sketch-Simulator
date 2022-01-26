@@ -19,17 +19,16 @@ for item in items:
     styles.add(style)
     avgs.add(avg_emb)
 
+avgs = list(avgs)
+avgs = (list(reversed(list(sorted(avgs)))))
+avgs = avgs[2:-1]
+
 # fill a grid with images, style on x-axis, src on y-axis
 img_size = Image.open(items[0]).size
 # grid_size = (len(styles)+1, len(srcs))
 grid_size = (len(avgs)+1, len(srcs))
 grid = Image.new("RGB", (img_size[0] * grid_size[0], img_size[1] * grid_size[1]))
 
-
-avgs = list(avgs)
-avgs = (list(reversed(list(sorted(avgs)))))
-avgs = avgs[2:-1]
-# avgs[1] = avgs[0]
 
 print(avgs)
 
