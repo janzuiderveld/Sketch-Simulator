@@ -207,6 +207,10 @@ class ModelHost:
 
     ovl_mean = torch.load(self.args.embedding_avg)
 
+    if "0" in self.args.embedding_avg:
+      ovl_mean = torch.zeros_like(ovl_mean)
+      print("zero")
+
     # set random cuts as target. Prompt class uses alll cuts, todo check how the distance to all of these is calculated, avg?
     if self.args.target_avg_cuts:
         batch = make_cutouts_init(init_img)
