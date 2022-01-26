@@ -33,7 +33,7 @@ def extract_sketch_embedding(paths):
         cuts_norm = mh.normalize(cuts)
         batch.append(cuts_norm)
 
-        if len(batch) >= (5000 // 32):
+        if len(batch) >= (5000 // mh.args.init_cutn):
             batch = torch.cat(batch, dim=0)
             # input(batch.shape)
            # batch = make_cutouts(TF.to_tensor(img).unsqueeze(0).to(device))
