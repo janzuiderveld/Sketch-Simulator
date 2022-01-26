@@ -410,7 +410,7 @@ class ModelHost:
 
   def unique_index(self, batchpath):
       i = 0
-      fname = self.args.init_image.split('/')[-1].split(".")[0].split(" ")[0] + "_" + self.args.embedding_avg.split("/")[-1].split(".")[0] + "_" + self.args.prompts[0].replace(" ", "") 
+      fname = self.args.init_image.split('/')[-1].split(".")[0].split(" ")[0] + "_" + self.args.embedding_avg.split("/")[-1].split(".")[0].replace("_", "") + "_" + self.args.prompts[0].replace(" ", "") 
       while True:
           if os.path.isfile(batchpath+"/"+ fname + "_" +str(i)+".png"):
               i = i+1
