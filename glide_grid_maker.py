@@ -8,7 +8,10 @@ path_lookup = dict()
 scores = dict()
 
 for sel in selection:
-    name, score = sel.split("/")[-1].split(".")[:-1].split("_")
+    name, score = sel.split("/")[-1].split("_")
+    print(score)
+    score = score.split(".")[:-1]
+    print(score)
     score = float(score)
     
     # save for sorting 
