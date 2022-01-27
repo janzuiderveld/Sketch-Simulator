@@ -21,7 +21,10 @@ styles = set()
 avgs = set()
 
 for item in items:
-    src, avg_emb, style, num = item.split("/")[-1].split("_")
+    src, src2, avg_emb, style, num = item.split("/")[-1].split("_")
+    src = src + "_" + src2
+
+    # src, avg_emb, style, num = item.split("/")[-1].split("_")
     srcs.add(src)
     styles.add(style)
     avgs.add(avg_emb)
