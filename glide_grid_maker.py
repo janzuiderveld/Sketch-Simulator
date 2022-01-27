@@ -48,22 +48,27 @@ for i, item in enumerate(top_10):
     # reszie the image
     src_img = src_img.resize((img_width, img_height))
 
-    if i < 4:
+    if i < 3:
         # paste src_img left to each image
         grid.paste(src_img, (0, i*img_height))
         # paste img right to each image
         grid.paste(img, (img_width_per_image//2, i*img_height))
 
-    elif i < 8:
+    elif i < 6:
         # paste src_img left to each image
-        grid.paste(src_img, (img_width_per_image, (i-4)*img_height))
+        grid.paste(src_img, (img_width_per_image, (i-3)*img_height))
         # paste img right to each image
-        grid.paste(img, (img_width_per_image + img_width_per_image//2, (i-4)*img_height))
-    elif i < 12:
+        grid.paste(img, (img_width_per_image + img_width_per_image//2, (i-3)*img_height))
+    elif i < 9:
         # paste src_img left to each image
-        grid.paste(src_img, (img_width_per_image*2, (i-8)*img_height))
+        grid.paste(src_img, (img_width_per_image*2, (i-6)*img_height))
         # paste img right to each image
-        grid.paste(img, (img_width_per_image*2 + img_width_per_image//2, (i-8)*img_height))
+        grid.paste(img, (img_width_per_image*2 + img_width_per_image//2, (i-6)*img_height))
+    else:
+        # paste src_img left to each image
+        grid.paste(src_img, (img_width_per_image*3, (i-9)*img_height))
+        # paste img right to each image
+        grid.paste(img, (img_width_per_image*3 + img_width_per_image//2, (i-9)*img_height))
         
 # save the grid
 grid.save(f"/content/drive/MyDrive/AI/sketch-to-image/outputs/glide_grid.png")
