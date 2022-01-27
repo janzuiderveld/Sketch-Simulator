@@ -59,7 +59,7 @@ for i, item in enumerate(top_10):
         grid.paste(src_img, (img_width_per_image, (i-4)*img_height))
         # paste img right to each image
         grid.paste(img, (img_width_per_image + img_width_per_image//2, (i-4)*img_height))
-    else:
+    elif i < 12:
         # paste src_img left to each image
         grid.paste(src_img, (img_width_per_image*2, (i-8)*img_height))
         # paste img right to each image
