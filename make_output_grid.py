@@ -20,7 +20,6 @@ styles = set()
 avgs = set()
 
 for item in items:
-    # print(item)
     src, avg_emb, style, num = item.split("/")[-1].split("_")
     srcs.add(src)
     styles.add(style)
