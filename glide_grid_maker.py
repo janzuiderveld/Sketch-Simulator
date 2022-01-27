@@ -1,7 +1,7 @@
 import glob
 from PIL import Image, ImageOps
 
-selection = glob.glob("/content/drive/MyDrive/AI/sketch-to-image/outputs/glide_outputs_cut_selection/*.png")
+selection = glob.glob("/content/drive/MyDrive/AI/sketch-to-image/glide_outputs_cut_selection/*")
 
 print(selection)
 path_lookup = dict()
@@ -21,3 +21,9 @@ for sel in selection:
 top_10 = sorted(scores, key=scores.get, reverse=True)[:10]
 
 print(top_10)
+
+for item in top_10:
+    print(scores[name])
+#     img = Image.open(path_lookup[item])
+#     img = img.resize((256, 256))
+#     img.save(f"/content/drive/MyDrive/AI/sketch-to-image/glide_outputs_cut_selection/{item}.png")                               
