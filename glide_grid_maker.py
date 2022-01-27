@@ -54,9 +54,9 @@ for i, item in enumerate(top_10):
         grid.paste(img, (img_width_per_image//2, i*img_height))
     else:
         # paste src_img left to each image
-        grid.paste(src_img, (0, (i-5)*img_height))
+        grid.paste(src_img, (img_width_per_image, (i-5)*img_height))
         # paste img right to each image
-        grid.paste(img, (img_width_per_image//2, (i-5)*img_height))
+        grid.paste(img, (img_width_per_image + img_width_per_image//2, (i-5)*img_height))
         
 # save the grid
 grid.save(f"/content/drive/MyDrive/AI/sketch-to-image/outputs/glide_grid.png")
