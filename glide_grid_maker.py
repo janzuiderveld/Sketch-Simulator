@@ -22,7 +22,7 @@ for sel in selection:
     path_lookup[name] = sel
 
 # get top 10 best score paths
-top_10 = sorted(scores, key=scores.get, reverse=True)[:10]
+top_10 = sorted(scores, key=scores.get, reverse=True)[:12]
 
 print(top_10)
 
