@@ -9,7 +9,7 @@ scores = dict()
 
 for sel in selection:
     name, score = sel.split("/")[-1].split("_")
-    if name in ["spoon", "teapot",  "bicycle", "chair", "hamburger", "rabbit", "rifle", "cat"]:continue
+    if name in ["spoon", "teapot",  "bicycle", "chair", "hamburger", "rabbit", "rifle", "cat", "table"]:continue
     print(score)
     score = score[:-4]
     print(score)
