@@ -181,12 +181,12 @@ def Main():
     else:
         start_images = [args.start_image]
 
-    print(start_images)
+    # print(start_images)
     print(prompts)
     while True:
-        for prompt in prompts:
+        for image in start_images:
             for avg_embed in avg_embeds:
-                for image in start_images:
+                for prompt in prompts:
                     print(image)
                     if args.wandb:
                         wandb.config.update({"start_image": image, 'init_image': image, 'image_prompts': [image]}, allow_val_change=True)  
