@@ -31,8 +31,13 @@ for item in items:
 
 print(src)
 
-item = [item for item in items_src if src in item]
-print(len(item))
+items = [item for item in items_src if src in item]
+
+# plot items in items list
+
+
+
+
 exit()
 
 
