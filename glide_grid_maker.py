@@ -28,26 +28,45 @@ print(top_10)
 input_images = glob.glob("/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/**")
 
 
-# make a 2 by 5 grid of the top 10
+# make a 5 by 2 grid of the top 10
 img_size = Image.open(selection[0]).size
 img_width = img_size[0]
 img_height = img_size[1]
 img_width_per_image = img_width * 2
 
-for item in top_10:
+# make the grid
+grid = Image.new("RGB", (img_width_per_image * 2, img_height * 5))
+
+for i, item in enumerate(top_10):
     # get the correct image
-    img_to_cut = Image.open(path_lookup[item])
+    img = Image.open(path_lookup[item])
 
     # get the corresponding input image
     src_path = [inp for inp in input_images if item in inp]
-    input_img = Image.open(input_images[])
+    src_img = Image.open(src_path[0])
 
-    print(item)
-    print(scores[item])
+    if i < 5:
+        # paste src_img left to each image
+        grid.paste(src_img, (0, i*img_height))
+        # paste img right to each image
+        grid.paste(img, (img_width_per_image, i*img_height))
+    else:
+        # paste src_img left to each image
+        grid.paste(src_img, (0, (i-5)*img_height))
+        # paste img right to each image
+        grid.paste(img, (img_width_per_image, (i-5)*img_height))
+        
+# save the grid
+grid.save(f"/content/drive/MyDrive/AI/sketch-to-image/outputs/glide_grid.png")
 
 
-    img = Image.open(path_lookup[item])
-    img = img.resize((256, 256))
+
+    # print(item)
+    # print(scores[item])
 
 
-    # img.save(f"/content/drive/MyDrive/AI/sketch-to-image/glide_outputs_cut_selection/{item}.png")                               
+    # img = Image.open(path_lookup[item])
+    # img = img.resize((256, 256))
+
+
+    # # img.save(f"/content/drive/MyDrive/AI/sketch-to-image/glide_outputs_cut_selection/{item}.png")                               
