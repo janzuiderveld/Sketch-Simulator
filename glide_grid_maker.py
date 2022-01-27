@@ -44,17 +44,19 @@ for i, item in enumerate(top_10):
     # get the corresponding input image
     src_path = [inp for inp in input_images if item in inp]
     src_img = Image.open(src_path[0])
+    # reszie the image
+    src_img = src_img.resize((img_width, img_height))
 
     if i < 5:
         # paste src_img left to each image
         grid.paste(src_img, (0, i*img_height))
         # paste img right to each image
-        grid.paste(img, (img_width_per_image, i*img_height))
+        grid.paste(img, (img_width_per_image//2, i*img_height))
     else:
         # paste src_img left to each image
         grid.paste(src_img, (0, (i-5)*img_height))
         # paste img right to each image
-        grid.paste(img, (img_width_per_image, (i-5)*img_height))
+        grid.paste(img, (img_width_per_image//2, (i-5)*img_height))
         
 # save the grid
 grid.save(f"/content/drive/MyDrive/AI/sketch-to-image/outputs/glide_grid.png")
