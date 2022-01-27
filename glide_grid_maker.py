@@ -1,6 +1,38 @@
 import glob
 from PIL import Image, ImageOps
 
+import torch as th
+from glide_text2im.download import load_checkpoint
+from glide_text2im.model_creation import (
+    create_model_and_diffusion,
+    model_and_diffusion_defaults,
+    model_and_diffusion_defaults_upsampler
+)
+has_cuda = th.cuda.is_available()
+device = th.device('cpu' if not has_cuda else 'cuda')
+
+# Create upsampler model.
+options_up = model_and_diffusion_defaults_upsampler()
+options_up['use_fp16'] = has_cuda
+options_up['timestep_respacing'] = 'fast27' # use 27 diffusion steps for very fast sampling
+model_up, diffusion_up = create_model_and_diffusion(**options_up)
+model_up.eval()
+if has_cuda:
+    model_up.convert_to_fp16()
+model_up.to(device)
+model_up.load_state_dict(load_checkpoint('upsample', device))
+print('total upsampler parameters', sum(x.numel() for x in model_up.parameters()))
+
+# Sampling parameters
+prompt = ""
+batch_size = 1
+guidance_scale = 3.0
+
+# Tune this parameter to control the sharpness of 256x256 images.
+# A value of 1.0 is sharper, but sometimes results in grainy artifacts.
+upsample_temp = 0.997
+
+
 selection = glob.glob("/content/drive/MyDrive/AI/sketch-to-image/glide_outputs_cut_selection/*")
 
 print(selection)
