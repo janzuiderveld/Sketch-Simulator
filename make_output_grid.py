@@ -30,6 +30,9 @@ for item in items:
     avgs.add(avg_emb)
 
 print(src)
+
+item = [item for item in items_src if src in item]
+print(item)
 exit()
 
 
