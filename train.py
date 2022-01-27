@@ -175,6 +175,9 @@ def Main():
     if "*" in args.start_image:
         import glob
         start_images = glob.glob(args.start_image)
+        # shuffle 
+        import random
+        random.shuffle(start_images)
     else:
         start_images = [args.start_image]
 
