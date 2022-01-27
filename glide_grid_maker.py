@@ -10,7 +10,7 @@ scores = dict()
 for sel in selection:
     name, score = sel.split("/")[-1].split("_")
     print(score)
-    score = score.split(".")[:-1]
+    score = score[:-4]
     print(score)
     score = float(score)
     
@@ -21,7 +21,7 @@ for sel in selection:
     path_lookup[name] = sel
 
 # get top 10 best score paths
-top_10 = sorted(scores, key=scores.get, reverse=False)[:10]
+top_10 = sorted(scores, key=scores.get, reverse=True)[:10]
 
 print(top_10)
 
