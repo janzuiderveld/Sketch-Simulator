@@ -13,7 +13,7 @@ items_src = "/content/Sketch-Simulator/256x256/sketch/**/**/*.png"
 items_src = glob.glob(items_src)
 
 
-exit()
+
 
 srcs = set()
 styles = set()
@@ -25,6 +25,11 @@ for item in items:
     srcs.add(src)
     styles.add(style)
     avgs.add(avg_emb)
+
+print(src)
+exit()
+
+
 
 avgs = list(avgs)
 avgs = (list(reversed(list(sorted(avgs)))))
