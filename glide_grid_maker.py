@@ -29,14 +29,14 @@ print(top_10)
 input_images = glob.glob("/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/**")
 
 
-# make a 5 by 2 grid of the top 10
+# make a 3 by 4 grid of the top 12
 img_size = Image.open(selection[0]).size
 img_width = img_size[0]
 img_height = img_size[1]
 img_width_per_image = img_width * 2
 
 # make the grid
-grid = Image.new("RGB", (img_width_per_image * 2, img_height * 5))
+grid = Image.new("RGB", (img_width_per_image * 4, img_height * 3))
 
 for i, item in enumerate(top_10):
     # get the correct image
@@ -48,16 +48,22 @@ for i, item in enumerate(top_10):
     # reszie the image
     src_img = src_img.resize((img_width, img_height))
 
-    if i < 5:
+    if i < 4:
         # paste src_img left to each image
         grid.paste(src_img, (0, i*img_height))
         # paste img right to each image
         grid.paste(img, (img_width_per_image//2, i*img_height))
+
+    elif i < 8:
+        # paste src_img left to each image
+        grid.paste(src_img, (img_width_per_image, (i-4)*img_height))
+        # paste img right to each image
+        grid.paste(img, (img_width_per_image + img_width_per_image//2, (i-4)*img_height))
     else:
         # paste src_img left to each image
-        grid.paste(src_img, (img_width_per_image, (i-5)*img_height))
+        grid.paste(src_img, (img_width_per_image*2, (i-8)*img_height))
         # paste img right to each image
-        grid.paste(img, (img_width_per_image + img_width_per_image//2, (i-5)*img_height))
+        grid.paste(img, (img_width_per_image*2 + img_width_per_image//2, (i-8)*img_height))
         
 # save the grid
 grid.save(f"/content/drive/MyDrive/AI/sketch-to-image/outputs/glide_grid.png")
