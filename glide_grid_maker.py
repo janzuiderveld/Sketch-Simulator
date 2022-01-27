@@ -8,7 +8,7 @@ path_lookup = dict()
 scores = dict()
 
 for sel in selection:
-    name, score = sel.split("/")[-1].split(".")[0].split("_")
+    name, score = sel.split("/")[-1].split(".")[:-1].split("_")
     score = float(score)
     
     # save for sorting 
@@ -18,11 +18,12 @@ for sel in selection:
     path_lookup[name] = sel
 
 # get top 10 best score paths
-top_10 = sorted(scores, key=scores.get, reverse=True)[:10]
+top_10 = sorted(scores, key=scores.get, reverse=False)[:10]
 
 print(top_10)
 
 for item in top_10:
+    print(item)
     print(scores[name])
 #     img = Image.open(path_lookup[item])
 #     img = img.resize((256, 256))
