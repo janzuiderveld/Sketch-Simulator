@@ -29,29 +29,18 @@ for item in items:
     styles.add(style)
     avgs.add(avg_emb)
 
-print(src)
-
-items = [item for item in items_src if src in item]
-
-# plot items in items list
 
 
-
-
-exit()
-
-
-
-avgs = list(avgs)
-avgs = (list(reversed(list(sorted(avgs)))))
-avgs[1] = avgs[-1]
-avgs = avgs[1:-2]
+# avgs = list(avgs)
+# avgs = (list(reversed(list(sorted(avgs)))))
+# avgs[1] = avgs[-1]
+# avgs = avgs[1:-2]
 
 # fill a grid with images, style on x-axis, src on y-axis
 img_size = Image.open(items[0]).size
 
-# grid_size = (len(styles)+1, len(srcs))
-grid_size = (len(avgs)+1, len(srcs))
+grid_size = (len(styles)+1, len(srcs))
+# grid_size = (len(avgs)+1, len(srcs))
 
 grid = Image.new("RGB", (img_size[0] * grid_size[0], img_size[1] * grid_size[1]))
 
@@ -59,8 +48,10 @@ grid = Image.new("RGB", (img_size[0] * grid_size[0], img_size[1] * grid_size[1])
 print(avgs)
 
 for i, src in enumerate(srcs):
-    src_path = items_src + src + "*.png"
-    src_path = glob.glob(src_path)
+    # src_path = items_src + src + "*.png"
+    # src_path = glob.glob(src_path)
+    src_path = [item for item in items_src if src in item]
+
     img = Image.open(src_path[0])
     # resize to fit
     img = img.resize(img_size)
@@ -68,8 +59,8 @@ for i, src in enumerate(srcs):
     img = img.resize(img_size)
 
     grid.paste(img, (0, i * img_size[1]))
-    for j, style in enumerate(avgs):
-    # for j, style in enumerate(styles):
+    # for j, style in enumerate(avgs):
+    for j, style in enumerate(styles):
         
 
         item = [item for item in items if src in item and style in item][0]
