@@ -26,15 +26,22 @@ top_10 = sorted(scores, key=scores.get, reverse=True)[:10]
 print(top_10)
 
 input_images = glob.glob("/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/**")
-print(input_images)
+
 
 # make a 2 by 5 grid of the top 10
 img_size = Image.open(selection[0]).size
-
-
-
+img_width = img_size[0]
+img_height = img_size[1]
+img_width_per_image = img_width * 2
 
 for item in top_10:
+    # get the correct image
+    img_to_cut = Image.open(path_lookup[item])
+
+    # get the corresponding input image
+    src_path = [inp for inp in input_images if item in inp]
+    input_img = Image.open(input_images[])
+
     print(item)
     print(scores[item])
 
