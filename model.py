@@ -425,26 +425,18 @@ class ModelHost:
       result = []
       if self.args.target_det_cuts:
         out_grid = self.make_cutouts_det(out)
-        # print(out_grid.shape)
         out_grid_cuts = self.make_cutouts(out_grid)
-        # print(out_grid_cuts.shape)
-      
 
         iii =[]
         for i, cutout_set in enumerate(out_grid_cuts):
           iii.append(self.perceptor.encode_image(self.normalize(cutout_set)).float().unsqueeze(0))
         iii = torch.cat(iii, dim = 0)
-        
-        # iii = self.perceptor.encode_image(self.normalize(out_grid_cuts)).float()
-
 
       else:
-        encodings = []
-        for i in range(self.args.num_cut_batches):
-          print(i)
-          iii = self.perceptor.encode_image(self.normalize(self.make_cutouts(out).squeeze())).float().unsqueeze(0)
-          for prompt in self.prompts:
-            result.append(prompt(iii))
+
+      iii = self.perceptor.encode_image(self.normalize(self.make_cutouts(out).squeeze())).float().unsqueeze(0)
+      for prompt in self.prompts:
+        result.append(prompt(iii))
 
       if self.args.init_weight and self.mse_weight > 0:
           result.append(F.mse_loss(self.z.tensor, self.z_orig) * self.mse_weight / 2)
@@ -458,32 +450,7 @@ class ModelHost:
       _, out_edges = kornia.filters.canny(out)
       _, init_img_edges = kornia.filters.canny(self.init_img)
       result.append(F.mse_loss(out_edges[init_img_edges>0], init_img_edges[init_img_edges>0]) * self.args.edge_weight)
-      
-      # if not self.counter % 10:
-      #   import matplotlib.pyplot as plt
-      #   # convert back to numpy
-      #   img_magnitude: np.ndarray = kornia.tensor_to_image(init_img_edges.byte())
-      #   img_canny: np.ndarray = kornia.tensor_to_image(out_edges.byte())
 
-      #   # plot the results ##########################################
-      #   # Create the plot
-      #   fig, axs = plt.subplots(1, 2, figsize=(16,16))
-      #   axs = axs.ravel()
-
-      #   axs[0].axis('off')
-      #   axs[0].set_title('init image edge')
-      #   axs[0].imshow(img_magnitude)
-
-      #   axs[1].axis('off')
-      #   axs[1].set_title('out init image edge')
-      #   axs[1].imshow(img_canny)
-
-      #   plt.show()
-
-      self.counter += 1
-
-
-          
       if self.usealtprompts:
         iii = self.perceptor.encode_image(self.normalize(self.alt_make_cutouts(out))).float()
         for prompt in self.altprompts:
@@ -494,36 +461,37 @@ class ModelHost:
       im_path = f'./steps/{self.counter}.png'
       imageio.imwrite(im_path, np.array(img))
       self.add_metadata(im_path, self.counter)
+      self.counter += 1
       return result
 
   def train(self):
-      self.opt.zero_grad()
-    #   mse_decay = self.args.decay
       lossAll = self.ascend_txt()
 
       if self.counter % self.args.display_freq == 0 or self.counter == 1:
         self.checkin(lossAll)
          
       loss = sum(lossAll)
+      loss = loss / self.args.accum_iter
       loss.backward()
-      self.opt.step()
+      if ((self.counter) % self.args.accum_iter == 0):
+        self.opt.step()
+        self.opt.zero_grad()
+
       with torch.no_grad():
           if self.mse_weight > 0 and self.args.init_weight and self.counter > 0 and self.counter%self.args.decay_rate == 0:
               self.z_orig = vector_quantize(self.z.average.movedim(1, 3), self.model.quantize.embedding.weight).movedim(3, 1)
-            #   self.mse_weight = self.mse_weight - mse_decay
-            #   print(f"updated mse weight: {self.mse_weight}")
 
   def run(self):
     i = 0
-    # try:
-    while True:
-        self.train()
-        if self.counter > 0 and self.counter%self.args.decay_rate==0 and self.mse_weight > 0:
-            self.z = EMATensor(self.z.average, self.args.ema_val)
-            self.opt = optim.Adam(self.z.parameters(), lr=self.args.step_size, weight_decay=self.args.weight_decay)
-        if self.counter >= self.args.max_iterations:
-            break
-        self.z.update()
-    # except KeyboardInterrupt:
-    #     pass
+    try:
+      while True:
+          self.train()
+          if self.counter > 0 and self.counter%self.args.decay_rate==0 and self.mse_weight > 0:
+              self.z = EMATensor(self.z.average, self.args.ema_val)
+              self.opt = optim.Adam(self.z.parameters(), lr=self.args.step_size, weight_decay=self.args.weight_decay)
+          if self.counter >= self.args.max_iterations:
+              break
+          self.z.update()
+    except KeyboardInterrupt:
+        pass
     return 
