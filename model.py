@@ -426,15 +426,14 @@ class ModelHost:
       if self.args.target_det_cuts:
         out_grid = self.make_cutouts_det(out)
         out_grid_cuts = self.make_cutouts(out_grid)
-
         iii =[]
         for i, cutout_set in enumerate(out_grid_cuts):
           iii.append(self.perceptor.encode_image(self.normalize(cutout_set)).float().unsqueeze(0))
         iii = torch.cat(iii, dim = 0)
 
       else:
-
-      iii = self.perceptor.encode_image(self.normalize(self.make_cutouts(out).squeeze())).float().unsqueeze(0)
+        iii = self.perceptor.encode_image(self.normalize(self.make_cutouts(out).squeeze())).float().unsqueeze(0)
+      
       for prompt in self.prompts:
         result.append(prompt(iii))
 
