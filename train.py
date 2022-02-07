@@ -41,7 +41,7 @@ parser.add_argument('--height', type=int, default= 400 )
 parser.add_argument('--wandb', type=int, default=0)
 parser.add_argument('--experiment_name', type=str, default="")
 
-parser.add_argument('--cutn', type=int, default=32 )
+parser.add_argument('--cutn', type=int, default=16 )
 parser.add_argument('--init_cutn', type=int, default=32)
 parser.add_argument('--num_init_cut_batches', type=int, default=16)
 parser.add_argument('--cut_pow', type=float, default=0.7)
