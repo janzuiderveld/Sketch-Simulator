@@ -440,6 +440,7 @@ class ModelHost:
       else:
         encodings = []
         for i in range(self.args.num_cut_batches):
+          print(i)
           iii = self.perceptor.encode_image(self.normalize(self.make_cutouts(out).squeeze())).float().unsqueeze(0)
           encodings.append(iii)
         iii = torch.cat(encodings, dim = 0)
