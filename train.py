@@ -31,7 +31,8 @@ import wandb
 
 parser = argparse.ArgumentParser()    
 parser.add_argument('--vqgan_model', type=str, default='ImageNet' )
-parser.add_argument('--clip_model', type=str, default='ViT-L/14' )
+# parser.add_argument('--clip_model', type=str, default='ViT-L/14' )
+parser.add_argument('--clip_model', type=str, default='ViT-B/32' )
 parser.add_argument('--display_freq', type=int, default= 10)
 parser.add_argument('--log_edges', type=int, default=0)
 parser.add_argument('--max_iterations', type=int, default=80)
