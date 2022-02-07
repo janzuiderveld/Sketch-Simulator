@@ -166,7 +166,7 @@ class Prompt(nn.Module):
        
         else:
             embed_normed = embed_normed.squeeze(1)
-            input_normed = input_normed.reshape((input_normed.shape[0]*input_normed.shape[1], 1, 512))
+            input_normed = input_normed.reshape((input_normed.shape[0]*input_normed.shape[1], 1, -1))
             print(input_normed.shape, embed_normed.shape)
             dists = input_normed.sub(embed_normed).norm(dim=2).div(2).arcsin().pow(2).mul(2)
             dists = dists * self.weight.sign()
