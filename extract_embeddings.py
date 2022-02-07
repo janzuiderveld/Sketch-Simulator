@@ -78,4 +78,4 @@ if __name__ == "__main__":
 
 
     path = glob.glob(args.path)
-    extract_sketch_embedding(path)
+    extract_sketch_embedding(path, args.save_name)
