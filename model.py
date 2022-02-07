@@ -214,7 +214,7 @@ class ModelHost:
         for i in range(self.args.num_init_cut_batches):
           batch = make_cutouts_init(init_img)
           embeds.append(perceptor.encode_image(normalize(batch.squeeze())).float().unsqueeze(0))
-        embed = torch.cat(embeds, dim=0)
+        embed = torch.cat(embeds, dim=1)
         embed = (embed - ovl_mean) 
     
         # embed = (embed - ovl_mean + txt_embed) 
