@@ -438,15 +438,11 @@ class ModelHost:
 
 
       else:
-
-
-        # iii =[]
-        # for i, cutout_set in enumerate(out_grid_cuts):
-        #   iii.append(self.perceptor.encode_image(self.normalize(cutout_set)).float().unsqueeze(0))
-        
-        iii = self.perceptor.encode_image(self.normalize(self.make_cutouts(out).squeeze())).float().unsqueeze(0)
-
-
+        encodings = []
+        for i in range(self.args.num_cutn_batches):
+          iii = self.perceptor.encode_image(self.normalize(self.make_cutouts(out).squeeze())).float().unsqueeze(0)
+          encodings.append(iii)
+        iii = torch.cat(encodings, dim = 0)
 
       result = []
       if self.args.init_weight and self.mse_weight > 0:
