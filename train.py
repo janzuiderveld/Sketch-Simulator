@@ -31,7 +31,7 @@ import wandb
 
 parser = argparse.ArgumentParser()    
 parser.add_argument('--vqgan_model', type=str, default='ImageNet' )
-parser.add_argument('--clip_model', type=str, default='ViT-B/32' )
+parser.add_argument('--clip_model', type=str, default='ViT-L/14' )
 parser.add_argument('--display_freq', type=int, default= 10)
 parser.add_argument('--log_edges', type=int, default=0)
 parser.add_argument('--max_iterations', type=int, default=80)
@@ -59,7 +59,7 @@ parser.add_argument('--epsilon', type=float, default=1e-16)
 parser.add_argument('--edge_weight', type=int, default= 5)
 # parser.add_argument('--sketch_embed_weight', type=int, default= 0)
 
-parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy_cutouts.pt")
+parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy_cutouts_vit-L.pt")
 # parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy0_cutouts.pt")
 # parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy100_cutouts.pt|/content/Sketch-Simulator/results/ovl_mean_sketchy1000_cutouts.pt|/content/Sketch-Simulator/results/ovl_mean_sketchy10000_cutouts.pt|/content/Sketch-Simulator/results/ovl_mean_sketchy_cutouts.pt")
 # parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy_photo_cutouts.pt")
