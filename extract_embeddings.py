@@ -41,7 +41,7 @@ def extract_sketch_embedding(paths, output_name):
             cuts_norm = mh.normalize(cuts.squeeze())
             batch.append(cuts_norm)
 
-            if len(batch) >= (5000 // mh.args.init_cutn):
+            if len(batch) >= (2000 // mh.args.init_cutn):
                 batch = torch.cat(batch, dim=0)
                 embed = mh.perceptor.encode_image(batch).float()
                 embed_avg = torch.mean(embed.double(), dim=0)
