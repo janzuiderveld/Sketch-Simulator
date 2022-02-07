@@ -20,6 +20,7 @@ def extract_sketch_embedding(paths, output_name):
     train.args.init_image = paths[0]
     train.args.prompts = ""
     train.args.init_cutn = 32
+
     # train.args.width = 
     # train.args.height = 
 
