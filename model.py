@@ -422,6 +422,7 @@ class ModelHost:
 
   def ascend_txt(self):
       out = self.synth(self.z.tensor)
+      result = []
       if self.args.target_det_cuts:
         out_grid = self.make_cutouts_det(out)
         # print(out_grid.shape)
@@ -445,7 +446,6 @@ class ModelHost:
           for prompt in self.prompts:
             result.append(prompt(iii))
 
-      result = []
       if self.args.init_weight and self.mse_weight > 0:
           result.append(F.mse_loss(self.z.tensor, self.z_orig) * self.mse_weight / 2)
       
