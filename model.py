@@ -438,7 +438,7 @@ class ModelHost:
         result.append(prompt(iii))
 
       if self.args.init_weight and self.mse_weight > 0:
-          result.append(F.mse_loss(self.z.tensor, self.z_orig) * self.mse_weight / 2)
+          result.append((F.mse_loss(self.z.tensor, self.z_orig) * self.mse_weight / 2) / self.args.accum_iter )
       
       ### INIT LOSS #########################
       # result.append(F.mse_loss(self.z.tensor, self.z_init) * 0.1)
@@ -491,7 +491,8 @@ class ModelHost:
               self.opt = optim.Adam(self.z.parameters(), lr=self.args.step_size, weight_decay=self.args.weight_decay)
           if self.counter >= self.args.max_iterations:
               break
-          self.z.update()
+          if ((self.counter) % self.args.accum_iter == 0):
+              self.z.update()
     except KeyboardInterrupt:
         pass
     return 
