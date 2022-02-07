@@ -209,9 +209,12 @@ class ModelHost:
 
     # set random cuts as target. Prompt class uses alll cuts, todo check how the distance to all of these is calculated, avg?
     if self.args.target_avg_cuts:
-        batch = make_cutouts_init(init_img)
-        embed = perceptor.encode_image(normalize(batch.squeeze())).float().unsqueeze(0)
-        
+      # img = self.resize_image_custom(Image.open(path).convert('RGB'), sideX, sideY)
+        embeds = []
+        for i in range(self.args.num_init_cut_batches):
+          batch = make_cutouts_init(init_img)
+          embeds.append(perceptor.encode_image(normalize(batch.squeeze())).float().unsqueeze(0))
+        embed = torch.cat(embeds, dim=0)
         embed = (embed - ovl_mean) 
     
         # embed = (embed - ovl_mean + txt_embed) 
