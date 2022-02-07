@@ -442,8 +442,8 @@ class ModelHost:
         for i in range(self.args.num_cut_batches):
           print(i)
           iii = self.perceptor.encode_image(self.normalize(self.make_cutouts(out).squeeze())).float().unsqueeze(0)
-          encodings.append(iii)
-        iii = torch.cat(encodings, dim = 0)
+          for prompt in self.prompts:
+            result.append(prompt(iii))
 
       result = []
       if self.args.init_weight and self.mse_weight > 0:
@@ -482,8 +482,7 @@ class ModelHost:
 
       self.counter += 1
 
-      for prompt in self.prompts:
-          result.append(prompt(iii))
+
           
       if self.usealtprompts:
         iii = self.perceptor.encode_image(self.normalize(self.alt_make_cutouts(out))).float()
