@@ -446,6 +446,7 @@ class ModelHost:
       # mask = (-mh.init_img + 1).int()
       # result.append(F.mse_loss(out*mask, self.init_img*mask) * 0.5)
 
+      ### EDGE LOSS #########################
       _, out_edges = kornia.filters.canny(out)
       _, init_img_edges = kornia.filters.canny(self.init_img)
       result.append(F.mse_loss(out_edges[init_img_edges>0], init_img_edges[init_img_edges>0]) * self.args.edge_weight)
