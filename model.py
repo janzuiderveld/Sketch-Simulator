@@ -212,7 +212,7 @@ class ModelHost:
         batch = make_cutouts_init(init_img)
         embed = perceptor.encode_image(normalize(batch.squeeze())).float().unsqueeze(0)
         
-        embed = (embed - ovl_mean) 
+        # embed = (embed - ovl_mean) 
     
         # embed = (embed - ovl_mean + txt_embed) 
 
