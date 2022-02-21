@@ -246,25 +246,25 @@ class ModelHost:
 
         batch, levels = make_cutouts_det(init_img, init=True)
         # print(batch.shape)
-        # batch = make_cutouts_init(batch)
+        batch = make_cutouts_init(batch)
         # print(batch.shape)
 
 
 ############################
-        # embed =[]
-        # for i, cutout_set in enumerate(batch):
-          # embed.append(perceptor.encode_image(normalize(cutout_set)).float().unsqueeze(0))
-        # embed = torch.cat(embed, dim = 0)
+        embed =[]
+        for i, cutout_set in enumerate(batch):
+          embed.append(perceptor.encode_image(normalize(cutout_set)).float().unsqueeze(0))
+        embed = torch.cat(embed, dim = 0)
 ########################
-        embed = perceptor.encode_image(normalize(batch)).float()
+        # embed = perceptor.encode_image(normalize(batch)).float()
 
         print("embed.shape")
         print(embed.shape)
-        # ovl_mean = ovl_mean.repeat(1, 256, 1)
+        ovl_mean = ovl_mean.repeat(1, 256, 1)
+        print(embed.shape)
         
         # embed = embed - ovl_mean + txt_embed
-        # embed = embed - ovl_mean.repeat(1, 256, 1)
-        # embed = embed - ovl_mean
+        embed = embed - ovl_mean.repeat(1, 256, 1)
 
 
         pMs.append(Prompt(embed, weight, stop, name="image", levels=levels, levels_bool=True, cutn=self.args.cutn, init_cutn=self.args.init_cutn).to(device))
