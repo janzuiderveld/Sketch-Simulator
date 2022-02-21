@@ -251,12 +251,12 @@ class ModelHost:
 
 
 ############################
-        embed =[]
-        for i, cutout_set in enumerate(batch):
-          embed.append(perceptor.encode_image(normalize(cutout_set)).float().unsqueeze(0))
-        embed = torch.cat(embed, dim = 0)
+        # embed =[]
+        # for i, cutout_set in enumerate(batch):
+          # embed.append(perceptor.encode_image(normalize(cutout_set)).float().unsqueeze(0))
+        # embed = torch.cat(embed, dim = 0)
 ########################
-        # embed = perceptor.encode_image(normalize(batch)).float()
+        embed = perceptor.encode_image(normalize(batch)).float()
 
         print("embed.shape")
         print(embed.shape)
