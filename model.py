@@ -246,7 +246,7 @@ class ModelHost:
 
         batch, levels = make_cutouts_det(init_img, init=True)
         # print(batch.shape)
-        batch = make_cutouts_init(batch)
+        # batch = make_cutouts_init(batch)
         # print(batch.shape)
 
 
