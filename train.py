@@ -78,10 +78,10 @@ parser.add_argument('--embedding_avg', type=str, default="/content/Sketch-Simula
 # parser.add_argument('--embedding_tgt', type=str, default="/content/Sketch-Simulator/results/ovl_mean_sketchy_photo_cutouts.pt")
 parser.add_argument('--embedding_tgt', type=str, default="")
 
-parser.add_argument('--target_avg_cuts', type=int, default=1)
-parser.add_argument('--target_det_cuts', type=int, default=0)
+parser.add_argument('--target_avg_cuts', type=int, default=0)
+parser.add_argument('--target_det_cuts', type=int, default=1)
 parser.add_argument('--target_full_img', type=int, default=0)
-parser.add_argument('--flavor', type=str, default="cumin", help='"ginger", "cumin", "holywater", "det"')
+parser.add_argument('--flavor', type=str, default="det", help='"ginger", "cumin", "holywater", "det"')
 
 # parser.add_argument('--reset_img_prompt_every', type=int, default= 0)
 
@@ -108,8 +108,9 @@ parser.add_argument('--padding', type=int, default=100)
 # Art Deco | Art Nouveau? | 
 # parser.add_argument('--prompts', type=str, default="A painting in the style of Salvador Dali, trending on ArtStation:1.5|An 8K HD National Geographic photo taken with Fujifilm Superia:1.5|Charcoal on canvas, 8K HD detailed black and white Wallpaper, trending on ArtStation:1.5|a photorealistic 3D render in Unreal Engine, trending on ArtStation:1.5|A woodblock print in the style of Ukiyo-e, trending on ArtStation:1.5" )
 # parser.add_argument('--prompts', type=str, default="an 8K HD National Geographic photo taken with Fujifilm Superia, a photorealistic 3D render in Unreal Engine" )
-parser.add_argument('--prompts', type=str, default="a photorealistic render in Unreal Engine in the style of Salvador Dali, trending on ArtStation:1.5" )
-# parser.add_argument('--prompts', type=str, default="a photorealistic 3D render in Unreal Engine, trending on ArtStation:1.5" )
+# parser.add_argument('--prompts', type=str, default="a photorealistic 3D render in Unreal Engine in the style of Salvador Dali, trending on ArtStation:1.5" )
+# parser.add_argument('--prompts', type=str, default="a painting in the style of Salvador Dali, trending on ArtStation:1.5" )
+parser.add_argument('--prompts', type=str, default="a photorealistic 3D render in Unreal Engine, trending on ArtStation:1.5" )
 # parser.add_argument('--prompts', type=str, default="Charcoal on canvas, 8K HD detailed black and white Wallpaper, trending on ArtStation:1.5" )
 # parser.add_argument('--prompts', type=str, default="")
 
@@ -119,7 +120,7 @@ parser.add_argument('--noise_prompt_weights', type=list, default=[])
 parser.add_argument('--path', type=str, default="")
 parser.add_argument('--save_root', type=str, default="/content/drive/MyDrive/AI/sketch-to-image/outputs")
 # parser.add_argument('--output_dir', type=str, default="comparison")
-parser.add_argument('--output_dir', type=str, default="dali-selection_vit-B")
+parser.add_argument('--output_dir', type=str, default="deer_experiments")
 parser.add_argument('--save_bef_aft', type=int, default=0)
 parser.add_argument('--never_stop', type=int, default=0)
 
