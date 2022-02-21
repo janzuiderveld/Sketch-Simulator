@@ -260,11 +260,11 @@ class ModelHost:
 
         print("embed.shape")
         print(embed.shape)
-        ovl_mean = ovl_mean.repeat(1, 256, 1)
-        print(embed.shape)
+        # ovl_mean = ovl_mean.repeat(1, 256, 1)
         
         # embed = embed - ovl_mean + txt_embed
-        embed = embed - ovl_mean.repeat(1, 256, 1)
+        # embed = embed - ovl_mean.repeat(1, 256, 1)
+        # embed = embed - ovl_mean
 
 
         pMs.append(Prompt(embed, weight, stop, name="image", levels=levels, levels_bool=True, cutn=self.args.cutn, init_cutn=self.args.init_cutn).to(device))
