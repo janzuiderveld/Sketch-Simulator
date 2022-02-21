@@ -293,8 +293,9 @@ class MakeCutoutsDet(nn.Module):
             os.makedirs("/content/Sketch-Simulator/thrash/", exist_ok=True)
             cv2.imwrite('/content/Sketch-Simulator/thrash/test_rectangles.jpg',img_cv2) 
 
-        input(cutouts.shape())
-        cutouts = torch.cat(cutouts, dim=0)
+        cutouts = torch.stack(cutouts).squeeze(1)
+        print(cutouts.shape)
+        # cutouts = torch.cat(cutouts, dim=0)
         levels = torch.tensor(levels)
         cutouts = clamp_with_grad(cutouts, 0, 1)
 
