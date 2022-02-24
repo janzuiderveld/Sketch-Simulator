@@ -21,6 +21,8 @@ import wandb
 # Ivan Aivazovsky
 # Henri Martin
 # Thomas Kinkade
+# A biomorpioc sculpure, by Kandinsky, Trending on Artstation
+# A woodblock print in the style of Ukiyo-e, trending on Artstation
 
 # step size: minimal 0.87, 1.5 often works well too
 # weight reg: 0, 0.0001 and 0.1 tested, 0.0001 often better
