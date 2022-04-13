@@ -99,7 +99,7 @@ parser.add_argument('--flavor', type=str, default="cumin", help='"ginger", "cumi
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/frontpage/*")
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/hybrid_sketches/*")
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/selection/*")
-parser.add_argument('--start_image', type=str, default=f"/content/Sketch-Simulator/test_images/IMG-20211007-WA0018.jpg")
+parser.add_argument('--start_image', type=str, default=f"test_images/IMG-20211007-WA0018.jpg")
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/selection2/*")
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/a_complete_clean_and_recognizable_sketch/*")
 # parser.add_argument('--start_image', type=str, default=f"/content/drive/MyDrive/AI/sketch-to-image/clip_prototypical/*")
