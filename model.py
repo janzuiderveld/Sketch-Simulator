@@ -206,6 +206,7 @@ class ModelHost:
     # img = self.resize_image_custom(Image.open(path).convert('RGB'), sideX, sideY)
 
     ovl_mean = torch.load(self.args.embedding_avg)
+    self.ovl_mean = ovl_mean
 
     # set random cuts as target. Prompt class uses alll cuts, todo check how the distance to all of these is calculated, avg?
     if self.args.target_avg_cuts:
@@ -234,13 +235,13 @@ class ModelHost:
         pMs.append(Prompt(embed, weight, stop, name="image").to(device))
         print("embed target", Prompt(embed, weight, stop).embed.shape)
 
-    if self.args.target_full_img:
+    elif self.args.target_full_img:
         embed = self.embed_images_full([self.args.init_image])
         embed = embed - ovl_mean
         pMs.append(Prompt(embed, weight, stop, name="image").to(device))
         print("embed full target", Prompt(embed, weight, stop).embed.shape)
 
-    if self.args.target_det_cuts:
+    elif self.args.target_det_cuts:
         # use TORCH.NN.FUNCTIONAL.GRID_SAMPLE and TORCH.NN.FUNCTIONAL.AFFINE_GRID?
         # torch.nn.functional.affine_grid()
 
@@ -280,6 +281,26 @@ class ModelHost:
         if(self.usealtprompts):
           altpMs.append(Prompt(embed, weight).to(device))
 
+  def set_start_image(self, img_path):
+      path, weight, stop = parse_prompt(img_path)
+
+      sideX, sideY = self.imageSize
+      init_img = self.load_init_image(path, sideX, sideY, self.device) 
+      z, *_ = self.model.encode(init_img * 2 - 1)
+      z = EMATensor(z, self.args.ema_val)
+      z.requires_grad_(True)
+      self.z = z
+      self.init_img = init_img
+
+      embeds = []
+      for i in range(self.args.num_init_cut_batches):
+        batch = self.make_cutouts_init(init_img)
+        embeds.append(self.perceptor.encode_image(self.normalize(batch.squeeze())).float().unsqueeze(0))
+      embed = torch.cat(embeds, dim=1)
+      embed = (embed - self.ovl_mean) 
+      self.prompts[-1] = Prompt(embed, weight, stop, name="image").to(self.device)
+     
+  
   def load_init_image(self, image_path, sideX, sideY, device):
     pil_image = Image.open(image_path).convert('RGB')
     pil_image = self.resize_image_custom(pil_image, sideX, sideY, padding=self.args.padding)
