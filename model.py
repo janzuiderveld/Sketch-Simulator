@@ -290,6 +290,8 @@ class ModelHost:
       z = EMATensor(z, self.args.ema_val)
       z.requires_grad_(True)
       self.z = z
+      self.opt = optim.Adam(self.z.parameters(), lr=self.args.step_size, weight_decay=0.00000000)
+      
       self.init_img = init_img
 
       embeds = []
@@ -298,8 +300,9 @@ class ModelHost:
         embeds.append(self.perceptor.encode_image(self.normalize(batch.squeeze())).float().unsqueeze(0))
       embed = torch.cat(embeds, dim=1)
       embed = (embed - self.ovl_mean) 
+
       self.prompts[-1] = Prompt(embed, weight, stop, name="image").to(self.device)
-     
+
   
   def load_init_image(self, image_path, sideX, sideY, device):
     pil_image = Image.open(image_path).convert('RGB')
@@ -503,6 +506,7 @@ class ModelHost:
 
   def run(self):
     i = 0
+    self.counter = 0
     try:
       while True:
           self.train()
@@ -513,6 +517,7 @@ class ModelHost:
               break
           if ((self.counter) % self.args.accum_iter == 0):
               self.z.update()
-    except KeyboardInterrupt:
-        pass
+    except Exception as err:
+        print(err)
+
     return 

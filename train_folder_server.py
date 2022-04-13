@@ -34,13 +34,13 @@ import time
 # step_size 0.12
 
 parser = argparse.ArgumentParser()    
-parser.add_argument('--input_dir', type=str, default='test_input' )
+parser.add_argument('--input_dir', type=str, default='input' )
 parser.add_argument('--vqgan_model', type=str, default='ImageNet' )
 # parser.add_argument('--clip_model', type=str, default='ViT-L/14' )
 parser.add_argument('--clip_model', type=str, default='ViT-B/32' )
-parser.add_argument('--display_freq', type=int, default= 30)
+parser.add_argument('--display_freq', type=int, default= 10)
 parser.add_argument('--log_edges', type=int, default=0)
-parser.add_argument('--max_iterations', type=int, default=30)
+parser.add_argument('--max_iterations', type=int, default=10)
 parser.add_argument('--seed', type=int, default=-1 )
 parser.add_argument('--width', type=int, default= 600 )
 parser.add_argument('--height', type=int, default= 600 )
@@ -139,11 +139,6 @@ else:
     args.output_dir = f'{args.save_root}/{args.output_dir}'
 os.makedirs(args.output_dir, exist_ok=True)
 
-# save args as yaml file
-import yaml
-with open(f'{args.output_dir}/args.yaml', 'w') as f:
-    yaml.dump(args, f)
-
 args.image_prompts = args.start_image
 args.init_image = args.start_image
 
@@ -216,6 +211,13 @@ def Main():
     # args.image_prompts = [image]
     # args.prompts = [prompt]
     # args.embedding_avg = avg_embed
+
+    # args.start_image = image
+    # args.init_image = image
+    # args.image_prompts = [image]
+    # args.prompts = [prompt]
+    # args.embedding_avg = avg_embed
+
     mh = ModelHost(config)
     while True:
         image_path = wait_new_file(args.input_dir)
