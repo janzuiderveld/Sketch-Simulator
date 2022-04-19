@@ -1,8 +1,8 @@
 kornia==0.5.11
 numpy==1.19.5
 adabelief_pytorch==0.2.1
-torchvision==0.10.0
-torch==1.9.0
+torchvision==0.10.0+cu111
+torch==1.9.0+cu111 
 # torchvision==0.10.0+cu102
 # torch==1.9.0+cu102
 tqdm==4.62.2
