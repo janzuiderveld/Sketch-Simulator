@@ -219,6 +219,9 @@ def Main():
     # args.embedding_avg = avg_embed
 
     mh = ModelHost(config)
+    
+    os.system("echo READY > /workspace/vast_ai/dream_machine/READY.log")
+    
     while True:
         image_path = wait_new_file(args.input_dir)
         if args.wandb:
