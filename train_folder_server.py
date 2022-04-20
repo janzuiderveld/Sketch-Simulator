@@ -34,7 +34,7 @@ import time
 # step_size 0.12
 
 parser = argparse.ArgumentParser()    
-parser.add_argument('--input_dir', type=str, default='/workspace/vast_ai/dream_machine/8080_images0' )
+parser.add_argument('--input_dir', type=str, default='/workspace/vast_ai/dream_machine/incoming_imgs' )
 parser.add_argument('--vqgan_model', type=str, default='ImageNet' )
 # parser.add_argument('--clip_model', type=str, default='ViT-L/14' )
 parser.add_argument('--clip_model', type=str, default='ViT-B/32' )
