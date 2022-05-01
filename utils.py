@@ -14,7 +14,11 @@ import os
 import numpy as np
 from torchvision.utils import save_image
 from torchvision.transforms import functional as TF
-import cv2 
+try:
+    import cv2
+except:
+    pass 
+
 import random
 def sinc(x):
     return torch.where(x != 0, torch.sin(math.pi * x) / (math.pi * x), x.new_ones([]))
@@ -251,11 +255,11 @@ class MakeCutoutsDet(nn.Module):
         elif sideX > sideY:
             input = F.pad(input, (0, 0, sideX - sideY, 0), 'constant', 0)
 
-        if self.testing:
-            # read torch array with cv2
-            img_cv2 = cv2.imread('/content/Sketch-Simulator/test_images/eedb70bc-7a45-41cd-98e1-1f91f6285803.jpeg')
-            # reshape to sideX x sideY
-            img_cv2 = cv2.resize(img_cv2, (sideX, sideY))
+        # if self.testing:
+        #     # read torch array with cv2
+        #     img_cv2 = cv2.imread('/content/Sketch-Simulator/test_images/eedb70bc-7a45-41cd-98e1-1f91f6285803.jpeg')
+        #     # reshape to sideX x sideY
+        #     img_cv2 = cv2.resize(img_cv2, (sideX, sideY))
 
         max_size = max(sideX, sideY)
         
@@ -279,8 +283,8 @@ class MakeCutoutsDet(nn.Module):
                         save_tensor_as_img(cutout, f'/content/Sketch-Simulator/thrash/cutout_{level}_{i}_{j}.png')
                         levels.append((level, i, j))
                         
-                        if self.testing:
-                            cv2.rectangle(img_cv2, (coord[j]+random.randint(-3, 3), coord[i]+random.randint(-3, 3)), (coord[j+1]+random.randint(-3, 3), coord[i+1]+random.randint(-3, 3)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), 2)
+                        # if self.testing:
+                            # cv2.rectangle(img_cv2, (coord[j]+random.randint(-3, 3), coord[i]+random.randint(-3, 3)), (coord[j+1]+random.randint(-3, 3), coord[i+1]+random.randint(-3, 3)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), 2)
                             # cv2.rectangle(img_cv2, (0,0, 800, 800), (0,0,0), 2)
                     else:
                         if (level, i, j) in self.used_cutout_indices:
@@ -288,10 +292,10 @@ class MakeCutoutsDet(nn.Module):
                             levels.append((level, i, j))
                     
         
-        if self.testing and init:
-            print(len(cutouts))
-            os.makedirs("/content/Sketch-Simulator/thrash/", exist_ok=True)
-            cv2.imwrite('/content/Sketch-Simulator/thrash/test_rectangles.jpg',img_cv2) 
+        # if self.testing and init:
+        #     print(len(cutouts))
+        #     os.makedirs("/content/Sketch-Simulator/thrash/", exist_ok=True)
+        #     cv2.imwrite('/content/Sketch-Simulator/thrash/test_rectangles.jpg',img_cv2) 
 
 
         cutouts = torch.cat(cutouts, dim=0)
@@ -309,7 +313,7 @@ class MakeCutoutsDet(nn.Module):
 
 class MakeCutoutsCumin(nn.Module):
     #from https://colab.research.google.com/drive/1ZAus_gn2RhTZWzOWUpPERNC0Q8OhZRTZ
-    def __init__(self, cut_size, cutn, cut_pow, augs):
+    def __init__(self, cut_size, cutn, cut_pow, augs, init=False):
         super().__init__()
         self.cut_size = cut_size
         print(f'cut size: {self.cut_size}')
@@ -319,6 +323,7 @@ class MakeCutoutsCumin(nn.Module):
         self.av_pool = nn.AdaptiveAvgPool2d((self.cut_size, self.cut_size))
         self.max_pool = nn.AdaptiveMaxPool2d((self.cut_size, self.cut_size))
         self.augs = augs
+        self.init = init
         
         # nn.Sequential(
         #   #K.RandomHorizontalFlip(p=0.5),
@@ -355,8 +360,12 @@ class MakeCutoutsCumin(nn.Module):
         for ii in range(self.cutn):
 
         ###########################
-          avg_pixel = 1.2
-          while avg_pixel > overall_avg*1.1: 
+          avg_pixel = 99
+        #   while avg_pixel > overall_avg*1.1: 
+          thresh = overall_avg*2
+          if self.init: 
+            thresh = overall_avg*1.1
+          while avg_pixel > overall_avg*2: 
         ###########################
 
             # size = int(torch.rand([])**self.cut_pow * (max_size - min_size) + min_size)
@@ -371,7 +380,8 @@ class MakeCutoutsCumin(nn.Module):
             #######################
             avg_pixel = torch.mean(cutout)
             ###########################
-          
+
+
           ###################
           if cutout.shape[0] > 1:
             cutouts.append(resample(cutout, (self.cut_size, self.cut_size)).unsqueeze(1))
