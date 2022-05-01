@@ -109,7 +109,7 @@ class ModelHost:
             # K.RandomErasing((.1, .4), (.3, 1/.3), same_on_batch=True, p=0.7),
             )
 
-    make_cutouts_init = flavordict[self.args.flavor](cut_size, self.args.init_cutn, cut_pow=self.args.init_cut_pow, augs=augs_init)
+    make_cutouts_init = flavordict[self.args.flavor](cut_size, self.args.init_cutn, cut_pow=self.args.init_cut_pow, augs=augs_init, init=True)
     make_cutouts = flavordict[self.args.flavor](cut_size, self.args.cutn, cut_pow=self.args.cut_pow,augs=augs)
     make_cutouts_det = flavordict["det"](cut_size, self.args.cutn, cut_pow=self.args.cut_pow,augs=augs)
     
@@ -273,7 +273,6 @@ class ModelHost:
     # print("embed shape before: ", embed.shape)
     # print("embed shape after: ", embed.shape)
 
-
     for weight in self.args.noise_prompt_weights:
         gen = torch.Generator().manual_seed(-1)
         embed = torch.empty([1, perceptor.visual.output_dim]).normal_(generator=gen)
@@ -303,7 +302,6 @@ class ModelHost:
 
       self.prompts[-1] = Prompt(embed, weight, stop, name="image").to(self.device)
 
-  
   def load_init_image(self, image_path, sideX, sideY, device):
     pil_image = Image.open(image_path).convert('RGB')
     pil_image = self.resize_image_custom(pil_image, sideX, sideY, padding=self.args.padding)
