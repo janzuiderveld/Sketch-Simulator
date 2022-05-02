@@ -192,7 +192,7 @@ def Main():
 
     print(args.prompts)
     if "|" in args.prompts:
-        prompts = prompts.split("|")
+        prompts = args.prompts.split("|")
     else:
         prompts = [args.prompts]
     
