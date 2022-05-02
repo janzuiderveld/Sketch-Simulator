@@ -192,7 +192,7 @@ class ModelHost:
     self.z, self.z_orig, self.z_min, self.z_max = z, z_orig, z_min, z_max
     # self.setup_metadata(seed)
     self.mse_weight = self.args.init_weight
-
+    self.clip = clip
     self.counter = 0
 
     if self.args.embedding_tgt:
@@ -280,7 +280,7 @@ class ModelHost:
         if(self.usealtprompts):
           altpMs.append(Prompt(embed, weight).to(device))
 
-  def set_start_image(self, img_path):
+  def set_start_image(self, img_path, prompt_update=""):
       path, weight, stop = parse_prompt(img_path)
 
       sideX, sideY = self.imageSize
@@ -301,7 +301,12 @@ class ModelHost:
       embed = (embed - self.ovl_mean) 
 
       self.prompts[-1] = Prompt(embed, weight, stop, name="image").to(self.device)
-
+      if prompt_update:
+        txt, weight, stop = parse_prompt(prompt_update)
+        if txt:
+          embed = self.perceptor.encode_text(self.clip.tokenize(txt).to(self.device)).float().unsqueeze(0)
+          self.prompts[0] = Prompt(embed, weight, stop, name="text").to(self.device))
+      
   def load_init_image(self, image_path, sideX, sideY, device):
     pil_image = Image.open(image_path).convert('RGB')
     pil_image = self.resize_image_custom(pil_image, sideX, sideY, padding=self.args.padding)
