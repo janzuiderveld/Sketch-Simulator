@@ -305,7 +305,7 @@ class ModelHost:
         txt, weight, stop = parse_prompt(prompt_update)
         if txt:
           embed = self.perceptor.encode_text(self.clip.tokenize(txt).to(self.device)).float().unsqueeze(0)
-          self.prompts[0] = Prompt(embed, weight, stop, name="text").to(self.device))
+          self.prompts[0] = Prompt(embed, weight, stop, name="text").to(self.device)
       
   def load_init_image(self, image_path, sideX, sideY, device):
     pil_image = Image.open(image_path).convert('RGB')
