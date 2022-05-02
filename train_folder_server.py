@@ -191,9 +191,12 @@ def Main():
         config = args
 
     print(args.prompts)
-    prompts = [args.prompts]
+    if "|" in prompts:
+        prompts = prompts.split("|")
+    else:
+        prompts = [args.prompts]
     
-    config.prompts = prompts
+    config.prompts = [prompts[0]]
 
     if "|" in args.embedding_avg:
         avg_embeds = args.embedding_avg.split("|")
@@ -218,9 +221,7 @@ def Main():
     mh = ModelHost(config)
     
     os.system("echo READY > /workspace/vast_ai/dream_machine/READY.log")
-    
-    if "|" in prompts:
-        prompts = prompts.split("|")
+   
     
     while True:
         for prompt in prompts:
