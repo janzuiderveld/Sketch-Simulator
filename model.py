@@ -436,10 +436,10 @@ class ModelHost:
       i = 0
       fname = self.args.init_image.split('/')[-1].split(".")[0].split(" ")[0] + "_" + self.args.embedding_avg.split("/")[-1].split(".")[0].replace("_", "") + "_" + self.args.prompts[0].replace(" ", "") 
       while True:
-          if os.path.isfile(batchpath+"/"+ fname + "_" +str(i)+".png"):
+          if os.path.isfile(batchpath+"/"+ fname + "_" +str(i)+".jpg"):
               i = i+1
           else:
-              return batchpath+"/"+ fname + "_" +str(i)+".png"
+              return batchpath+"/"+ fname + "_" +str(i)+".jpg"
 
   def ascend_txt(self):
       out = self.synth(self.z.tensor)
