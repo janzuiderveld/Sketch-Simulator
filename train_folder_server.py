@@ -114,8 +114,8 @@ parser.add_argument('--padding', type=int, default=0)
 # parser.add_argument('--prompts', type=str, default="A painting in the style of Salvador Dali, trending on ArtStation:1.5|An 8K HD National Geographic photo taken with Fujifilm Superia:1.5|Charcoal on canvas, 8K HD detailed black and white Wallpaper, trending on ArtStation:1.5|a photorealistic 3D render in Unreal Engine, trending on ArtStation:1.5|A woodblock print in the style of Ukiyo-e, trending on ArtStation:1.5" )
 # parser.add_argument('--prompts', type=str, default="an 8K HD National Geographic photo taken with Fujifilm Superia, a photorealistic 3D render in Unreal Engine" )
 # parser.add_argument('--prompts', type=str, default="a photorealistic 3D render in Unreal Engine in the style of Salvador Dali, trending on ArtStation:1.5" )
-# parser.add_argument('--prompts', type=str, default="a painting in the style of Salvador Dali, trending on ArtStation:1.5" )
-parser.add_argument('--prompts', type=str, default="a photorealistic 3D render in Unreal Engine, trending on ArtStation:1.5" )
+parser.add_argument('--prompts', type=str, default="a painting in the style of Salvador Dali, trending on ArtStation:1.5 | a biomorphic sculpture in the style of Kandinsky, trending on artstation:1.5 | A woodblock print of a beautiful starry night in the style of Ukiyo-e, trending on artstation:1.5 | A print in the style of Art Deco, trending on artstation:1.5 | A print in the style of constructivism, trending on artstation" )
+# parser.add_argument('--prompts', type=str, default="a photorealistic 3D render in Unreal Engine, trending on ArtStation:1.5" )
 # parser.add_argument('--prompts', type=str, default="Charcoal on canvas, 8K HD detailed black and white Wallpaper, trending on ArtStation:1.5" )
 # parser.add_argument('--prompts', type=str, default="")
 
@@ -223,11 +223,12 @@ def Main():
     os.system("echo READY > /workspace/vast_ai/dream_machine/READY.log")
     
     while True:
-        image_path = wait_new_file(args.input_dir)
-        if args.wandb:
-            wandb.config.update({"start_image": image_path, 'init_image': image_path, 'image_prompts': [image_path]}, allow_val_change=True)  
-        mh.set_start_image(image_path)
-        mh.run()
+        for prompt in prompts:
+            image_path = wait_new_file(args.input_dir)
+            if args.wandb:
+                wandb.config.update({"start_image": image_path, 'init_image': image_path, 'image_prompts': [image_path]}, allow_val_change=True)  
+            mh.set_start_image(image_path, prompt_update=prompt)
+            mh.run()
 
 if __name__ == "__main__":
     os.makedirs("steps", exist_ok=True)
