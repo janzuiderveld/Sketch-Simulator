@@ -230,6 +230,7 @@ def Main():
             if args.wandb:
                 wandb.config.update({"start_image": image_path, 'init_image': image_path, 'image_prompts': [image_path]}, allow_val_change=True)  
             mh.set_start_image(image_path, prompt_update=prompt)
+            print(mh.prompts)
             mh.run()
 
 if __name__ == "__main__":
