@@ -191,10 +191,7 @@ def Main():
         config = args
 
     print(args.prompts)
-    if "|" in args.prompts:
-        prompts = args.prompts.split("|")
-    else:
-        prompts = [args.prompts]
+    prompts = [args.prompts]
     
     config.prompts = prompts
 
@@ -221,6 +218,9 @@ def Main():
     mh = ModelHost(config)
     
     os.system("echo READY > /workspace/vast_ai/dream_machine/READY.log")
+    
+    if "|" in prompts:
+        prompts = prompts.split("|")
     
     while True:
         for prompt in prompts:
