@@ -191,7 +191,7 @@ def Main():
         config = args
 
     print(args.prompts)
-    if "|" in prompts:
+    if "|" in args.prompts:
         prompts = prompts.split("|")
     else:
         prompts = [args.prompts]
