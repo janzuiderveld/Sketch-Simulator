@@ -226,6 +226,7 @@ def Main():
     while True:
         for prompt in prompts:
             prompt = prompt.strip()
+            print(prompt)
             image_path = wait_new_file(args.input_dir)
             if args.wandb:
                 wandb.config.update({"start_image": image_path, 'init_image': image_path, 'image_prompts': [image_path]}, allow_val_change=True)  
