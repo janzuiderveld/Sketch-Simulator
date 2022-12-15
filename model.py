@@ -438,13 +438,28 @@ class ModelHost:
       self.add_metadata('progress.png', self.counter)
 
   def unique_index(self, batchpath):
-      i = 0
-      fname = self.args.init_image.split('/')[-1].split(".")[0].split(" ")[0] + "_" + self.args.embedding_avg.split("/")[-1].split(".")[0].replace("_", "") + "_" + self.args.prompts[0].replace(" ", "") 
+      cnt = 0
+      #fname = self.args.init_image.split('/')[-1].split(".")[0].split(" ")[0] + "_" + self.args.embedding_avg.split("/")[-1].split(".")[0].replace("_", "") + "_" + self.args.prompts[0].replace(" ", "") 
       while True:
-          if os.path.isfile(batchpath+"/"+ fname + "_" +str(i)+".jpg"):
-              i = i+1
+          #if os.path.isfile(batchpath+"/"+ fname + "_" +str(i)+".jpg"):
+          #    i = i+1
+          #else:
+          #    return batchpath+"/"+ fname + "_" +str(i)+".jpg"
+          
+          if (cnt < 10):
+              cnt_str = '000' + str(cnt)
+          elif (cnt < 100):
+              cnt_str = '00' + str(cnt)
+          elif (cnt < 1000):
+              cnt_str = '0' + str(cnt)
           else:
-              return batchpath+"/"+ fname + "_" +str(i)+".jpg"
+              cnt_str = str(cnt)
+          if os.path.isfile(f"{batchpath}/{cnt_str}.jpg"):
+              cnt = cnt+1
+          else:
+              out_path = f"{batchpath}/{cnt_str}.jpg"
+              return out_path
+          
 
   def ascend_txt(self):
       out = self.synth(self.z.tensor)
