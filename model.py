@@ -414,7 +414,7 @@ class ModelHost:
            
             os.chdir("/workspace/vast_ai/dream_machine/Real-ESRGAN")
             os.system(f"python3 inference_realesrgan.py -n RealESRGAN_x4plus -i {uppath_before} -o {batchpath} --outscale 4")
-            os.chdir("/workspace/vast_ai/dream_machine")
+            os.chdir("/workspace/vast_ai/dream_machine/Sketch-Simulator")
 #             resp_file = glob.glob(tmp_folder + "/*")[0]
 #             print(resp_file, "is the output file of ESRGAN")
             
