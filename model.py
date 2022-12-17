@@ -394,6 +394,7 @@ class ModelHost:
           os.makedirs(tmp_folder_before, exist_ok=True)
           
           os.makedirs(self.args.output_dir, exist_ok=True)
+          
           batchpath = self.unique_index(self.args.output_dir)
           uppath = self.unique_index(tmp_folder)
           uppath_before = self.unique_index(tmp_folder_before)
@@ -413,7 +414,7 @@ class ModelHost:
             output_img_array.save(uppath_before)
            
             os.chdir("/workspace/vast_ai/dream_machine/Real-ESRGAN")
-            os.system(f"python3 inference_realesrgan.py -n RealESRGAN_x4plus -i {uppath_before} -o {batchpath} --outscale 4")
+            os.system(f"python3 inference_realesrgan.py -n RealESRGAN_x4plus -i {uppath_before} -o {self.args.output_dir} --outscale 4")
             os.chdir("/workspace/vast_ai/dream_machine/Sketch-Simulator")
 #             resp_file = glob.glob(tmp_folder + "/*")[0]
 #             print(resp_file, "is the output file of ESRGAN")
