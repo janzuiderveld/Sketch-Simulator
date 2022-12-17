@@ -123,7 +123,7 @@ parser.add_argument('--altprompts', type=str, default="" )
 parser.add_argument('--noise_prompt_weights', type=list, default=[])
 
 parser.add_argument('--path', type=str, default="")
-parser.add_argument('--save_root', type=str, default="out")
+parser.add_argument('--save_root', type=str, default="/workspace/vast_ai/dream_machine/Sketch-Simulator/out")
 # parser.add_argument('--output_dir', type=str, default="comparison")
 parser.add_argument('--output_dir', type=str, default="to_send")
 parser.add_argument('--save_bef_aft', type=int, default=0)
