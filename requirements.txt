@@ -1,19 +1,19 @@
-kornia==0.5.11
-numpy==1.19.5
-adabelief_pytorch==0.2.1
+kornia
+# numpy==1.19.5
+adabelief_pytorch
 # torchvision==0.10.0+cu111 
 # torch==1.9.0+cu111
 # torchvision==0.10.0+cu102
 # torch==1.9.0+cu102
 tqdm==4.62.2
 omegaconf==2.1.1
-matplotlib==3.2.2
+matplotlib
 imageio==2.4.1
 CLIP==0.2.0
 Pillow==8.3.2
 protobuf==3.18.0
 quickdraw==0.2.0
-torchtext==0.10
+torchtext==0.12
 pytorch-lightning
 einops
 transformers
