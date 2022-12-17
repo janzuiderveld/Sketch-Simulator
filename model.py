@@ -388,8 +388,16 @@ class ModelHost:
       print(f'cutn: {self.make_cutouts.cutn}, cut_pow: {self.make_cutouts.cut_pow}, step_size: {self.cur_step_size}')
       out = self.synth(self.z.average)
       if self.counter == self.args.max_iterations:
+          tmp_folder = "/workspace/vast_ai/dream_machine/temp_upscale"
+          tmp_folder_before = "/workspace/vast_ai/dream_machine/temp_before_upscale"
+          os.makedirs(tmp_folder, exist_ok=True)
+          os.makedirs(tmp_folder_before, exist_ok=True)
+          
           os.makedirs(self.args.output_dir, exist_ok=True)
           batchpath = self.unique_index(self.args.output_dir)
+          uppath = self.unique_index(tmp_folder)
+          uppath_before = self.unique_index(tmp_folder_before)
+          
         #   batchpath = self.args.output_dir + '/' + self.args.init_image.split('/')[-1] 
 
           input_img_array = TF.to_pil_image(self.init_img.cpu().squeeze())
@@ -402,7 +410,15 @@ class ModelHost:
             im.paste(output_img_array, (input_img_array.width, 0))
             im.save(batchpath)
           else:
-            output_img_array.save(batchpath)
+            output_img_array.save(uppath_before)
+           
+            os.chdir("/workspace/vast_ai/dream_machine/Real-ESRGAN")
+            os.system(f"python3 inference_realesrgan.py -n RealESRGAN_x4plus -i {uppath_before} -o {batchpath} --outscale 4")
+            os.chdir("/workspace/vast_ai/dream_machine")
+#             resp_file = glob.glob(tmp_folder + "/*")[0]
+#             print(resp_file, "is the output file of ESRGAN")
+            
+#             output_img_array.save(batchpath)
 
           if self.args.wandb:
               # wandb.log({'edge_loss': edge_loss})
